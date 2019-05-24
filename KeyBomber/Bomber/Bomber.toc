@@ -1,0 +1,7 @@
+﻿## Interface: 81000
+## Title: Bomber
+## Author: Konstantin
+## Notes: Spell bomber
+
+Bomber.lua
+Bomber.Core.lua
