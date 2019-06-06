@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Linq;
 using System.Threading;
 
 namespace KeyBomber
@@ -13,7 +14,7 @@ namespace KeyBomber
         const uint WM_KEYDOWN = 0x0100;
         const uint WM_KEYUP   = 0x0101;
 
-        [DllImport("User32.Dll", EntryPoint = "PostMessageA")]
+        [DllImport("user32.dll", EntryPoint = "PostMessageA", SetLastError = true)]
         private static extern bool PostMessage(IntPtr hWnd, uint msg, int wParam, int lParam);
 
         static readonly Random random = new Random();
@@ -26,11 +27,18 @@ namespace KeyBomber
                 Thread.Sleep(random.Next(10, 30));
             }
 
-            PostMessage(hwd, WM_KEYDOWN, keyRec.Key, 0);
+            int count = random.Next(1, 4);
+            for (int i = 0; i < count; ++i)
+            {
+                if (i > 0)
+                {
+                    Thread.Sleep(random.Next(10, 30));
+                }
 
-            Thread.Sleep(random.Next(30, 60));
-
-            PostMessage(hwd, WM_KEYUP, keyRec.Key, 0);
+                PostMessage(hwd, WM_KEYDOWN, keyRec.Key, 0);
+                Thread.Sleep(random.Next(30, 60));
+                PostMessage(hwd, WM_KEYUP, keyRec.Key, 0);
+            }
 
             if (keyRec.HasModif)
             {
@@ -51,28 +59,35 @@ namespace KeyBomber
 
         static void Main(string[] args)
         {
-            //KeyMapGenerator.MakeLuaMapFiles("Bomber.KeyMap.lua");
-            //KeyMapGenerator.MakeSharpMapFiles("KeyMap.cs");
-            var foregroundWindow = new ForegrounWindow();
-
-            while (true)
+            if (args.Contains("-m"))
             {
-                if (foregroundWindow.IsTitle("World of Warcraft"))
+                KeyMapGenerator.MakeLuaMapFiles("Bomber.KeyMap.lua");
+                KeyMapGenerator.MakeSharpMapFiles("KeyMap.cs");
+                Console.ReadLine();
+            }
+            else
+            {
+                var foregroundWindow = new ForegrounWindow();
+
+                while (true)
                 {
-                    var keyColor = foregroundWindow.GetPixelColor();
-                    Console.WriteLine($"KeyColor: {keyColor}, 0x{keyColor.ToArgb():X08}");
-
-                    var keyRec = GetKeyFromColor(keyColor);
-
-                    Console.WriteLine(keyRec);
-
-                    if (keyRec.HasKey)
+                    if (foregroundWindow.IsTitle("World of Warcraft"))
                     {
-                        //SendKey(foregroundWindow.Hwd, keyRec);
-                    }
-                }                
+                        var keyColor = foregroundWindow.GetPixelColor();
+                        Console.WriteLine($"KeyColor: {keyColor}, 0x{keyColor.ToArgb():X08}");
 
-                Thread.Sleep(random.Next(800, 1200));
+                        var keyRec = GetKeyFromColor(keyColor);
+
+                        Console.WriteLine(keyRec);
+
+                        if (keyRec.HasKey)
+                        {
+                            //SendKey(foregroundWindow.Hwd, keyRec);
+                        }
+                    }
+
+                    Thread.Sleep(random.Next(800, 1200));
+                }
             }
         }
     }
