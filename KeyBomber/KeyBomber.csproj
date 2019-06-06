@@ -46,12 +46,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ForegrounWindow.cs" />
+    <Compile Include="KeyMap.cs" />
+    <Compile Include="KeyMapGenerator.cs" />
+    <Compile Include="KeyRecord.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Bomber\Bomber.Core.lua" />
+    <None Include="Bomber\Bomber.KeyMap.lua" />
     <None Include="Bomber\Bomber.lua" />
     <None Include="Bomber\Bomber.toc" />
     <None Include="Bomber\Common\Common.lua" />
@@ -78,7 +82,11 @@
     <None Include="Bomber\Warrior\Arms.lua" />
     <None Include="Bomber\Warrior\Furry.lua" />
     <None Include="Bomber\Warrior\Protection.lua" />
+    <None Include="CopyAddon.ps1" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>powershell.exe -ExecutionPolicy Unrestricted -file $(ProjectDir)CopyAddon.ps1</PostBuildEvent>
+  </PropertyGroup>
 </Project>

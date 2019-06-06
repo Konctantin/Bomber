@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 
 namespace KeyBomber
@@ -16,72 +18,61 @@ namespace KeyBomber
 
         static readonly Random random = new Random();
 
-        //private static Bitmap CropImage(Bitmap img, Rectangle cropArea)
-        //{
-        //    var bmpImage = new Bitmap(img);
-        //    return bmpImage.Clone(cropArea, bmpImage.PixelFormat);
-        //}
-
-        private static void SendAKey(IntPtr hwd, int key, int mod = 0)
+        private static void SendKey(IntPtr hwd, KeyRecord keyRec)
         {
-            if (mod != 0)
+            if (keyRec.HasModif)
             {
-                PostMessage(hwd, WM_KEYDOWN, mod, 0);
+                PostMessage(hwd, WM_KEYDOWN, keyRec.Modifier, 0);
                 Thread.Sleep(random.Next(10, 30));
             }
 
-            PostMessage(hwd, WM_KEYDOWN, key, 0);
+            PostMessage(hwd, WM_KEYDOWN, keyRec.Key, 0);
 
             Thread.Sleep(random.Next(30, 60));
 
-            PostMessage(hwd, WM_KEYUP, key, 0);
+            PostMessage(hwd, WM_KEYUP, keyRec.Key, 0);
 
-            if (mod != 0)
+            if (keyRec.HasModif)
             {
                 Thread.Sleep(random.Next(10, 30));
-                PostMessage(hwd, WM_KEYUP, mod, 0);
+                PostMessage(hwd, WM_KEYUP, keyRec.Modifier, 0);
             }
         }
 
-        private static int GetKeyFromColor(Color color)
-        {
-            return 0;
-        }
+        private static KeyRecord GetKeyFromColor(Color color)
+        { 
+            var intColor = color.ToArgb();
 
-        private static int GetModFromColor(Color color)
-        {
-            return 0;
+            if (KeyMap.KEY_MAP.ContainsKey(intColor))
+                return KeyMap.KEY_MAP[intColor];
+            else
+                return new KeyRecord();
         }
 
         static void Main(string[] args)
         {
+            //KeyMapGenerator.MakeLuaMapFiles("Bomber.KeyMap.lua");
+            //KeyMapGenerator.MakeSharpMapFiles("KeyMap.cs");
             var foregroundWindow = new ForegrounWindow();
 
             while (true)
             {
                 if (foregroundWindow.IsTitle("World of Warcraft"))
                 {
-                    var image = foregroundWindow.GetScreen();
-                    //var modKeyImg = CropImage(image, new Rectangle(0, 0, 10, 10));
-                    //var keyImg    = CropImage(image, new Rectangle(10, 0, 10, 10));
+                    var keyColor = foregroundWindow.GetPixelColor();
+                    Console.WriteLine($"KeyColor: {keyColor}, 0x{keyColor.ToArgb():X08}");
 
-                    var modColor = image.GetPixel(5,  5);
-                    var keyColor = image.GetPixel(15, 5);
-                    Console.WriteLine($"ModColor: {modColor}, KeyColor: {keyColor}");
+                    var keyRec = GetKeyFromColor(keyColor);
 
-                    var key = GetKeyFromColor(keyColor);
-                    var mod = GetModFromColor(modColor);
+                    Console.WriteLine(keyRec);
 
-                    Console.WriteLine($"Modifier: {mod}, Key: {key}");
-
-                    if (key != 0 && mod != 0)
+                    if (keyRec.HasKey)
                     {
-                        SendAKey(foregroundWindow.Hwd, key, mod);
+                        //SendKey(foregroundWindow.Hwd, keyRec);
                     }
-                }
-                
+                }                
 
-                Thread.Sleep(random.Next(80, 120));
+                Thread.Sleep(random.Next(800, 1200));
             }
         }
     }

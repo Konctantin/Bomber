@@ -4,4 +4,4 @@
 ## Notes: Spell bomber
 
 Bomber.lua
-Bomber.Core.lua
+Bomber.KeyMap.lua

@@ -1,65 +1,103 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace KeyBomber
 {
+    [StructLayout(LayoutKind.Sequential)]
+    public struct Rect
+    {
+        public int Left;
+        public int Top;
+        public int Right;
+        public int Bottom;
+    }
+
     public class ForegrounWindow
     {
-        [StructLayout(LayoutKind.Sequential)]
-        private struct Rect
-        {
-            public int Left;
-            public int Top;
-            public int Right;
-            public int Bottom;
-        }
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern IntPtr GetDesktopWindow();
 
-        [DllImport("user32.dll")]
-        private static extern IntPtr GetForegroundWindow();
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern IntPtr GetWindowDC(IntPtr window);
 
-        [DllImport("user32.dll")]
-        private static extern IntPtr GetWindowRect(IntPtr hWnd, ref Rect rect);
+        [DllImport("gdi32.dll", SetLastError = true)]
+        static extern uint GetPixel(IntPtr dc, int x, int y);
 
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern int ReleaseDC(IntPtr window, IntPtr dc);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern IntPtr GetWindowRect(IntPtr hWnd, ref Rect rect);
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
 
         public IntPtr Hwd => GetForegroundWindow();
 
+        public Rect GetForegroundRect()
+        {
+            var rect = new Rect();
+            GetWindowRect(Hwd, ref rect);
+            return rect;
+        }
+
+        ///Stopwatch sw = new Stopwatch();
+
         public string Title
         {
             get
             {
                 var sb = new StringBuilder(255);
-                GetWindowText(GetForegroundWindow(), sb, sb.Capacity);
+                GetWindowText(Hwd, sb, sb.Capacity);
                 return sb.ToString()?.Trim();
             }
         }
 
         public bool IsTitle(string title, bool caseSensative = false)
         {
-            return Title.Equals(title, caseSensative ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase);
+            var comparisonType = caseSensative ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase;
+            return Title.Equals(title, comparisonType);
         }
 
-        public Bitmap GetScreen()
+
+        static Color GetColorAt(int x, int y)
         {
-            var rect = new Rect();
-            GetWindowRect(GetForegroundWindow(), ref rect);
-
-            var bounds = new Rectangle(rect.Left, rect.Bottom - 10, 20, 10);
-            var result = new Bitmap(bounds.Width, bounds.Height);
-
-            using (var g = Graphics.FromImage(result))
+            var desk = GetDesktopWindow();
+            var dc = GetWindowDC(desk);
+            try
             {
-                g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
-            }
+                int color = (int)GetPixel(dc, x, y);
 
-            return result;
+                int a = 0x00; // trim alpha chanel
+                int r = (color >> 00) & 0xff;
+                int g = (color >> 08) & 0xff;
+                int b = (color >> 16) & 0xff;
+                
+                return Color.FromArgb(a, r, g, b);
+            }
+            finally
+            {
+                ReleaseDC(desk, dc);
+            }
+        }
+
+        public Color GetPixelColor()
+        {
+            //sw.Restart();
+
+            var rect = GetForegroundRect();
+            var color = GetColorAt(rect.Left + 1, rect.Bottom - 1);
+
+            //sw.Stop();
+            //Console.WriteLine($"Total: {sw.Elapsed} ({sw.ElapsedMilliseconds} ms)");
+
+            return color;
         }
     }
 }
