@@ -109,17 +109,18 @@ function IsMoving()
     return GetUnitSpeed("player") ~= 0 or IsFalling();
 end
 
--- возвращает текущее значение здоровья в процентах
+-- Return current health by percent
 function HealthByPercent(m_target)
     return UnitExists(m_target) and 100 * (UnitHealth(m_target) or 1) / (UnitHealthMax(m_target) or 1) or 0;
 end
 
--- возвращает текущее значение ресурса (мана, энергия, фокус, ярость ...) в процентах
+-- Return current value of resource (mana, energy, focus, rage, ...) in percents.
 function PowerByPercent(m_target, m_powertype)
     return UnitExists(m_target) and 100 * (UnitPower(m_target, m_powertype) or 1) / (UnitPowerMax(m_target, m_powertype) or 1) or 0;
 end
 
--- Проверка, была ли зажата клавиша модификатор mk*
+--- Check if was pressed modifier key
+-- @param m_key modifier key
 function IsModKeyDown(m_key)
     if not GetCurrentKeyBoardFocus() then
         return  (m_key == mkLeftShift    and IsLeftShiftKeyDown()   ) or
@@ -131,22 +132,24 @@ function IsModKeyDown(m_key)
     end
 end
 
--- Возвращает дистанцию между двумя игроками
-function GetDistance(unit1, unit2)
-    local lvl, a1, b1, a2, b2 = GetCurrentMapDungeonLevel();
+--- Return distance between 2 players
+-- @param player1
+-- @param palyer2
+function GetDistance(player1, palyer2)
+    local _, a1, b1, a2, b2 = GetCurrentMapDungeonLevel();
     if not (a1 and b1 and a2 and b2) then
-        lvl, a1, y1, a2, y2 = GetCurrentMapZone();
+        _, a1, y1, a2, y2 = GetCurrentMapZone();
     end
     if a1 and b1 and a2 and b2 then
-        local x1, y1 = GetPlayerMapPosition(unit1);
-        local x2, y2 = GetPlayerMapPosition(unit2);
+        local x1, y1 = GetPlayerMapPosition(player1);
+        local x2, y2 = GetPlayerMapPosition(palyer2);
         local dX = ((x1 - x2) * abs(a2 - a1)) ^ 2;
         local dY = ((y1 - y2) * abs(b2 - b1)) ^ 2;
         return sqrt(dX + dY);
     end
 end
 
--- Возвращает ID юнита
+-- Return Unit ID
 function UnitId(unit)
     return tonumber((UnitGUID(unit) or ""):match("-(%d+)-%x+$"), 10);
 end
@@ -194,7 +197,7 @@ function SetInRangeSpell(rangeSpell)
             assert("Unknown spell by Id "..tostring(rangeSpell))
         end
         if not SpellHasRange(name) then
-            assert("Spell "..tostring(rangeSpell).." "..name.."not have range");
+            assert("Spell ("..tostring(rangeSpell)..") "..name.." not have range");
         end
         AddonFrame.RangeSpell = name;
     end
@@ -211,16 +214,6 @@ PLAYER = {
         self.IsMoving = IsMoving("player");
         self.IsMounted= IsMounted() and not HasBuff("player", 165803);
         self.Agro     = UnitThreatSituation("player") or 0;
-
-        if PLAYER.HP < 30 and UnitAffectingCombat("player") and not PLAYER.IsMounted then
-            local _, durationH, enableH = GetItemCooldown(5512);   -- Камень здоровья
-            local _, durationP, enableP = GetItemCooldown(109223); -- Лечебное снадобье
-            if durationH == 0 and enableH and GetItemCount(5512) > 0 then
-                UseItemById(5512);
-            elseif durationP == 0 and enableP and GetItemCount(109223) > 0 then
-                UseItemById(109223);
-            end
-        end
     end,
 };
 
@@ -261,7 +254,7 @@ function CheckKnownAbility(ability)
     -- Есть заклинания, которые имеют одинаковое название и разные Id
     local spellId = select(2, GetSpellBookItemInfo(ability.SpellName));
     if spellId and ability.SpellId ~= spellId then
-        print(string.format("|cff15bd05Заклинание: %s Id %d -> %d|r", ability.SpellName, ability.SpellId, spellId));
+        print(string.format("|cff15bd05Changed spell: %s Id %d -> %d|r", ability.SpellName, ability.SpellId, spellId));
         ability.SpellId = spellId;
         ability.IsKnown = true;
     end
@@ -278,10 +271,25 @@ function CheckAllSpells()
     end
 end
 
-function CheckAndCastAbility(ability, targetInfo)
+function GetHotKeyBySpellId(spellId)
+    local actionList = C_ActionBar.FindSpellActionButtons(spellId);
+    if actionList and #actionList > 0 then
+        local actionID = actionList[1];
+        --for _, barName in pairs({'Action','MultiBarBottomLeft','MultiBarBottomRight','MultiBarRight','MultiBarLeft'}) do
+        for _, barName in pairs({"Action","MultiBarBottomLeft","MultiBarBottomRight"}) do
+            for i = 1, 12 do
+                local button = _G[barName .. 'Button' .. i];
+                if button.GetID and button:GetID() == actionID then
+                    return button.HotKey:GetText();
+                end
+            end
+        end
+    end
+end
 
+function CheckAndCastAbility(ability, targetInfo)
     BomberFrame.SetKey();
-    
+
     if ability.IsCheckInCombat and not UnitAffectingCombat("player") then
         return;
     end
@@ -340,8 +348,6 @@ function CheckAndCastAbility(ability, targetInfo)
     local result = ability.Func(ability, targetInfo, targetInfo.Target);
     if not result then
         return;
-    elseif type(result) == "string" then
-        targetInfo.Target = result;
     end
 
     if targetInfo.Target ~= "none" and targetInfo.Target ~= "player" and targetInfo.Target ~= "mouselocation" then
@@ -360,26 +366,12 @@ function CheckAndCastAbility(ability, targetInfo)
         end
     end
 
-    if ability.CancelCasting then
-        SpellStopCasting();
-    end
-
+    -- move to SPELL_CAST_START
     targetInfo.Guid = UnitGUID(targetInfo.Target);
     targetInfo.LastCastingTime = GetTime() + (select(7, GetSpellInfo(ability.SpellId)) or 0) / 1000;
 
-    if targetInfo.Target == "mouselocation" then
-        --CastSpellByName(spellName, nil);
-        --CameraOrSelectOrMoveStart();
-        --CameraOrSelectOrMoveStop();
-        --CastSpellByName(spellName, nil);
-    elseif targetInfo.Target == "none" then
-        --LAST_TARGET = UnitGUID("player");
-        --CastSpellByName(spellName, nil);
-    else
-        LAST_TARGET = UnitGUID(targetInfo.Target);
-        --CastSpellByName(spellName, targetInfo.Target);
-        BomberFrame.SetKey(ability.HotKey);
-    end
+    local hotKey = GetHotKeyBySpellId(ability.SpellId);
+    BomberFrame_SetKey(hotKey);
     return true;
 end
 
@@ -409,6 +401,9 @@ function AddonFrame_OnEvent(self, event, ...)
             SetTargetCastintInfo(spellId, destGUID, GetTime());
         elseif subEvent == "SPELL_CAST_FAILED" and sourceGUID == UnitGUID("player") then
             SetTargetCastintInfo(spellId, nil, 0);
+        elseif subEvent == "SPELL_CAST_START" then
+            -- reset color after start casting spell
+            BomberFrame_SetKey(nil);
         end
 
         if COMBATLOG_MODS[subEvent] then
