@@ -1,6 +1,5 @@
 ﻿BOMBER_HUNTER_1 = {
     OnLoad = function()
-        print("Hi")
     end,
     {   SpellId =      0, Name = "Инициализация",
         IsMovingCheck     = "none",

@@ -1,5 +1,6 @@
 ﻿EVENT_MODS = { };
 COMBATLOG_MODS = { };
+ABILITY_TABLE = {}
 
 -- Константы горячих клавиш
 mkLeftShift     = 1;
@@ -56,8 +57,6 @@ PLAYER = {
         self.Agro     = UnitThreatSituation("player") or 0;
     end,
 };
-
-ABILITY_TABLE = {}
 
 function HasBuff(unit, spellId, filter)
     local spell_table = { };
@@ -152,15 +151,15 @@ end
 -- Проверяет, надо ли сбивать заклинание текущему юниту.
 function CheckInterrupt(unit, sec)
     -- чтение заклинания прерываем только перед окончанием каста.
-    local name,_,_,_,startTime,endTime,isTrade,_,notInterruptible = UnitCastingInfo(unit);
-    if name and not (notInterruptible or isTrade) then
+    local name, text, texture, startTime, endTime, isTradeSkill, castID, notInterruptible, spellID = UnitCastingInfo(unit);
+    if name and not (notInterruptible or isTradeSkill) then
         if (((endTime / 1000) - GetTime()) - BomberFrame.ping) <= (sec or 1) then
             return true;
         end
     end
     -- канальное заклинание прерываем сразу.
-    local name,_,_,_,_,_,isTrade,notInterruptible = UnitChannelInfo(unit);
-    if name and not (notInterruptible or isTrade) then
+    local name, text, texture, startTime, endTime, isTradeSkill, notInterruptible, spellID = UnitChannelInfo(unit);
+    if name and not (notInterruptible or isTradeSkill) then
         return true;
     end
 end
@@ -317,12 +316,17 @@ function CheckAndCastAbility(ability, targetInfo)
         end
     end
 
+    local hotKey = GetHotKeyBySpellId(ability.SpellId);
+    BomberFrame_SetKey(hotKey);
+
     -- move to SPELL_CAST_START
     targetInfo.Guid = UnitGUID(targetInfo.Target);
     targetInfo.LastCastingTime = GetTime() + (select(7, GetSpellInfo(ability.SpellId)) or 0) / 1000;
 
-    local hotKey = GetHotKeyBySpellId(ability.SpellId);
-    BomberFrame_SetKey(hotKey);
+    if not hotKey and ability.SpellId > 0 then
+        print("HotKey by "..spellName.." not found");
+    end
+
     return hotKey ~= nil;
 end
 
@@ -356,7 +360,6 @@ end
 
 function LoadRotation()
     local rotationName = "BOMBER_"..select(2, UnitClass("player")).."_"..tostring(GetSpecialization());
-    print ("ROTATION", rotationName)
     ABILITY_TABLE = _G[rotationName];
 
     BOMBER_AOE = false;
@@ -365,6 +368,7 @@ function LoadRotation()
 
     if ABILITY_TABLE and type(ABILITY_TABLE.OnLoad) == "function" then
         ABILITY_TABLE.OnLoad();
+        BomberFrameInfo.print("|cff15bd05Rotation: |r|cff6f0a9a"..select(2, GetSpecializationInfo(GetSpecialization())).."|r|cff15bd05 is enabled.|r", true);
     end
 end
 
@@ -393,7 +397,6 @@ function BomberFrame_OnEvent(self, event, ...)
         CheckAllSpells();
     elseif event == "PLAYER_SPECIALIZATION_CHANGED" then
         local unit = ...;
-        print("Spec changed:", unit)
         if UnitGUID(unit) == UnitGUID("player") then
             LoadRotation();
         end

@@ -2,7 +2,6 @@
 -- Affiction
 BOMBER_WARLOCK_1 = {
     OnLoad = function()
-        print("Hi")
     end,
     {   SpellId =      0, Name = "Инициализация",
         IsMovingCheck     = "none",
@@ -85,7 +84,6 @@ BOMBER_WARLOCK_1 = {
             { Target = "target" }
         },
         Func = function(ability, targetInfo, target)
-            --print('tick')
             return true
         end
     },
@@ -98,5 +96,92 @@ BOMBER_WARLOCK_2 = {
 
 -- Destruction
 BOMBER_WARLOCK_3 = {
-
+    OnLoad = function()
+    end,
+    {   SpellId =      0, Name = "Инициализация",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = false,
+        IsUsableCheck     = true,
+        RangeCheck        = false,
+        TargetList = {
+            { Target = "none" }
+        },
+        Func = function(ability, targetInfo, target)
+            BomberFrame.RangeSpell = GetSpellInfo(29722);
+            if IsModKeyDown(mkLeftAlt) or IsMounted() then
+                return true;
+            end
+        end
+    },
+    {   SpellId = 348, Name = "Жертвенный огонь",
+        IsMovingCheck     = "none",
+        RecastDelay       = 2,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        IsUsableCheck     = true,
+        RangeCheck        = true,
+        TargetList = {
+            { Target = "target" }
+        },
+        Func = function(ability, targetInfo, target)
+            if select(3, HasDebuff("target", 157736, "PLAYER")) < 4 then
+                return true;
+            end
+        end
+    },
+    {   SpellId = 17962, Name = "Поджигание",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        IsUsableCheck     = true,
+        RangeCheck        = true,
+        TargetList = {
+            { Target = "target" }
+        },
+        Func = function(ability, targetInfo, target)
+            if not HasBuff("player", 117828) then
+                return true;
+            end
+        end
+    },
+    {   SpellId = 116858, Name = "Стрела Хаоса",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        IsUsableCheck     = true,
+        RangeCheck        = true,
+        TargetList = {
+            { Target = "target" }
+        },
+        Func = function(ability, targetInfo, target)
+            if not IsMoving() then
+                return true;
+            end
+        end
+    },
+    {   SpellId = 29722, Name = "Испепеление",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        IsUsableCheck     = true,
+        RangeCheck        = true,
+        TargetList = {
+            { Target = "target" }
+        },
+        Func = function(ability, targetInfo, target)
+            if not IsMoving() or HasBuff("player", 279673) then
+                return true;
+            end
+        end
+    },
 }
