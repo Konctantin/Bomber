@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Linq;
 using System.Threading;
 
@@ -27,7 +24,7 @@ namespace KeyBomber
                 Thread.Sleep(random.Next(10, 30));
             }
 
-            int count = random.Next(1, 4);
+            int count = random.Next(1, 2);
             for (int i = 0; i < count; ++i)
             {
                 if (i > 0)
@@ -74,19 +71,15 @@ namespace KeyBomber
                     if (foregroundWindow.IsTitle("World of Warcraft"))
                     {
                         var keyColor = foregroundWindow.GetPixelColor();
-                        Console.WriteLine($"KeyColor: {keyColor}, 0x{keyColor.ToArgb():X08}");
-
                         var keyRec = GetKeyFromColor(keyColor);
-
-                        Console.WriteLine(keyRec);
-
                         if (keyRec.HasKey)
                         {
-                            //SendKey(foregroundWindow.Hwd, keyRec);
+                            Console.WriteLine($"KeyColor: {keyColor}, 0x{keyColor.ToArgb():X08} {keyRec}");
+                            SendKey(foregroundWindow.Hwd, keyRec);
                         }
                     }
 
-                    Thread.Sleep(random.Next(800, 1200));
+                    Thread.Sleep(100);
                 }
             }
         }

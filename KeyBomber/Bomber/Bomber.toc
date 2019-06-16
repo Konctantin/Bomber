@@ -5,3 +5,16 @@
 
 Bomber.lua
 Bomber.KeyMap.lua
+
+DeamonHunter.lua
+DeathKnight.lua
+Druid.lua
+Hunter.lua
+Mage.lua
+Monk.lua
+Paladin.lua
+Priest.lua
+Rogue.lua
+Shaman.lua
+Warlock.lua
+Warrior.lua

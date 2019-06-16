@@ -1,0 +1,3 @@
+﻿BOMBER_MAGE_1 = {}
+BOMBER_MAGE_2 = {}
+BOMBER_MAGE_3 = {}

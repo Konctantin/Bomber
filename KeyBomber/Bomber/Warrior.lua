@@ -1,0 +1,4 @@
+﻿-- 
+BOMBER_WARRIOR_1 = {}
+BOMBER_WARRIOR_2 = {}
+BOMBER_WARRIOR_3 = {}

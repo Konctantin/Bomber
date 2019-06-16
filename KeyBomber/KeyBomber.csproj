@@ -54,34 +54,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Bomber\Bomber.Core.lua" />
     <None Include="Bomber\Bomber.KeyMap.lua" />
     <None Include="Bomber\Bomber.lua" />
     <None Include="Bomber\Bomber.toc" />
-    <None Include="Bomber\Common\Common.lua" />
-    <None Include="Bomber\DeamonHunter\Havoc.lua" />
-    <None Include="Bomber\DeamonHunter\Vengeance.lua" />
-    <None Include="Bomber\DeathKnight\Blood.lua" />
-    <None Include="Bomber\DeathKnight\Frost.lua" />
-    <None Include="Bomber\Druid\Balance.lua" />
-    <None Include="Bomber\Druid\Feral.lua" />
-    <None Include="Bomber\Druid\Guardian.lua" />
-    <None Include="Bomber\Hunter\Beastmaster.lua" />
-    <None Include="Bomber\Mage\Frost.lua" />
-    <None Include="Bomber\Monk\Brewmaster.lua" />
-    <None Include="Bomber\Paladin\Holy.lua" />
-    <None Include="Bomber\Paladin\Protection.lua" />
-    <None Include="Bomber\Paladin\Retribution.lua" />
-    <None Include="Bomber\Priest\Discipline.lua" />
-    <None Include="Bomber\Priest\Shadow.lua" />
-    <None Include="Bomber\Rogue\Assassination.lua" />
-    <None Include="Bomber\Shaman\Elemental.lua" />
-    <None Include="Bomber\Warlock\Affliction.lua" />
-    <None Include="Bomber\Warlock\Demonology.lua" />
-    <None Include="Bomber\Warlock\Destruction.lua" />
-    <None Include="Bomber\Warrior\Arms.lua" />
-    <None Include="Bomber\Warrior\Furry.lua" />
-    <None Include="Bomber\Warrior\Protection.lua" />
+    <None Include="Bomber\DeamonHunter.lua" />
+    <None Include="Bomber\DeathKnight.lua" />
+    <None Include="Bomber\Druid.lua" />
+    <None Include="Bomber\Hunter.lua" />
+    <None Include="Bomber\Mage.lua" />
+    <None Include="Bomber\Monk.lua" />
+    <None Include="Bomber\Paladin.lua" />
+    <None Include="Bomber\Priest.lua" />
+    <None Include="Bomber\Rogue.lua" />
+    <None Include="Bomber\Shaman.lua" />
+    <None Include="Bomber\Warlock.lua" />
+    <None Include="Bomber\Warrior.lua" />
     <None Include="CopyAddon.ps1" />
   </ItemGroup>
   <ItemGroup />
