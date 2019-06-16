@@ -9,6 +9,40 @@ mkRightShift    = 4;
 mkRightControl  = 5;
 mkRightAlt      = 6;
 
+BOMBER_AOE = false;
+BOMBER_COOLDOWN = false;
+BOMBER_PAUSE = false;
+
+function EVENT_MODS.MODIFIER_STATE_CHANGED(modifier, state)
+    if state == 0 then return end; -- release key
+
+    if modifier == "LCTRL" then
+        if BOMBER_AOE then
+            BOMBER_AOE = false;
+            BomberFrameInfo.print("|cff00ff00Одиночная цель", true);
+        else
+            BOMBER_AOE = true;
+            BomberFrameInfo.print("|cffff0000AOE", true);
+        end
+    elseif modifier == "RSHIFT" then
+        if BOMBER_COOLDOWN then
+            BOMBER_COOLDOWN = false;
+            BomberFrameInfo.print("|cffff0000Кулдауны выключены", true);
+        else
+            BOMBER_COOLDOWN = true;
+            BomberFrameInfo.print("|cff00ff00Кулдауны включены", true);
+        end
+    elseif modifier == "LALT" then
+        if BOMBER_PAUSE then
+            BOMBER_PAUSE = false;
+            BomberFrameInfo.print("|cffff0000Пауза выключена", true);
+        else
+            BOMBER_PAUSE = true;
+            BomberFrameInfo.print("|cff00ff00Пауза включена", true);
+        end
+    end
+end
+
 PLAYER = {
     HP   = 0,
     Agro = 0,
@@ -185,11 +219,10 @@ function GetHotKeyBySpellId(spellId)
     local actionList = C_ActionBar.FindSpellActionButtons(spellId);
     if actionList and #actionList > 0 then
         local actionID = actionList[1];
-        --for _, barName in pairs({'Action','MultiBarBottomLeft','MultiBarBottomRight','MultiBarRight','MultiBarLeft'}) do
-        for _, barName in pairs({"Action","MultiBarBottomLeft","MultiBarBottomRight"}) do
+        for _, barName in pairs({'Action','MultiBarBottomLeft','MultiBarBottomRight','MultiBarRight','MultiBarLeft'}) do
             for i = 1, 12 do
                 local button = _G[barName .. 'Button' .. i];
-                if button.GetID and button:GetID() == actionID then
+                if button.action == actionID then
                     return button.HotKey:GetText();
                 end
             end
@@ -199,6 +232,14 @@ end
 
 function CheckAndCastAbility(ability, targetInfo)
     BomberFrame_SetKey();
+
+    if BOMBER_PAUSE then
+        return;
+    end
+
+    if GetCurrentKeyBoardFocus() then
+        return;
+    end
 
     if ability.IsCheckInCombat and not UnitAffectingCombat("player") then
         return;
@@ -282,7 +323,7 @@ function CheckAndCastAbility(ability, targetInfo)
 
     local hotKey = GetHotKeyBySpellId(ability.SpellId);
     BomberFrame_SetKey(hotKey);
-    return true;
+    return hotKey ~= nil;
 end
 
 function AddonFrame_AbilityLoop()
@@ -317,6 +358,11 @@ function LoadRotation()
     local rotationName = "BOMBER_"..select(2, UnitClass("player")).."_"..tostring(GetSpecialization());
     print ("ROTATION", rotationName)
     ABILITY_TABLE = _G[rotationName];
+
+    BOMBER_AOE = false;
+    BOMBER_COOLDOWN = false;
+    BOMBER_PAUSE = false;
+
     if ABILITY_TABLE and type(ABILITY_TABLE.OnLoad) == "function" then
         ABILITY_TABLE.OnLoad();
     end
@@ -388,6 +434,25 @@ BomberFrame:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED");
 BomberFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
 BomberFrame:RegisterEvent("MODIFIER_STATE_CHANGED");
 BomberFrame:Show();
+
+BomberFrameInfo = CreateFrame("Frame");
+BomberFrameInfo:SetScript("OnUpdate", function (self, elapsed)
+    if (BomberFrameInfo.Duration or 0) < GetTime() then
+        BomberFrameInfo.Msg:SetText("");
+    end
+end);
+BomberFrameInfo:SetHeight(300);
+BomberFrameInfo:SetWidth(600);
+BomberFrameInfo.Buttons = {};
+BomberFrameInfo.Msg = BomberFrameInfo:CreateFontString(nil, "BACKGROUND", "PVPInfoTextFont");
+BomberFrameInfo.Msg:SetAllPoints();
+BomberFrameInfo.print = function(msg, con)
+    BomberFrameInfo.Msg:SetText(msg);
+    if con then print(msg) end
+    BomberFrameInfo.Duration = GetTime() + 5;
+end;
+BomberFrameInfo:SetPoint("CENTER", 0, 200);
+BomberFrameInfo:Show();
 
 function BomberFrame_SetKey(key)
     if key then
