@@ -270,14 +270,16 @@ function CheckAndCastAbility(ability, targetInfo)
 
     local castPing = BomberFrame.ping * 1000;
     if not ability.CancelCasting then
-        local endTime = select(6, UnitCastingInfo("player")) or 0;
+        -- local name, text, texture, startTime, endTime, isTradeSkill, castID, notInterruptible, spellID
+        local endTime = select(5, UnitCastingInfo("player")) or 0;
         if (endTime - (GetTime() * 1000)) >= castPing then
             return;
         end
     end
 
     if not ability.DropChanel then
-        local endTime = select(6, UnitChannelInfo("player")) or 0;
+        -- name, text, texture, startTime, endTime, isTradeSkill, notInterruptible, spellID
+        local endTime = select(5, UnitChannelInfo("player")) or 0;
         if (endTime - (GetTime() * 1000)) >= castPing then
             return;
         end
@@ -317,10 +319,12 @@ function CheckAndCastAbility(ability, targetInfo)
     end
 
     local hotKey = GetHotKeyBySpellId(ability.SpellId);
+
     BomberFrame_SetKey(hotKey);
 
     -- move to SPELL_CAST_START
     targetInfo.Guid = UnitGUID(targetInfo.Target);
+    -- name, _, icon, cost, isFunnel, powerType, castTime, minRage, maxRange
     targetInfo.LastCastingTime = GetTime() + (select(7, GetSpellInfo(ability.SpellId)) or 0) / 1000;
 
     if not hotKey and ability.SpellId > 0 then
@@ -449,9 +453,9 @@ BomberFrameInfo:SetWidth(600);
 BomberFrameInfo.Buttons = {};
 BomberFrameInfo.Msg = BomberFrameInfo:CreateFontString(nil, "BACKGROUND", "PVPInfoTextFont");
 BomberFrameInfo.Msg:SetAllPoints();
-BomberFrameInfo.print = function(msg, con)
+BomberFrameInfo.print = function(msg, toChat)
     BomberFrameInfo.Msg:SetText(msg);
-    if con then print(msg) end
+    if toChat then print(msg) end
     BomberFrameInfo.Duration = GetTime() + 5;
 end;
 BomberFrameInfo:SetPoint("CENTER", 0, 200);

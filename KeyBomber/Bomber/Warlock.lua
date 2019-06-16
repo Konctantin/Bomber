@@ -110,7 +110,7 @@ BOMBER_WARLOCK_3 = {
             { Target = "none" }
         },
         Func = function(ability, targetInfo, target)
-            BomberFrame.RangeSpell = GetSpellInfo(29722);
+            BomberFrame.RangeSpell = GetSpellInfo(17962);
             if IsModKeyDown(mkLeftAlt) or IsMounted() then
                 return true;
             end
