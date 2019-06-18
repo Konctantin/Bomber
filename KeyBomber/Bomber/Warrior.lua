@@ -1,6 +1,7 @@
-﻿-- 
+﻿-- Arms
 BOMBER_WARRIOR_1 = {}
 
+-- Furry
 BOMBER_WARRIOR_2 = {
     OnLoad = function()
     end,
@@ -17,7 +18,7 @@ BOMBER_WARRIOR_2 = {
         },
         Func = function(ability, targetInfo, target)
             BomberFrame.RangeSpell = GetSpellInfo(23881);
-            if IsModKeyDown(mkLeftAlt) or IsMounted() then
+            if IsMounted() then
                 return true;
             end
         end

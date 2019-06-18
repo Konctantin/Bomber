@@ -1,7 +1,9 @@
-﻿BOMBER_PALADIN_1 = {
+﻿-- Holy
+BOMBER_PALADIN_1 = {
     -- Healer spec impossible implemented
 }
 
+-- Retribution
 BOMBER_PALADIN_2 = {
     OnLoad = function()
     end,
@@ -18,7 +20,7 @@ BOMBER_PALADIN_2 = {
         },
         Func = function(ability, targetInfo, target)
             BomberFrame.RangeSpell = GetSpellInfo(96231);
-            if IsModKeyDown(mkLeftAlt) or IsMounted() then
+            if IsMounted() then
                 return true;
             end
         end
@@ -164,6 +166,7 @@ BOMBER_PALADIN_2 = {
     },
 }
 
+-- Protection
 BOMBER_PALADIN_3 = {
     OnLoad = function()
     end,
@@ -180,7 +183,7 @@ BOMBER_PALADIN_3 = {
         },
         Func = function(ability, targetInfo, target)
             BomberFrame.RangeSpell = GetSpellInfo(35395);
-            if IsModKeyDown(mkLeftAlt) or IsMounted() then
+            if IsMounted() then
                 return true;
             end
         end

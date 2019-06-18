@@ -12,7 +12,6 @@ mkRightAlt      = 6;
 
 BOMBER_AOE = false;
 BOMBER_COOLDOWN = false;
-BOMBER_PAUSE = false;
 
 function EVENT_MODS.MODIFIER_STATE_CHANGED(modifier, state)
     if state == 0 then return end; -- release key
@@ -33,15 +32,6 @@ function EVENT_MODS.MODIFIER_STATE_CHANGED(modifier, state)
             BOMBER_COOLDOWN = true;
             BomberFrameInfo.print("|cff00ff00Кулдауны включены", true);
         end
-    elseif modifier == "LALT" then
-        if BOMBER_PAUSE then
-            BOMBER_PAUSE = false;
-            BomberFrameInfo.print("|cffff0000Пауза выключена", true);
-        else
-            BOMBER_PAUSE = true;
-            BomberFrameInfo.print("|cff00ff00Пауза включена", true);
-        end
-    end
 end
 
 PLAYER = {
@@ -232,11 +222,7 @@ end
 function CheckAndCastAbility(ability, targetInfo)
     BomberFrame_SetKey();
 
-    if BOMBER_PAUSE then
-        return;
-    end
-
-    if GetCurrentKeyBoardFocus() then
+    if GetCurrentKeyBoardFocus() or IsModKeyDown(mkLeftAlt) then
         return;
     end
 
@@ -368,7 +354,6 @@ function LoadRotation()
 
     BOMBER_AOE = false;
     BOMBER_COOLDOWN = false;
-    BOMBER_PAUSE = false;
 
     if ABILITY_TABLE and type(ABILITY_TABLE.OnLoad) == "function" then
         ABILITY_TABLE.OnLoad();

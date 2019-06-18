@@ -1,4 +1,4 @@
-﻿-- 
+﻿-- Assassination
 BOMBER_ROGUE_1 = {
     OnLoad = function()
     end,
@@ -15,7 +15,7 @@ BOMBER_ROGUE_1 = {
         },
         Func = function(ability, targetInfo, target)
             BomberFrame.RangeSpell = GetSpellInfo(703);
-            if IsModKeyDown(mkLeftAlt) or IsMounted() or IsStealthed() then
+            if IsMounted() or IsStealthed() then
                 return true;
             end
         end

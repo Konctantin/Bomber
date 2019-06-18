@@ -1,11 +1,10 @@
-﻿BOMBER_HUNTER_1 = {
+﻿-- Beastmaster
+BOMBER_HUNTER_1 = {
     OnLoad = function()
     end,
     {   SpellId =      0, Name = "Инициализация",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
-        DropChanel        = false,
-        CancelCasting     = false,
         IsCheckInCombat   = false,
         IsUsableCheck     = true,
         RangeCheck        = false,
@@ -14,7 +13,7 @@
         },
         Func = function(ability, targetInfo, target)
             BomberFrame.RangeSpell = GetSpellInfo(193455);
-            if IsModKeyDown(mkLeftAlt) or IsMounted() or IsStealthed() then
+            if IsMounted() or IsStealthed() then
                 return true;
             end
         end
@@ -153,4 +152,5 @@
 }
 
 BOMBER_HUNTER_2 = {}
+
 BOMBER_HUNTER_3 = {}
