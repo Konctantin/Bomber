@@ -162,7 +162,7 @@ BOMBER_WARLOCK_3 = {
             { Target = "target" }
         },
         Func = function(ability, targetInfo, target)
-            if not IsMoving() then
+            if not IsMoving() and not BOMBER_AOE then
                 return true;
             end
         end

@@ -412,6 +412,7 @@ function BomberFrame_OnEvent(self, event, ...)
             SetTargetCastintInfo(spellId, nil, 0);
         elseif subEvent == "SPELL_CAST_START" then
             -- after start spell cast need reset frame color
+            --print(CombatLogGetCurrentEventInfo())
             BomberFrame_SetKey(nil);
         end
 
