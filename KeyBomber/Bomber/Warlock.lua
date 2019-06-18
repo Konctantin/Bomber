@@ -16,7 +16,7 @@ BOMBER_WARLOCK_1 = {
         },
         Func = function(ability, targetInfo, target)
             BomberFrame.RangeSpell = GetSpellInfo(232670);
-            if IsModKeyDown(mkLeftAlt) or IsMounted() then
+            if IsMounted() then
                 return true;
             end
         end
@@ -68,7 +68,17 @@ BOMBER_WARLOCK_1 = {
         },
         Func = function(ability, targetInfo, target)
             if not IsMoving() and UnitHealth("target") > UnitHealth("palyer") then
-                return true
+                local count = 0;
+                for i = 1, 40 do
+                    local spellId = UnitDebuff("target", i, "PLAYER");
+                    if not spellId then break end
+                    if spellId == 30108 then
+                        count = count + 1
+                    end
+                end
+                if count < 3 or UnitPower("player", 7) > 4 then
+                    return true;
+                end
             end
         end
     },
@@ -111,7 +121,7 @@ BOMBER_WARLOCK_3 = {
         },
         Func = function(ability, targetInfo, target)
             BomberFrame.RangeSpell = GetSpellInfo(17962);
-            if IsModKeyDown(mkLeftAlt) or IsMounted() then
+            if IsMounted() then
                 return true;
             end
         end
