@@ -32,6 +32,7 @@ function EVENT_MODS.MODIFIER_STATE_CHANGED(modifier, state)
             BOMBER_COOLDOWN = true;
             BomberFrameInfo.print("|cff00ff00Кулдауны включены", true);
         end
+    end
 end
 
 PLAYER = {
