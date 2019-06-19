@@ -205,15 +205,22 @@ function CheckAllSpells()
     end
 end
 
+local ACTION_BAR_TYPES = { 'Action', 'MultiBarBottomLeft', 'MultiBarBottomRight', 'MultiBarRight', 'MultiBarLeft' };
+
 function GetHotKeyBySpellId(spellId)
     local actionList = C_ActionBar.FindSpellActionButtons(spellId);
     if actionList and #actionList > 0 then
-        local actionID = actionList[1];
-        for _, barName in pairs({'Action','MultiBarBottomLeft','MultiBarBottomRight','MultiBarRight','MultiBarLeft'}) do
-            for i = 1, 12 do
-                local button = _G[barName .. 'Button' .. i];
-                if button.action == actionID then
-                    return button.HotKey:GetText();
+        for _, actionID in ipairs(actionList) do
+            for _, barName in pairs(ACTION_BAR_TYPES) do
+                for i = 1, 12 do
+                    local button = _G[barName .. 'Button' .. i];
+                    if button and button.action == actionID then
+                        local hotKey = string.upper(tostring(button.HotKey:GetText()));
+                        local color = BOMBER_KEYMAP[hotKey]
+                        if color then
+                            return hotKey;
+                        end
+                    end
                 end
             end
         end
@@ -315,7 +322,7 @@ function CheckAndCastAbility(ability, targetInfo)
     targetInfo.LastCastingTime = GetTime() + (select(7, GetSpellInfo(ability.SpellId)) or 0) / 1000;
 
     if not hotKey and ability.SpellId > 0 then
-        print("HotKey by "..spellName.." not found");
+        print("HotKey by ("..spellName..") not found");
     end
 
     return hotKey ~= nil;
@@ -350,20 +357,24 @@ function BomberFrame_OnUpdate(self, elapsed)
 end
 
 function LoadRotation()
-    local rotationName = "BOMBER_"..select(2, UnitClass("player")).."_"..tostring(GetSpecialization());
+    local className, classMnkd = UnitClass("player");
+    local rotationName = "BOMBER_"..classMnkd.."_"..tostring(GetSpecialization());
     ABILITY_TABLE = _G[rotationName];
 
     BOMBER_AOE = false;
     BOMBER_COOLDOWN = false;
 
-    if ABILITY_TABLE and type(ABILITY_TABLE.OnLoad) == "function" then
-        ABILITY_TABLE.OnLoad();
-        BomberFrameInfo.print("|cff15bd05Rotation: |r|cff6f0a9a"..select(2, GetSpecializationInfo(GetSpecialization())).."|r|cff15bd05 is enabled.|r", true);
+    if type(ABILITY_TABLE) == "table" and #ABILITY_TABLE > 0 then
+        if type(ABILITY_TABLE.OnLoad) == "function" then
+            ABILITY_TABLE.OnLoad();
+        end
+        local spec = select(2, GetSpecializationInfo(GetSpecialization()));
+        BomberFrameInfo.print("|cff15bd05Rotation: |r|cff6f0a9a"..className..": "..spec.."|r|cff15bd05 is enabled.|r", true);
     end
 end
 
 function SetTargetCastintInfo(spellId, guid, castTime)
-    if type(ABILITY_TABLE) == "table" then 
+    if type(ABILITY_TABLE) == "table" then
         local dstGuid = guid and guid or LAST_TARGET;
         for _,ability in ipairs(ABILITY_TABLE) do
             if type(ability) == "table" then
@@ -450,7 +461,7 @@ BomberFrameInfo:Show();
 
 function BomberFrame_SetKey(key)
     if key then
-        local color = BOMBER_KEYMAP[string.upper(key)];
+        local color = BOMBER_KEYMAP[key];
         if color then
             BomberFrame.texture:SetColorTexture(color.R, color.G, color.B, 1);
         else

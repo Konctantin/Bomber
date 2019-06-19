@@ -151,6 +151,8 @@ BOMBER_HUNTER_1 = {
     },
 }
 
+-- Marksmanship
 BOMBER_HUNTER_2 = {}
 
+-- Survival
 BOMBER_HUNTER_3 = {}

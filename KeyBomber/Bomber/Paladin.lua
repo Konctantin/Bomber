@@ -3,7 +3,7 @@ BOMBER_PALADIN_1 = {
     -- Healer spec impossible implemented
 }
 
--- Retribution
+-- Protection
 BOMBER_PALADIN_2 = {
     OnLoad = function()
     end,
@@ -166,7 +166,7 @@ BOMBER_PALADIN_2 = {
     },
 }
 
--- Protection
+-- Retribution
 BOMBER_PALADIN_3 = {
     OnLoad = function()
     end,
@@ -182,7 +182,7 @@ BOMBER_PALADIN_3 = {
             { Target = "none" }
         },
         Func = function(ability, targetInfo, target)
-            BomberFrame.RangeSpell = GetSpellInfo(35395);
+            BomberFrame.RangeSpell = GetSpellInfo(96231);
             if IsMounted() then
                 return true;
             end
@@ -290,7 +290,7 @@ BOMBER_PALADIN_3 = {
             { Target = "target" }
         },
         Func = function(ability, targetInfo, target)
-            if BOMBER_AOE then
+            if BOMBER_AOE or HasBuff("player", 286393) then
                 return true;
             end
         end

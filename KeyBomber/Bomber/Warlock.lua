@@ -101,7 +101,26 @@ BOMBER_WARLOCK_1 = {
 
 -- Demonology
 BOMBER_WARLOCK_2 = {
-
+    OnLoad = function()
+    end,
+    {   SpellId =      0, Name = "Инициализация",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = false,
+        IsUsableCheck     = true,
+        RangeCheck        = false,
+        TargetList = {
+            { Target = "none" }
+        },
+        Func = function(ability, targetInfo, target)
+            BomberFrame.RangeSpell = GetSpellInfo(232670);
+            if IsMounted() then
+                return true;
+            end
+        end
+    },
 }
 
 -- Destruction

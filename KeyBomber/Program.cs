@@ -74,7 +74,7 @@ namespace KeyBomber
                         var keyRec = GetKeyFromColor(keyColor);
                         if (keyRec.HasKey)
                         {
-                            Console.WriteLine($"KeyColor: {keyColor}, 0x{keyColor.ToArgb():X08} {keyRec}");
+                            Console.WriteLine($"KeyColor: 0x{keyColor.ToArgb():X08} {keyRec}");
                             SendKey(foregroundWindow.Hwd, keyRec);
                         }
                     }

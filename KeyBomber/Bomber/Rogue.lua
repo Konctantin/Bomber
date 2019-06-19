@@ -20,6 +20,23 @@ BOMBER_ROGUE_1 = {
             end
         end
     },
+    {   SpellId =    1766, Name = "Пинок",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        IsUsableCheck     = true,
+        RangeCheck        = true,
+        TargetList = {
+            { Target = "target" }
+        },
+        Func = function(ability, targetInfo, target)
+            if CheckInterrupt("target") then
+                return true;
+            end
+        end
+    },
     {   SpellId =    703, Name = "Гаротта",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
@@ -87,15 +104,49 @@ BOMBER_ROGUE_1 = {
             { Target = "target" }
         },
         Func = function(ability, targetInfo, target)
-            return true;
+            return not BOMBER_AOE;
+        end
+    },
+    {   SpellId =  51723, Name = "Веер клинков",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        IsUsableCheck     = true,
+        RangeCheck        = true,
+        TargetList = {
+            { Target = "target" }
+        },
+        Func = function(ability, targetInfo, target)
+            return BOMBER_AOE;
+        end
+    },
+    {   SpellId =   185565, Name = "Отравленный нож",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        IsUsableCheck     = true,
+        RangeCheck        = false,
+        TargetList = {
+            { Target = "target" }
+        },
+        Func = function(ability, targetInfo, target)
+            if UnitPower("player") > 60 then
+                if IsSpellInRange(GetSpellInfo(185565), "target") == 1 then
+                    return true;
+                end
+            end
         end
     },
 }
 
--- 
+-- Combat
 BOMBER_ROGUE_2 = {
 }
 
--- 
+-- Subtlety
 BOMBER_ROGUE_3 = {
 }

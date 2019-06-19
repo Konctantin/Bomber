@@ -11,9 +11,23 @@ namespace KeyBomber
 
         public bool HasModif => Modifier != 0;
 
+        private string ModToStr(int mod)
+        {
+            switch (mod)
+            {
+                case 0xA0: return "S";
+                case 0xA2: return "C";
+                case 0xA4: return "A";
+                default: return "";
+            }
+        }
+
         public override string ToString()
         {
-            return $"Modifyer: {Modifier}, Key: {Key}";
+            if (HasModif)
+                return $"HotKey: <{ModToStr(Modifier)}-{(char)Key}>";
+            else
+                return $"HotKey: <{(char)Key}>";
         }
     }
 }

@@ -57,7 +57,7 @@
     <None Include="Bomber\Bomber.KeyMap.lua" />
     <None Include="Bomber\Bomber.lua" />
     <None Include="Bomber\Bomber.toc" />
-    <None Include="Bomber\DeamonHunter.lua" />
+    <None Include="Bomber\DemonHunter.lua" />
     <None Include="Bomber\DeathKnight.lua" />
     <None Include="Bomber\Druid.lua" />
     <None Include="Bomber\Hunter.lua" />

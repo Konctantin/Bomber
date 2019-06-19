@@ -1,5 +1,6 @@
 ﻿-- Arms
-BOMBER_WARRIOR_1 = {}
+BOMBER_WARRIOR_1 = {
+}
 
 -- Furry
 BOMBER_WARRIOR_2 = {
@@ -165,12 +166,30 @@ BOMBER_WARRIOR_2 = {
         IsUsableCheck     = true,
         RangeCheck        = true,
         TargetList = {
-            { Target = "target" }
+            { Target = "none" }
         },
         Func = function(ability, targetInfo, target)
             return true;
         end
     },
+    {   SpellId =  57755, Name = "Героический бросок",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        IsUsableCheck     = true,
+        RangeCheck        = false,
+        TargetList = {
+            { Target = "target" }
+        },
+        Func = function(ability, targetInfo, target)
+            if IsSpellInRange(GetSpellInfo(57755), "target") == 1 then
+                return true;
+            end
+        end
+    },
 }
 
-BOMBER_WARRIOR_3 = {}
+BOMBER_WARRIOR_3 = {
+}

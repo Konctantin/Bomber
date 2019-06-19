@@ -1,3 +1,11 @@
-﻿BOMBER_MAGE_1 = {}
-BOMBER_MAGE_2 = {}
-BOMBER_MAGE_3 = {}
+﻿-- Arcane
+BOMBER_MAGE_1 = {
+}
+
+-- Fire
+BOMBER_MAGE_2 = {
+}
+
+-- Frost
+BOMBER_MAGE_3 = {
+}

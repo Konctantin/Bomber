@@ -6,7 +6,7 @@
 Bomber.lua
 Bomber.KeyMap.lua
 
-DeamonHunter.lua
+DemonHunter.lua
 DeathKnight.lua
 Druid.lua
 Hunter.lua
