@@ -1,6 +1,6 @@
 ﻿EVENT_MODS = { };
 COMBATLOG_MODS = { };
-ABILITY_TABLE = {}
+ABILITY_TABLE = { }
 
 -- Константы горячих клавиш
 mkLeftShift     = 1;
@@ -12,6 +12,7 @@ mkRightAlt      = 6;
 
 BOMBER_AOE = false;
 BOMBER_COOLDOWN = false;
+BOMBER_PAUSE = false;
 
 function EVENT_MODS.MODIFIER_STATE_CHANGED(modifier, state)
     if state == 0 then return end; -- release key
@@ -32,6 +33,14 @@ function EVENT_MODS.MODIFIER_STATE_CHANGED(modifier, state)
             BOMBER_COOLDOWN = true;
             BomberFrameInfo.print("|cff00ff00Кулдауны включены", true);
         end
+    elseif modifier == "RALT" then
+        if BOMBER_PAUSE then
+            BOMBER_PAUSE = false;
+            BomberFrameInfo.print("|cffff0000Пауза выключена", true);
+        else
+            BOMBER_PAUSE = true;
+            BomberFrameInfo.print("|cff00ff00Пауза включена", true);
+        end
     end
 end
 
@@ -47,7 +56,25 @@ PLAYER = {
         self.IsMounted= IsMounted() and not HasBuff("player", 165803);
         self.Agro     = UnitThreatSituation("player") or 0;
     end,
+
+    HasBuff = function(self, spellId, filter)
+        return HasBuff("player", spellId, filter)
+    end
 };
+
+TARGET = {
+    HP = 0,
+    ID = 0,
+
+    Init = function(self)
+        self.HP = 100 * (UnitHealth("target") or 1) / (UnitHealthMax("target") or 1) or 0;
+        self.ID = UnitId("target");
+    end,
+
+    HasDebuf = function (self, spellId, filter)
+        return HasDebuff("target", spellId, filter)
+    end,
+}
 
 function HasBuff(unit, spellId, filter)
     local spell_table = { };
@@ -207,7 +234,7 @@ end
 
 local ACTION_BAR_TYPES = { 'Action', 'MultiBarBottomLeft', 'MultiBarBottomRight', 'MultiBarRight', 'MultiBarLeft' };
 
-function GetHotKeyBySpellId(spellId)
+function GetHotKeyColorBySpellId(spellId)
     local actionList = C_ActionBar.FindSpellActionButtons(spellId);
     if actionList and #actionList > 0 then
         for _, actionID in ipairs(actionList) do
@@ -218,7 +245,7 @@ function GetHotKeyBySpellId(spellId)
                         local hotKey = string.upper(tostring(button.HotKey:GetText()));
                         local color = BOMBER_KEYMAP[hotKey]
                         if color then
-                            return hotKey;
+                            return color;
                         end
                     end
                 end
@@ -228,9 +255,17 @@ function GetHotKeyBySpellId(spellId)
 end
 
 function CheckAndCastAbility(ability, targetInfo)
-    BomberFrame_SetKey();
+    BomberFrame_SetColor(nil);
 
-    if GetCurrentKeyBoardFocus() or IsModKeyDown(mkLeftAlt) then
+    if GetCurrentKeyBoardFocus() or IsModKeyDown(mkLeftAlt) or BOMBER_PAUSE then
+        return;
+    end
+
+    if UnitIsDeadOrGhost("player") then
+        return;
+    end
+
+    if UnitHasVehicleUI("player") then
         return;
     end
 
@@ -312,20 +347,20 @@ function CheckAndCastAbility(ability, targetInfo)
         end
     end
 
-    local hotKey = GetHotKeyBySpellId(ability.SpellId);
+    local hotKeyColor = GetHotKeyColorBySpellId(ability.SpellId);
 
-    BomberFrame_SetKey(hotKey);
+    BomberFrame_SetColor(hotKey);
 
     -- move to SPELL_CAST_START
     targetInfo.Guid = UnitGUID(targetInfo.Target);
     -- name, _, icon, cost, isFunnel, powerType, castTime, minRage, maxRange
     targetInfo.LastCastingTime = GetTime() + (select(7, GetSpellInfo(ability.SpellId)) or 0) / 1000;
 
-    if not hotKey and ability.SpellId > 0 then
-        print("HotKey by ("..spellName..") not found");
+    if not hotKeyColor and ability.SpellId > 0 then
+        print("HotKey color by ("..spellName..") not found");
     end
 
-    return hotKey ~= nil;
+    return hotKeyColor ~= nil;
 end
 
 function AddonFrame_AbilityLoop()
@@ -350,6 +385,7 @@ function BomberFrame_OnUpdate(self, elapsed)
         if not UnitIsDeadOrGhost("player") and not UnitIsAFK("player") then
             BomberFrame.ping = select(4, GetNetStats()) / 1000;
             PLAYER:Init();
+            TARGET:Init();
             AddonFrame_AbilityLoop();
         end
         BomberFrame.LastTime = GetTime() + math.random(150, 250) / 1000;
@@ -363,6 +399,7 @@ function LoadRotation()
 
     BOMBER_AOE = false;
     BOMBER_COOLDOWN = false;
+    BOMBER_PAUSE = false;
 
     if type(ABILITY_TABLE) == "table" and #ABILITY_TABLE > 0 then
         if type(ABILITY_TABLE.OnLoad) == "function" then
@@ -410,7 +447,7 @@ function BomberFrame_OnEvent(self, event, ...)
         elseif subEvent == "SPELL_CAST_START" then
             -- after start spell cast need reset frame color
             --print(CombatLogGetCurrentEventInfo())
-            BomberFrame_SetKey(nil);
+            BomberFrame_SetColor(nil);
         end
 
         if COMBATLOG_MODS[subEvent] then
@@ -459,16 +496,10 @@ end;
 BomberFrameInfo:SetPoint("CENTER", 0, 200);
 BomberFrameInfo:Show();
 
-function BomberFrame_SetKey(key)
-    if key then
-        local color = BOMBER_KEYMAP[key];
-        if color then
-            BomberFrame.texture:SetColorTexture(color.R, color.G, color.B, 1);
-        else
-            BomberFrame.texture:SetColorTexture(0, 0, 0, 1);
-        end
+function BomberFrame_SetColor(color)
+    if color then
+        BomberFrame.texture:SetColorTexture(color.R, color.G, color.B, 1);
     else
         BomberFrame.texture:SetColorTexture(0, 0, 0, 1);
     end
 end
-
