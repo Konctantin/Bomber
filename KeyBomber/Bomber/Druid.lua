@@ -144,6 +144,7 @@ BOMBER_DRUID_1 = {
 
 -- Feral
 BOMBER_DRUID_2 = {
+
 }
 
 -- Guardian

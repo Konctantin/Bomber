@@ -10,4 +10,5 @@ BOMBER_PRIEST_2 = {
 
 -- Shadow
 BOMBER_PRIEST_3 = {
+
 }

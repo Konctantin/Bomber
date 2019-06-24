@@ -200,9 +200,10 @@ BOMBER_PALADIN_3 = {
             { Target = "none" }
         },
         Func = function(ability, targetInfo, target)
-            if not HasBuff("player", 203538) then
-                return true;
-            end
+            --if not HasBuff("player", 203538) and IsInParty() then
+            --    return true;
+            --end
+            return false
         end
     },
     {   SpellId =  31884, Name = "Гнев карателя",

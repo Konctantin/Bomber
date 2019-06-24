@@ -1,9 +1,11 @@
 ﻿-- Elemental
 BOMBER_SHAMAN_1 = {
+
 }
 
 -- Enhancement
 BOMBER_SHAMAN_2 = {
+
 }
 
 -- Restoration

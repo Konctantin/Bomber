@@ -16,12 +16,17 @@ namespace KeyBomber
 
         static readonly Random random = new Random();
 
+        private static void RandomSleep(int min, int max)
+        {
+            Thread.Sleep(random.Next(min, max));
+        }
+
         private static void SendKey(IntPtr hwd, KeyRecord keyRec)
         {
             if (keyRec.HasModif)
             {
                 PostMessage(hwd, WM_KEYDOWN, keyRec.Modifier, 0);
-                Thread.Sleep(random.Next(10, 30));
+                RandomSleep(10, 30);
             }
 
             int count = random.Next(1, 2);
@@ -29,17 +34,17 @@ namespace KeyBomber
             {
                 if (i > 0)
                 {
-                    Thread.Sleep(random.Next(10, 30));
+                    RandomSleep(10, 30);
                 }
 
                 PostMessage(hwd, WM_KEYDOWN, keyRec.Key, 0);
-                Thread.Sleep(random.Next(30, 60));
+                RandomSleep(30, 60);
                 PostMessage(hwd, WM_KEYUP, keyRec.Key, 0);
             }
 
             if (keyRec.HasModif)
             {
-                Thread.Sleep(random.Next(10, 30));
+                RandomSleep(10, 30);
                 PostMessage(hwd, WM_KEYUP, keyRec.Modifier, 0);
             }
         }

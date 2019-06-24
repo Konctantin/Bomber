@@ -1,5 +1,6 @@
 ﻿-- Brewmaster
 BOMBER_MONK_1 = {
+
 }
 
 -- Mistweaver

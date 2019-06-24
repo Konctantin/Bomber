@@ -1,5 +1,6 @@
 ﻿-- Arms
 BOMBER_WARRIOR_1 = {
+
 }
 
 -- Furry
@@ -191,5 +192,7 @@ BOMBER_WARRIOR_2 = {
     },
 }
 
+-- Protection
 BOMBER_WARRIOR_3 = {
+
 }

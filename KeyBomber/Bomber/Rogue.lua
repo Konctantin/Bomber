@@ -145,8 +145,10 @@ BOMBER_ROGUE_1 = {
 
 -- Combat
 BOMBER_ROGUE_2 = {
+
 }
 
 -- Subtlety
 BOMBER_ROGUE_3 = {
+
 }
