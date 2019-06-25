@@ -349,7 +349,7 @@ function CheckAndCastAbility(ability, targetInfo)
 
     local hotKeyColor = GetHotKeyColorBySpellId(ability.SpellId);
 
-    BomberFrame_SetColor(hotKey);
+    BomberFrame_SetColor(hotKeyColor);
 
     -- move to SPELL_CAST_START
     targetInfo.Guid = UnitGUID(targetInfo.Target);
@@ -498,6 +498,7 @@ BomberFrameInfo:Show();
 
 function BomberFrame_SetColor(color)
     if color then
+        --print(color.R, color.G, color.B)
         BomberFrame.texture:SetColorTexture(color.R, color.G, color.B, 1);
     else
         BomberFrame.texture:SetColorTexture(0, 0, 0, 1);
