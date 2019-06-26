@@ -65,6 +65,19 @@ namespace KeyBomber
             return Title.Equals(title, comparisonType);
         }
 
+        public bool IsFullScreen()
+        {
+            var a = GetForegroundRect();
+
+            var b = new Rect();
+            GetWindowRect(GetDesktopWindow(), ref b);
+
+            return (a.Left   == b.Left &&
+                    a.Top    == b.Top &&
+                    a.Right  == b.Right &&
+                    a.Bottom == b.Bottom);
+        }
+
 
         static Color GetColorAt(int x, int y)
         {
@@ -78,6 +91,8 @@ namespace KeyBomber
                 int r = (color >> 00) & 0xff;
                 int g = (color >> 08) & 0xff;
                 int b = (color >> 16) & 0xff;
+
+                //Console.WriteLine($"{color:X08}");
                 
                 return Color.FromArgb(a, r, g, b);
             }
@@ -92,7 +107,18 @@ namespace KeyBomber
             //sw.Restart();
 
             var rect = GetForegroundRect();
-            var color = GetColorAt(rect.Left + 1, rect.Bottom - 1);
+
+            // get left bottom pixel point
+            int x = rect.Left + 1;
+            int y = rect.Bottom - 1;
+
+            if (!IsFullScreen())
+            {
+                x += 10;
+                y -= 10;
+            }
+
+            var color = GetColorAt(x, y);
 
             //sw.Stop();
             //Console.WriteLine($"Total: {sw.Elapsed} ({sw.ElapsedMilliseconds} ms)");
