@@ -1,4 +1,4 @@
-﻿## Interface: 81000
+﻿## Interface: 80200
 ## Title: Bomber
 ## Author: Konstantin
 ## Notes: Spell bomber
