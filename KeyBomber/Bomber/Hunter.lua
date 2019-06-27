@@ -1,18 +1,15 @@
 ﻿-- Beastmaster
 BOMBER_HUNTER_1 = {
     OnLoad = function()
+        SetInRangeSpell(193455);
     end,
-    {   SpellId =      0, Name = "Инициализация",
+    {   SpellId =      0, Name = "Initialization",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         IsCheckInCombat   = false,
-        IsUsableCheck     = true,
         RangeCheck        = false,
-        TargetList = {
-            { Target = "none" }
-        },
-        Func = function(ability, targetInfo, target)
-            BomberFrame.RangeSpell = GetSpellInfo(193455);
+        Target            = "none",
+        Func = function(ability)
             if IsMounted() or IsStealthed() then
                 return true;
             end
@@ -24,18 +21,14 @@ BOMBER_HUNTER_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
-        RangeCheck        = false,
-        TargetList = {
-            { Target = "none" }
-        },
-        Func = function(ability, targetInfo, target)
+        RangeCheck        = true,
+        Target            = "none",
+        Func = function(ability)
             if BOMBER_COOLDOWN
             and UnitExists("pet")
             and UnitExists("target")
             and not UnitIsDeadOrGhost("target")
             and UnitCanAttack("player", "target")
-            and IsSpellInRange(BomberFrame.RangeSpell, "target") == 1
             then
                 return true;
             end
@@ -47,18 +40,14 @@ BOMBER_HUNTER_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
-        RangeCheck        = false,
-        TargetList = {
-            { Target = "none" }
-        },
-        Func = function(ability, targetInfo, target)
+        RangeCheck        = true,
+        Target            = "none",
+        Func = function(ability)
             if BOMBER_COOLDOWN
             and UnitExists("pet")
             and UnitExists("target")
             and not UnitIsDeadOrGhost("target")
             and UnitCanAttack("player", "target")
-            and IsSpellInRange(BomberFrame.RangeSpell, "target") == 1
             then
                 return true;
             end
@@ -70,12 +59,9 @@ BOMBER_HUNTER_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if UnitPower("player") < 70 then
                 return true;
             end
@@ -87,12 +73,9 @@ BOMBER_HUNTER_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if select(3, HasDebuff("target", 217200, "PLAYER")) < 3 then
                 return true;
             end
@@ -104,12 +87,9 @@ BOMBER_HUNTER_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if UnitExists("pet") then
                 return true;
             end
@@ -121,12 +101,9 @@ BOMBER_HUNTER_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if BOMBER_AOE then
                 return true;
             end
@@ -138,12 +115,9 @@ BOMBER_HUNTER_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if not BOMBER_AOE then
                 return true;
             end

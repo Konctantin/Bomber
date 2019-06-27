@@ -1,20 +1,17 @@
 ﻿-- Blood
 BOMBER_DEATHKNIGHT_1 = {
     OnLoad = function()
+        SetInRangeSpell(47528);
     end,
-    {   SpellId =      0, Name = "Инициализация",
+    {   SpellId =      0, Name = "Initialization",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = false,
-        IsUsableCheck     = true,
         RangeCheck        = false,
-        TargetList = {
-            { Target = "none" }
-        },
-        Func = function(ability, targetInfo, target)
-            BomberFrame.RangeSpell = GetSpellInfo(47528);
+        Target            = "none",
+        Func = function(ability)
             if IsMounted() then
                 return true;
             end
@@ -26,12 +23,9 @@ BOMBER_DEATHKNIGHT_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if CheckInterrupt("target") then
                 return true;
             end
@@ -43,12 +37,9 @@ BOMBER_DEATHKNIGHT_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             return true;
         end
     },
@@ -58,12 +49,9 @@ BOMBER_DEATHKNIGHT_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if not HasBuff("player", 195181) then
                 return true;
             end
@@ -75,12 +63,9 @@ BOMBER_DEATHKNIGHT_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             return true;
         end
     },
@@ -90,12 +75,9 @@ BOMBER_DEATHKNIGHT_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             return true;
         end
     },
@@ -105,15 +87,10 @@ BOMBER_DEATHKNIGHT_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = false,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
-            if IsSpellInRange(GetSpellInfo(195292), "target") == 1 then
-                return true;
-            end
+        Target            = "target",
+        Func = function(ability)
+            return true;
         end
     },
 }

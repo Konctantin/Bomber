@@ -2,7 +2,6 @@
 COMBATLOG_MODS = { };
 ABILITY_TABLE = { }
 
--- Константы горячих клавиш
 mkLeftShift     = 1;
 mkLeftControl   = 2;
 mkLeftAlt       = 3;
@@ -13,6 +12,7 @@ mkRightAlt      = 6;
 BOMBER_AOE = false;
 BOMBER_COOLDOWN = false;
 BOMBER_PAUSE = false;
+BOMBER_INTERRUPT = true;
 
 function EVENT_MODS.MODIFIER_STATE_CHANGED(modifier, state)
     if state == 0 then return end; -- release key
@@ -20,7 +20,7 @@ function EVENT_MODS.MODIFIER_STATE_CHANGED(modifier, state)
     if modifier == "LCTRL" then
         if BOMBER_AOE then
             BOMBER_AOE = false;
-            BomberFrameInfo.print("|cff00ff00Одиночная цель", true);
+            BomberFrameInfo.print("|cff00ff00Single target", true);
         else
             BOMBER_AOE = true;
             BomberFrameInfo.print("|cffff0000AOE", true);
@@ -28,18 +28,26 @@ function EVENT_MODS.MODIFIER_STATE_CHANGED(modifier, state)
     elseif modifier == "RSHIFT" then
         if BOMBER_COOLDOWN then
             BOMBER_COOLDOWN = false;
-            BomberFrameInfo.print("|cffff0000Кулдауны выключены", true);
+            BomberFrameInfo.print("|cffff0000Cooldown ON", true);
         else
             BOMBER_COOLDOWN = true;
-            BomberFrameInfo.print("|cff00ff00Кулдауны включены", true);
+            BomberFrameInfo.print("|cff00ff00Cooldown OFF", true);
+        end
+    elseif modifier == "RCTRL" then
+        if BOMBER_INTERRUPT then
+            BOMBER_INTERRUPT = false;
+            BomberFrameInfo.print("|cffff0000Spell interrupt OFF", true);
+        else
+            BOMBER_INTERRUPT = true;
+            BomberFrameInfo.print("|cff00ff00Spell interrupt ON", true);
         end
     elseif modifier == "RALT" then
         if BOMBER_PAUSE then
             BOMBER_PAUSE = false;
-            BomberFrameInfo.print("|cffff0000Пауза выключена", true);
+            BomberFrameInfo.print("|cffff0000Pause OFF", true);
         else
             BOMBER_PAUSE = true;
-            BomberFrameInfo.print("|cff00ff00Пауза включена", true);
+            BomberFrameInfo.print("|cff00ff00Pause ON", true);
         end
     end
 end
@@ -166,19 +174,65 @@ function UnitId(unit)
     return tonumber((UnitGUID(unit) or ""):match("-(%d+)-%x+$"), 10);
 end
 
--- Проверяет, надо ли сбивать заклинание текущему юниту.
+-- Checking if needs is interrupt unit's cast.
 function CheckInterrupt(unit, sec)
-    -- чтение заклинания прерываем только перед окончанием каста.
-    local name, text, texture, startTime, endTime, isTradeSkill, castID, notInterruptible, spellID = UnitCastingInfo(unit);
-    if name and not (notInterruptible or isTradeSkill) then
-        if (((endTime / 1000) - GetTime()) - BomberFrame.ping) <= (sec or 1) then
+    if BOMBER_INTERRUPT then
+        local name, text, texture, startTime, endTime, isTradeSkill, castID, notInterruptible, spellID = UnitCastingInfo(unit);
+        if name and not (notInterruptible or isTradeSkill) then
+            if (((endTime / 1000) - GetTime()) - BomberFrame.ping) <= (sec or 1) then
+                return true;
+            end
+        end
+
+        local name, text, texture, startTime, endTime, isTradeSkill, notInterruptible, spellID = UnitChannelInfo(unit);
+        if name and not (notInterruptible or isTradeSkill) then
             return true;
         end
     end
-    -- канальное заклинание прерываем сразу.
-    local name, text, texture, startTime, endTime, isTradeSkill, notInterruptible, spellID = UnitChannelInfo(unit);
-    if name and not (notInterruptible or isTradeSkill) then
-        return true;
+end
+
+function SetInRangeSpell(spellId)
+    BomberFrame.RangeSpellBookId = nil;
+    if (spellId or 0) > 0 then
+        local name = GetSpellInfo(spellId);
+        assert(name, "Unknown spell by Id "..tostring(spellId));
+        assert(SpellHasRange(name), "Spell "..tostring(rangeSpell).." "..name.."not have range");
+
+        local bookId = GetSpellBookId(spellId) or 0;
+        assert(bookId > 0, "SpellBookId not found for spell "..name.." ("..tostring(spellId)..")");
+        BomberFrame.RangeSpellBookId = bookId;
+    end
+end
+
+function GetSpellBookId(spellId)
+    local spellName = GetSpellInfo(spellId);
+
+    local _, _, offs, numspells = GetSpellTabInfo(3);
+	local maxSpellNum = offs -- The offset of the next tab is the max ID of the previous tab.
+	if numspells == 0 then
+		-- New characters pre level 10 only have 2 tabs.
+		local _, _, offs, numspells = GetSpellTabInfo(2);
+		maxSpellNum = offs + numspells
+	end
+
+    for _, bookType in ipairs({"spell", "pet"}) do
+	    for spellBookID = 1, maxSpellNum do
+		    local type, baseSpellID = GetSpellBookItemInfo(spellBookID, bookType);
+		    if type == "SPELL" then
+                local currentSpellName = GetSpellBookItemName(spellBookID, bookType);
+			    local link = GetSpellLink(currentSpellName);
+			    local currentSpellID = tonumber(link and link:gsub("|", "||"):match("spell:(%d+)"));
+			    local baseSpellName = GetSpellInfo(baseSpellID);
+
+                if spellId   == baseSpellID
+                or spellId   == currentSpellID
+                or spellName == currentSpellName
+                or spellName == baseSpellName
+                then
+                    return spellBookID;
+                end
+		    end
+	    end
     end
 end
 
@@ -191,40 +245,43 @@ function CheckKnownAbility(ability)
         return;
     end
 
-    -- Основная проверка
+    -- main check
     if IsPlayerSpell(ability.SpellId)
         or IsSpellKnown(ability.SpellId) or IsSpellKnown(ability.SpellId, true)
         or IsTalentSpell(ability.SpellName) then
         ability.IsKnown = true;
-        return;
     end
 
-    local spec = GetSpecialization();
-    if spec then
-        -- Проверка на доступность заклинания по уровню и специализиции
-        local spellList = { GetSpecializationSpells(spec) };
-        local lvl = UnitLevel("player");
-        for i = 1, #spellList, 2 do
-            if spellList[i] == ability.SpellId and lvl > (spellList[i+1] or 0) then
-                ability.IsKnown = true;
-                return;
+    -- check specialization spells
+    if not ability.IsKnown then
+        local spec = GetSpecialization();
+        if spec then
+            local spellList = { GetSpecializationSpells(spec) };
+            local lvl = UnitLevel("player");
+            for i = 1, #spellList, 2 do
+                if spellList[i] == ability.SpellId and lvl > (spellList[i+1] or 0) then
+                    ability.IsKnown = true;
+                end
             end
         end
     end
 
-    -- Есть заклинания, которые имеют одинаковое название и разные Id
-    local spellId = select(2, GetSpellBookItemInfo(ability.SpellName));
-    if spellId and ability.SpellId ~= spellId then
-        print(string.format("|cff15bd05Changed spell: %s Id %d -> %d|r", ability.SpellName, ability.SpellId, spellId));
-        ability.SpellId = spellId;
-        ability.IsKnown = true;
+    -- check spell on the spellbook
+    if not ability.IsKnown then
+        local spellId = select(2, GetSpellBookItemInfo(ability.SpellName));
+        if spellId and ability.SpellId ~= spellId then
+            print(string.format("|cff15bd05Changed spell: %s Id %d -> %d|r", ability.SpellName, ability.SpellId, spellId));
+            ability.SpellId = spellId;
+            ability.IsKnown = true;
+        end
     end
+
+    ability.SpellBookId = GetSpellBookId(ability.SpellId);
 end
 
--- Проверяем доступность заклинаний
 function CheckAllSpells()
     if type(ABILITY_TABLE) == "table" then
-        for _,ability in ipairs(ABILITY_TABLE) do
+        for _, ability in ipairs(ABILITY_TABLE) do
             if ability.SpellId > 0 then
                 CheckKnownAbility(ability);
             end
@@ -254,7 +311,7 @@ function GetHotKeyColorBySpellId(spellId)
     end
 end
 
-function CheckAndCastAbility(ability, targetInfo)
+function CheckAndCastAbility(ability)
     BomberFrame_SetColor(nil);
 
     if GetCurrentKeyBoardFocus() or IsModKeyDown(mkLeftAlt) or BOMBER_PAUSE then
@@ -273,9 +330,12 @@ function CheckAndCastAbility(ability, targetInfo)
         return;
     end
 
+    local target = ability.Target or "none";
+    local spellCastingTime = select(7, GetSpellInfo(ability.SpellId)) or 0;
+
     if ability.RecastDelay > 0
-        and targetInfo.Guid == UnitGUID(targetInfo.Target)
-        and ((targetInfo.LastCastingTime or 0) + ability.RecastDelay) >= GetTime() then
+        and tarabilitygetInfo.Guid == UnitGUID(target)
+        and ((ability.LastCastingTime or 0) + ability.RecastDelay) >= GetTime() then
         return;
     end
 
@@ -284,12 +344,11 @@ function CheckAndCastAbility(ability, targetInfo)
         return;
     end
 
-    if ability.SpellId < 1 then
-        return ability.Func(ability, targetInfo, targetInfo.Target);
+    if (ability.SpellId or 0) == 0 then
+        if if type(ability.Func) == "function" then
+            return ability.Func(ability);
+        end
     elseif not ability.IsKnown then
-        return;
-    -- todo: check and use spellId
-    elseif ability.IsUsableCheck and not IsUsableSpell(spellName) then
         return;
     end
 
@@ -315,44 +374,38 @@ function CheckAndCastAbility(ability, targetInfo)
         end
     end
 
-    --if SpellHasRange(spellName) == 1 then
-    --    if IsSpellInRange(spellName, targetInfo.Target) ~= 1 then
-    --        return;
-    --    end
-    --else
-    --    if IsSpellInRange(BomberFrame.RangeSpell, "target") ~= 1 then
-    --        return;
-    --    end
-    --end
-
     if ability.RangeCheck then
-        assert(BomberFrame.RangeSpell, "Ability: "..ability.Name.." set range check and not set range spell")
-        if IsSpellInRange(BomberFrame.RangeSpell, "target") ~= 1 then
+        assert(BomberFrame.RangeSpellBookId, "Ability: "..ability.Name.." set range check and not set range spell")
+        if IsSpellInRange(BomberFrame.RangeSpellBookId, "spell", "target") == 0 then
             return;
         end
     end
 
-    if (ability.IsMovingCheck == "notmoving"  and PLAYER.IsMoving)
-    or (ability.IsMovingCheck == "moving" and not PLAYER.IsMoving) then
-        return;
+    if spellCastingTime > 0 then
+        if (ability.IsMovingCheck == "notmoving"  and PLAYER.IsMoving)
+        or (ability.IsMovingCheck == "moving" and not PLAYER.IsMoving) then
+            return;
+        end
     end
 
-    local result = ability.Func(ability, targetInfo, targetInfo.Target);
-    if not result then
-        return;
+    if type(ability.Func) == "function" then
+        local result = ability.Func(ability);
+        if not result then
+            return;
+        end
     end
 
-    if targetInfo.Target ~= "none" and targetInfo.Target ~= "player" and targetInfo.Target ~= "mouselocation" then
-        if not UnitExists(targetInfo.Target) then
+    if target == "target" then
+        if not UnitExists(target) then
             return;
-        elseif SpellHasRange(spellName) and IsSpellInRange(spellName, targetInfo.Target) == 0 then
+        elseif SpellHasRange(ability.SpellBookId, "spell") and IsSpellInRange(ability.SpellBookId, "spell", target) == 0 then
             return;
-        elseif IsHelpfulSpell(spellName) and not UnitIsFriend("player", targetInfo.Target) then
+        elseif IsHelpfulSpell(spellName) and not UnitIsFriend("player", target) then
             return;
-        elseif IsHarmfulSpell(spellName) and UnitIsFriend("player", targetInfo.Target) then
+        elseif IsHarmfulSpell(spellName) and UnitIsFriend("player", target) then
             return;
-        elseif not UnitIsFriend("player", targetInfo.Target) then
-            if UnitIsDeadOrGhost(targetInfo.Target) or not UnitCanAttack("player", targetInfo.Target) then
+        elseif not UnitIsFriend("player", target) then
+            if UnitIsDeadOrGhost(target) or not UnitCanAttack("player", target) then
                 return;
             end
         end
@@ -363,9 +416,9 @@ function CheckAndCastAbility(ability, targetInfo)
     BomberFrame_SetColor(hotKeyColor);
 
     -- move to SPELL_CAST_START
-    targetInfo.Guid = UnitGUID(targetInfo.Target);
+    ability.Guid = UnitGUID(target);
     -- name, _, icon, cost, isFunnel, powerType, castTime, minRage, maxRange
-    targetInfo.LastCastingTime = GetTime() + (select(7, GetSpellInfo(ability.SpellId)) or 0) / 1000;
+    ability.LastCastingTime = GetTime() + (spellCastingTime / 1000);
 
     if not hotKeyColor and ability.SpellId > 0 then
         print("HotKey color by ("..spellName..") not found");
@@ -376,14 +429,11 @@ end
 
 function AddonFrame_AbilityLoop()
     if type(ABILITY_TABLE) == "table" then 
-        for _,ability in ipairs(ABILITY_TABLE) do
+        for _, ability in ipairs(ABILITY_TABLE) do
             if type(ability) == "table" and not ability.Failed then
-                local targetList = ability.TargetList or { "none" };
-                for _,targetInfo in ipairs(targetList) do
-                    if not targetInfo.IsDisable then
-                        if CheckAndCastAbility(ability, targetInfo) then
-                            return;
-                        end
+                if not ability.IsDisable then
+                    if CheckAndCastAbility(ability) then
+                        return;
                     end
                 end
             end
@@ -411,6 +461,7 @@ function LoadRotation()
     BOMBER_AOE = false;
     BOMBER_COOLDOWN = false;
     BOMBER_PAUSE = false;
+    BomberFrame.RangeSpellBookId = nil;
 
     if type(ABILITY_TABLE) == "table" and #ABILITY_TABLE > 0 then
         if type(ABILITY_TABLE.OnLoad) == "function" then
@@ -418,19 +469,18 @@ function LoadRotation()
         end
         local spec = select(2, GetSpecializationInfo(GetSpecialization()));
         BomberFrameInfo.print("|cff15bd05Rotation: |r|cff6f0a9a"..className..": "..spec.."|r|cff15bd05 is enabled.|r", true);
+        CheckAllSpells();
     end
 end
 
 function SetTargetCastintInfo(spellId, guid, castTime)
     if type(ABILITY_TABLE) == "table" then
         local dstGuid = guid and guid or LAST_TARGET;
-        for _,ability in ipairs(ABILITY_TABLE) do
-            if type(ability) == "table" then
-                for _,targetInfo in ipairs(ability.TargetList) do
-                    if spellId == ability.SpellId and UnitGUID(targetInfo.Target) == dstGuid then
-                        targetInfo.Guid = guid;
-                        targetInfo.LastCastingTime = castTime;
-                    end
+        for _, ability in ipairs(ABILITY_TABLE) do
+            if type(ability) == "table" and ability.Target then
+                if spellId == ability.SpellId and (not guid or (UnitGUID(ability.Target) == dstGuid)) then
+                    ability.Guid = guid;
+                    ability.LastCastingTime = castTime;
                 end
             end
         end
@@ -514,4 +564,83 @@ function BomberFrame_SetColor(color)
     else
         BomberFrame.texture:SetColorTexture(0, 0, 0, 1);
     end
+end
+
+local function PrintRangeCheck(spellBookId)
+    local currentSpellName = GetSpellBookItemName(spellBookId, "spell");
+
+    local hasRange = SpellHasRange(spellBookId, "spell");
+    local inRange = IsSpellInRange(spellBookId, "spell", "target");
+
+    local hasRangePrefix = "|cffff0000";
+    if hasRange then
+        hasRangePrefix = "|cff00ff00";
+    end
+
+    local inRangePrefix = "|cffff0000";
+    if inRange then
+        inRangePrefix = "|cff00ff00";
+    end
+
+    print("Spell: "..currentSpellName.." ("..tostring(spellBookId)..") =>  HasRange: "
+        ..hasRangePrefix..tostring(hasRange).."|r InRange: "..inRangePrefix..tostring(inRange).."|r")
+end
+
+function CheckSpellHasRange()
+    print("|cff00ff00 Start range check...")
+    if not UnitExists("target") then
+        print("|cffff0000 You must select a unit of target!")
+        return;
+    end
+
+    if BomberFrame.RangeSpellBookId then
+        PrintRangeCheck(BomberFrame.RangeSpellBookId);
+    end
+
+    for i, ability in ipairs(ABILITY_TABLE) do
+        if ability.SpellId > 0 then
+            PrintRangeCheck(ability.SpellBookId);
+        end
+    end
+
+    print("|cffff0000 End range check.")
+end
+
+function DumpSpellBook()
+    local _, _, offs, numspells = GetSpellTabInfo(3);
+	local maxSpellNum = offs -- The offset of the next tab is the max ID of the previous tab.
+	if numspells == 0 then
+		-- New characters pre level 10 only have 2 tabs.
+		local _, _, offs, numspells = GetSpellTabInfo(2);
+		maxSpellNum = offs + numspells
+	end
+
+    print("======================")
+
+    for _, bookType in ipairs({"spell", "pet"}) do
+	    for spellBookID = 1, maxSpellNum do
+		    local type, baseSpellID = GetSpellBookItemInfo(spellBookID, bookType);
+		    if type == "SPELL" then
+                local currentSpellName = GetSpellBookItemName(spellBookID, bookType);
+			    local link = GetSpellLink(currentSpellName);
+			    local currentSpellID = tonumber(link and link:gsub("|", "||"):match("spell:(%d+)"));
+			    local baseSpellName = GetSpellInfo(baseSpellID);
+
+                print(bookType,spellBookID, currentSpellID, baseSpellID, currentSpellName, baseSpellName)
+		    end
+	    end
+    end
+
+    print("======================")
+end
+
+SLASH_RCHECK1= '/rcheck'
+SLASH_DUMPSP1= '/dumpsp'
+
+function SlashCmdList.RCHECK(msg)
+    CheckSpellHasRange();
+end
+
+function SlashCmdList.DUMPSP(msg)
+    DumpSpellBook();
 end

@@ -1,20 +1,17 @@
 ﻿-- Assassination
 BOMBER_ROGUE_1 = {
     OnLoad = function()
+        SetInRangeSpell(703);
     end,
-    {   SpellId =      0, Name = "Инициализация",
+    {   SpellId =      0, Name = "Initialization",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = false,
-        IsUsableCheck     = true,
         RangeCheck        = false,
-        TargetList = {
-            { Target = "none" }
-        },
-        Func = function(ability, targetInfo, target)
-            BomberFrame.RangeSpell = GetSpellInfo(703);
+        Target            = "none",
+        Func = function(ability)
             if IsMounted() or IsStealthed() then
                 return true;
             end
@@ -26,12 +23,9 @@ BOMBER_ROGUE_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if CheckInterrupt("target") then
                 return true;
             end
@@ -43,12 +37,9 @@ BOMBER_ROGUE_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if select(3, HasDebuff("target", 703, "PLAYER")) < 4 then
                 return true;
             end
@@ -60,12 +51,9 @@ BOMBER_ROGUE_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if GetComboPoints("player", "target") > 3 then
                 if select(3, HasDebuff("target", 1943, "PLAYER")) < 4 then
                     return true;
@@ -79,12 +67,9 @@ BOMBER_ROGUE_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if GetComboPoints("player", "target") > 3 then
                 if select(3, HasDebuff("target", 1943, "PLAYER")) > 5 then
                     return true;
@@ -98,12 +83,9 @@ BOMBER_ROGUE_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             return not BOMBER_AOE;
         end
     },
@@ -113,12 +95,9 @@ BOMBER_ROGUE_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             return BOMBER_AOE;
         end
     },
@@ -128,16 +107,11 @@ BOMBER_ROGUE_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = false,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if UnitPower("player") > 60 then
-                if IsSpellInRange(GetSpellInfo(185565), "target") == 1 then
-                    return true;
-                end
+                return true;
             end
         end
     },

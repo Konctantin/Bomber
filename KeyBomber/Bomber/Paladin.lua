@@ -6,20 +6,17 @@ BOMBER_PALADIN_1 = {
 -- Protection
 BOMBER_PALADIN_2 = {
     OnLoad = function()
+        SetInRangeSpell(96231);
     end,
-    {   SpellId =      0, Name = "Инициализация",
+    {   SpellId =      0, Name = "Initialization",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = false,
-        IsUsableCheck     = true,
         RangeCheck        = false,
-        TargetList = {
-            { Target = "none" }
-        },
-        Func = function(ability, targetInfo, target)
-            BomberFrame.RangeSpell = GetSpellInfo(96231);
+        Target            = "none",
+        Func = function(ability)
             if IsMounted() then
                 return true;
             end
@@ -31,12 +28,9 @@ BOMBER_PALADIN_2 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = false,
-        TargetList = {
-            { Target = "none" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "none",
+        Func = function(ability)
             if BOMBER_COOLDOWN
             and UnitExists("target")
             and not UnitIsDeadOrGhost("target")
@@ -53,12 +47,9 @@ BOMBER_PALADIN_2 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if CheckInterrupt("target") then
                 return true;
             end
@@ -70,12 +61,9 @@ BOMBER_PALADIN_2 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = false,
-        TargetList = {
-            { Target = "player" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "player",
+        Func = function(ability)
             if HealthByPercent("player") < 70 then
                 return true;
             end
@@ -87,12 +75,9 @@ BOMBER_PALADIN_2 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = false,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if IsSpellInRange(GetSpellInfo(31935), "target") == 1 then
                 return true;
             end
@@ -104,12 +89,9 @@ BOMBER_PALADIN_2 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "none" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "none",
+        Func = function(ability)
              if not HasBuff("player", 188370) then
                 return true;
             end
@@ -121,12 +103,9 @@ BOMBER_PALADIN_2 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if not HasBuff("plaayer", 132403) then
                 return true;
             end
@@ -138,12 +117,9 @@ BOMBER_PALADIN_2 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             return true;
         end
     },
@@ -153,12 +129,9 @@ BOMBER_PALADIN_2 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = false,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if IsSpellInRange(GetSpellInfo(35395), "target") == 1 then
                 return true;
             end
@@ -169,20 +142,17 @@ BOMBER_PALADIN_2 = {
 -- Retribution
 BOMBER_PALADIN_3 = {
     OnLoad = function()
+        SetInRangeSpell(96231);
     end,
-    {   SpellId =      0, Name = "Инициализация",
+    {   SpellId =      0, Name = "Initialization",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = false,
-        IsUsableCheck     = true,
         RangeCheck        = false,
-        TargetList = {
-            { Target = "none" }
-        },
-        Func = function(ability, targetInfo, target)
-            BomberFrame.RangeSpell = GetSpellInfo(96231);
+        Target            = "none",
+        Func = function(ability)
             if IsMounted() then
                 return true;
             end
@@ -194,12 +164,9 @@ BOMBER_PALADIN_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = false,
-        TargetList = {
-            { Target = "none" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "none",
+        Func = function(ability)
             --if not HasBuff("player", 203538) and IsInParty() then
             --    return true;
             --end
@@ -212,12 +179,9 @@ BOMBER_PALADIN_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = false,
-        TargetList = {
-            { Target = "none" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "none",
+        Func = function(ability)
             if BOMBER_COOLDOWN
             and UnitExists("target")
             and not UnitIsDeadOrGhost("target")
@@ -234,12 +198,9 @@ BOMBER_PALADIN_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if CheckInterrupt("target") then
                 return true;
             end
@@ -251,12 +212,9 @@ BOMBER_PALADIN_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = false,
-        TargetList = {
-            { Target = "player" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "player",
+        Func = function(ability)
             if HealthByPercent("player") < 70 and select(2, HasBuff("player", 114250)) > 4 then
                 return true;
             end
@@ -268,12 +226,9 @@ BOMBER_PALADIN_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if UnitPower("player", 9) < 1 then
                 return true;
             end
@@ -285,12 +240,9 @@ BOMBER_PALADIN_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if BOMBER_AOE or HasBuff("player", 286393) then
                 return true;
             end
@@ -302,12 +254,9 @@ BOMBER_PALADIN_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if not BOMBER_AOE then
                 return true;
             end
@@ -319,12 +268,9 @@ BOMBER_PALADIN_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             return true;
         end
     },
@@ -334,12 +280,9 @@ BOMBER_PALADIN_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             return true;
         end
     },
@@ -349,12 +292,9 @@ BOMBER_PALADIN_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             return true;
         end
     },

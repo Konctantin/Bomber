@@ -2,20 +2,17 @@
 -- Affiction
 BOMBER_WARLOCK_1 = {
     OnLoad = function()
+        SetInRangeSpell(232670);
     end,
-    {   SpellId =      0, Name = "Инициализация",
+    {   SpellId =      0, Name = "Initialization",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = false,
-        IsUsableCheck     = true,
         RangeCheck        = false,
-        TargetList = {
-            { Target = "none" }
-        },
-        Func = function(ability, targetInfo, target)
-            BomberFrame.RangeSpell = GetSpellInfo(232670);
+        Target            = "none",
+        Func = function(ability)
             if IsMounted() then
                 return true;
             end
@@ -27,12 +24,9 @@ BOMBER_WARLOCK_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if select(3, HasDebuff("target", 980, "PLAYER")) < 4 then
                 return true
             end
@@ -44,12 +38,9 @@ BOMBER_WARLOCK_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if not HasDebuff("target", 146739, "PLAYER") then
                 return true
             end
@@ -61,12 +52,9 @@ BOMBER_WARLOCK_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if not IsMoving() and UnitHealth("target") > UnitHealth("palyer") then
                 local count = 0;
                 for i = 1, 40 do
@@ -88,12 +76,9 @@ BOMBER_WARLOCK_1 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             return true
         end
     },
@@ -102,20 +87,17 @@ BOMBER_WARLOCK_1 = {
 -- Demonology
 BOMBER_WARLOCK_2 = {
     OnLoad = function()
+        SetInRangeSpell(232670);
     end,
-    {   SpellId =      0, Name = "Инициализация",
+    {   SpellId =      0, Name = "Initialization",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = false,
-        IsUsableCheck     = true,
         RangeCheck        = false,
-        TargetList = {
-            { Target = "none" }
-        },
-        Func = function(ability, targetInfo, target)
-            BomberFrame.RangeSpell = GetSpellInfo(232670);
+        Target            = "none",
+        Func = function(ability)
             if IsMounted() then
                 return true;
             end
@@ -126,20 +108,17 @@ BOMBER_WARLOCK_2 = {
 -- Destruction
 BOMBER_WARLOCK_3 = {
     OnLoad = function()
+        SetInRangeSpell(17962);
     end,
-    {   SpellId =      0, Name = "Инициализация",
+    {   SpellId =      0, Name = "Initialization",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = false,
-        IsUsableCheck     = true,
         RangeCheck        = false,
-        TargetList = {
-            { Target = "none" }
-        },
-        Func = function(ability, targetInfo, target)
-            BomberFrame.RangeSpell = GetSpellInfo(17962);
+        Target            = "none",
+        Func = function(ability)
             if IsMounted() then
                 return true;
             end
@@ -151,63 +130,48 @@ BOMBER_WARLOCK_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if select(3, HasDebuff("target", 157736, "PLAYER")) < 4 then
                 return true;
             end
         end
-    },
-    {   SpellId = 17962, Name = "Поджигание",
+    }, {   SpellId = 17962, Name = "Поджигание", -- lol
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if not HasBuff("player", 117828) then
                 return true;
             end
         end
-    },
-    {   SpellId = 116858, Name = "Стрела Хаоса",
+    }, {   SpellId = 116858, Name = "Стрела Хаоса",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if not IsMoving() and not BOMBER_AOE then
                 return true;
             end
         end
-    },
-    {   SpellId = 29722, Name = "Испепеление",
+    }, {   SpellId = 29722, Name = "Испепеление",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if not IsMoving() or HasBuff("player", 279673) then
                 return true;
             end

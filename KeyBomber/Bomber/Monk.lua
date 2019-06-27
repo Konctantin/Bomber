@@ -11,20 +11,17 @@ BOMBER_MONK_2 = {
 -- Windwalker
 BOMBER_MONK_3 = {
     OnLoad = function()
+        SetInRangeSpell(100780);
     end,
-    {   SpellId =      0, Name = "Инициализация",
+    {   SpellId =      0, Name = "Initialization",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = false,
-        IsUsableCheck     = true,
         RangeCheck        = false,
-        TargetList = {
-            { Target = "none" }
-        },
-        Func = function(ability, targetInfo, target)
-            BomberFrame.RangeSpell = GetSpellInfo(100780);
+        Target            = "none",
+        Func = function(ability)
             if IsMounted() then
                 return true;
             end
@@ -36,12 +33,9 @@ BOMBER_MONK_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = false,
-        TargetList = {
-            { Target = "none" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "none",
+        Func = function(ability)
             if BOMBER_COOLDOWN
             and UnitExists("target")
             and not UnitIsDeadOrGhost("target")
@@ -59,12 +53,9 @@ BOMBER_MONK_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = false,
-        TargetList = {
-            { Target = "none" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "none",
+        Func = function(ability)
             if BOMBER_COOLDOWN
             and UnitExists("target")
             and not UnitIsDeadOrGhost("target")
@@ -81,12 +72,9 @@ BOMBER_MONK_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if CheckInterrupt("target") then
                 return true;
             end
@@ -98,12 +86,9 @@ BOMBER_MONK_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "none" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "none",
+        Func = function(ability)
             return true;
         end
     },
@@ -113,12 +98,9 @@ BOMBER_MONK_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             return true;
         end
     },
@@ -128,12 +110,9 @@ BOMBER_MONK_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "none" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "none",
+        Func = function(ability)
             return true;
         end
     },
@@ -143,12 +122,9 @@ BOMBER_MONK_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "none" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "none",
+        Func = function(ability)
             return BOMBER_AOE;
         end
     },
@@ -158,12 +134,9 @@ BOMBER_MONK_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             if HasBuff("player", 116768) or SpellCD(113656) > 4 or UnitPower("player", 12) > 3 then
                 return true;
             end
@@ -175,12 +148,9 @@ BOMBER_MONK_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        IsUsableCheck     = true,
         RangeCheck        = true,
-        TargetList = {
-            { Target = "target" }
-        },
-        Func = function(ability, targetInfo, target)
+        Target            = "target",
+        Func = function(ability)
             return true;
         end
     },
