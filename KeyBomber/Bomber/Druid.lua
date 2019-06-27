@@ -119,7 +119,145 @@ BOMBER_DRUID_1 = {
 
 -- Feral
 BOMBER_DRUID_2 = {
-
+    OnLoad = function()
+        SetInRangeSpell(5221);
+    end,
+    {      SpellId =      0, Name = "Initialization",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = false,
+        RangeCheck        = false,
+        Target            = "none",
+        Func = function(ability)
+            if IsMounted() or IsStealthed() or GetShapeshiftForm() ~= 2 then
+                return true;
+            end
+        end
+    }, {   SpellId = 106839, Name = "Лобовая атака",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = false,
+        Target            = "target",
+        Func = function(ability)
+            if CheckInterrupt("target") then
+                return true;
+            end
+        end
+    },
+    {   SpellId = 106951, Name = "Берсерк",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "none",
+        Func = function(ability)
+            if BOMBER_COOLDOWN
+            and UnitExists("pet")
+            and UnitExists("target")
+            and not UnitIsDeadOrGhost("target")
+            and UnitCanAttack("player", "target")
+            then
+                return true;
+            end
+        end
+    },
+    {   SpellId = 5217, Name = "Тигриное неистовство",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "none",
+        Func = function(ability)
+            if UnitExists("target")
+            and not UnitIsDeadOrGhost("target")
+            and UnitCanAttack("player", "target")
+            and UnitPower("player") < (UnitPowerMax("player")-50)
+            and not HasBuff("player", 106951, "PLAYER")
+            then
+                return true;
+            end
+        end
+    },
+    {   SpellId =  1822, Name = "Глубокая рана",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = false,
+        Target            = "target",
+        Func = function(ability)
+            if select(3, HasDebuff("target", 155722, "PLAYER")) < 3 then
+                return true;
+            end
+        end
+    },
+    {   SpellId =  155625, Name = "Лунный огонь",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = false,
+        Target            = "target",
+        Func = function(ability)
+            --if select(3, HasDebuff("target", 155625, "PLAYER")) < 3 then
+            --    print(12)
+            --    return true;
+            --end
+        end
+    }, 
+    {   SpellId =  1079, Name = "Разорвать",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = false,
+        Target            = "target",
+        Func = function(ability)
+            if GetComboPoints("player", "target") > 4 then
+                if select(3, HasDebuff("target", 1079, "PLAYER")) < 5 then
+                    return true;
+                end
+            end
+        end
+    }, {   SpellId =  22568, Name = "Свирепый укус",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = false,
+        Target            = "target",
+        Func = function(ability)
+            if GetComboPoints("player", "target") > 4 and UnitPower("player") >= 50  then
+                return true;
+            end
+        end
+    }, {   SpellId =  5221, Name = "Полоснуть",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = false,
+        Target            = "target",
+        Func = function(ability)
+            if (GetComboPoints("player", "target") < 5) or HasBuff("player", 135700) then
+                return true;
+            end
+        end
+    },
 }
 
 -- Guardian
@@ -196,7 +334,7 @@ BOMBER_DRUID_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        RangeCheck        = true,
+        RangeCheck        = false,
         Target            = "target",
         Func = function(ability)
             --if UnitPower("player") > 20 then
@@ -209,7 +347,7 @@ BOMBER_DRUID_3 = {
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        RangeCheck        = true,
+        RangeCheck        = false,
         Target            = "target",
         Func = function(ability)
             return true;

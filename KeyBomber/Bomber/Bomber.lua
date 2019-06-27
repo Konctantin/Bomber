@@ -28,18 +28,18 @@ function EVENT_MODS.MODIFIER_STATE_CHANGED(modifier, state)
     elseif modifier == "RSHIFT" then
         if BOMBER_COOLDOWN then
             BOMBER_COOLDOWN = false;
-            BomberFrameInfo.print("|cffff0000Cooldown ON", true);
+            BomberFrameInfo.print("|cff00fff00Cooldown ON", true);
         else
             BOMBER_COOLDOWN = true;
-            BomberFrameInfo.print("|cff00ff00Cooldown OFF", true);
+            BomberFrameInfo.print("|cffff0000Cooldown OFF", true);
         end
     elseif modifier == "RCTRL" then
         if BOMBER_INTERRUPT then
             BOMBER_INTERRUPT = false;
-            BomberFrameInfo.print("|cffff0000Spell interrupt OFF", true);
+            BomberFrameInfo.print("|cff00ff00Spell interrupt OFF", true);
         else
             BOMBER_INTERRUPT = true;
-            BomberFrameInfo.print("|cff00ff00Spell interrupt ON", true);
+            BomberFrameInfo.print("|cffff0000Spell interrupt ON", true);
         end
     elseif modifier == "RALT" then
         if BOMBER_PAUSE then
@@ -198,41 +198,31 @@ function SetInRangeSpell(spellId)
         assert(name, "Unknown spell by Id "..tostring(spellId));
         assert(SpellHasRange(name), "Spell "..tostring(rangeSpell).." "..name.."not have range");
 
-        local bookId = GetSpellBookId(spellId) or 0;
-        assert(bookId > 0, "SpellBookId not found for spell "..name.." ("..tostring(spellId)..")");
+        local bookId, bookType = GetSpellBookId(spellId);
+        assert(bookId, "SpellBookId not found for spell "..name.." ("..tostring(spellId)..")");
         BomberFrame.RangeSpellBookId = bookId;
+        BomberFrame.RangeSpellBookType = bookType;
     end
 end
 
 function GetSpellBookId(spellId)
     local spellName = GetSpellInfo(spellId);
 
-    local _, _, offs, numspells = GetSpellTabInfo(3);
-	local maxSpellNum = offs -- The offset of the next tab is the max ID of the previous tab.
-	if numspells == 0 then
-		-- New characters pre level 10 only have 2 tabs.
-		local _, _, offs, numspells = GetSpellTabInfo(2);
-		maxSpellNum = offs + numspells
-	end
+    local _, _, offs, numspells = GetSpellTabInfo(2);
+    local maxSpellNum = offs + numspells;
 
     for _, bookType in ipairs({"spell", "pet"}) do
-	    for spellBookID = 1, maxSpellNum do
-		    local type, baseSpellID = GetSpellBookItemInfo(spellBookID, bookType);
-		    if type == "SPELL" then
-                local currentSpellName = GetSpellBookItemName(spellBookID, bookType);
-			    local link = GetSpellLink(currentSpellName);
-			    local currentSpellID = tonumber(link and link:gsub("|", "||"):match("spell:(%d+)"));
-			    local baseSpellName = GetSpellInfo(baseSpellID);
+        for spellBookID = 1, maxSpellNum do
+            local type, baseSpellID = GetSpellBookItemInfo(spellBookID, bookType);
 
-                if spellId   == baseSpellID
-                or spellId   == currentSpellID
-                or spellName == currentSpellName
-                or spellName == baseSpellName
-                then
-                    return spellBookID;
-                end
-		    end
-	    end
+            local currentSpellName = GetSpellBookItemName(spellBookID, bookType);
+            local link = GetSpellLink(currentSpellName);
+            local currentSpellID = tonumber(link and link:gsub("|", "||"):match("spell:(%d+)"));
+
+            if spellId == currentSpellID or spellName == currentSpellName then
+                return spellBookID, bookType;
+            end
+        end
     end
 end
 
@@ -276,7 +266,14 @@ function CheckKnownAbility(ability)
         end
     end
 
-    ability.SpellBookId = GetSpellBookId(ability.SpellId);
+    local bookId, bookType = GetSpellBookId(ability.SpellId);
+
+    if not bookId then
+        print("|cffff0000*SpellBookId for ("..tostring(ability.SpellId)..") "..ability.SpellName.." not found");
+    end
+
+    ability.SpellBookId = bookId;
+    ability.SpellBookType = bookType;
 end
 
 function CheckAllSpells()
@@ -331,7 +328,12 @@ function CheckAndCastAbility(ability)
     end
 
     local target = ability.Target or "none";
-    local spellCastingTime = select(7, GetSpellInfo(ability.SpellId)) or 0;
+    local spellName, _, spellIcon, spellCost, spellIsFunnel, spellPowerType, spellCastTime, spellMinRage, spellMaxRange = GetSpellInfo(ability.SpellId);
+    spellCastTime = spellCastTime or 0;
+
+    if not spellName and ability.SpellId > 0 then
+        return;
+    end
 
     if ability.RecastDelay > 0
         and tarabilitygetInfo.Guid == UnitGUID(target)
@@ -339,16 +341,14 @@ function CheckAndCastAbility(ability)
         return;
     end
 
-    local spellName = GetSpellInfo(ability.SpellId);
-    if not spellName and ability.SpellId > 0 then
-        return;
-    end
-
     if (ability.SpellId or 0) == 0 then
-        if if type(ability.Func) == "function" then
-            return ability.Func(ability);
+        if type(ability.Func) == "function" then
+            local result = ability.Func(ability);
+            return result;
         end
     elseif not ability.IsKnown then
+        return;
+    elseif not IsUsableSpell(ability.SpellBookId, ability.SpellBookType) then
         return;
     end
 
@@ -375,13 +375,13 @@ function CheckAndCastAbility(ability)
     end
 
     if ability.RangeCheck then
-        assert(BomberFrame.RangeSpellBookId, "Ability: "..ability.Name.." set range check and not set range spell")
-        if IsSpellInRange(BomberFrame.RangeSpellBookId, "spell", "target") == 0 then
+        assert(BomberFrame.RangeSpellBookId, "Ability: "..ability.Name.." set range check and not set range spell");
+        if IsSpellInRange(BomberFrame.RangeSpellBookId, BomberFrame.RangeSpellBookType, "target") == 0 then
             return;
         end
     end
 
-    if spellCastingTime > 0 then
+    if spellCastTime > 0 then
         if (ability.IsMovingCheck == "notmoving"  and PLAYER.IsMoving)
         or (ability.IsMovingCheck == "moving" and not PLAYER.IsMoving) then
             return;
@@ -398,11 +398,11 @@ function CheckAndCastAbility(ability)
     if target == "target" then
         if not UnitExists(target) then
             return;
-        elseif SpellHasRange(ability.SpellBookId, "spell") and IsSpellInRange(ability.SpellBookId, "spell", target) == 0 then
+        elseif SpellHasRange(ability.SpellBookId, ability.SpellBookType) and IsSpellInRange(ability.SpellBookId, ability.SpellBookType, target) == 0 then
             return;
-        elseif IsHelpfulSpell(spellName) and not UnitIsFriend("player", target) then
+        elseif IsHelpfulSpell(ability.SpellBookId, ability.SpellBookType) and not UnitIsFriend("player", target) then
             return;
-        elseif IsHarmfulSpell(spellName) and UnitIsFriend("player", target) then
+        elseif IsHarmfulSpell(ability.SpellBookId, ability.SpellBookType) and UnitIsFriend("player", target) then
             return;
         elseif not UnitIsFriend("player", target) then
             if UnitIsDeadOrGhost(target) or not UnitCanAttack("player", target) then
@@ -415,10 +415,8 @@ function CheckAndCastAbility(ability)
 
     BomberFrame_SetColor(hotKeyColor);
 
-    -- move to SPELL_CAST_START
     ability.Guid = UnitGUID(target);
-    -- name, _, icon, cost, isFunnel, powerType, castTime, minRage, maxRange
-    ability.LastCastingTime = GetTime() + (spellCastingTime / 1000);
+    ability.LastCastingTime = GetTime() + (spellCastTime / 1000);
 
     if not hotKeyColor and ability.SpellId > 0 then
         print("HotKey color by ("..spellName..") not found");
@@ -462,6 +460,7 @@ function LoadRotation()
     BOMBER_COOLDOWN = false;
     BOMBER_PAUSE = false;
     BomberFrame.RangeSpellBookId = nil;
+    BomberFrame.RangeSpellBookType = nil;
 
     if type(ABILITY_TABLE) == "table" and #ABILITY_TABLE > 0 then
         if type(ABILITY_TABLE.OnLoad) == "function" then
@@ -566,11 +565,11 @@ function BomberFrame_SetColor(color)
     end
 end
 
-local function PrintRangeCheck(spellBookId)
-    local currentSpellName = GetSpellBookItemName(spellBookId, "spell");
+local function PrintRangeCheck(spellBookId, spellBookType)
+    local currentSpellName = GetSpellBookItemName(spellBookId, spellBookType);
 
-    local hasRange = SpellHasRange(spellBookId, "spell");
-    local inRange = IsSpellInRange(spellBookId, "spell", "target");
+    local hasRange = SpellHasRange(spellBookId, spellBookType);
+    local inRange = IsSpellInRange(spellBookId, spellBookType, "target");
 
     local hasRangePrefix = "|cffff0000";
     if hasRange then
@@ -582,7 +581,7 @@ local function PrintRangeCheck(spellBookId)
         inRangePrefix = "|cff00ff00";
     end
 
-    print("Spell: "..currentSpellName.." ("..tostring(spellBookId)..") =>  HasRange: "
+    print("|cff30ff60"..currentSpellName.."|r ("..tostring(spellBookId)..") =>  HasRange: "
         ..hasRangePrefix..tostring(hasRange).."|r InRange: "..inRangePrefix..tostring(inRange).."|r")
 end
 
@@ -594,12 +593,12 @@ function CheckSpellHasRange()
     end
 
     if BomberFrame.RangeSpellBookId then
-        PrintRangeCheck(BomberFrame.RangeSpellBookId);
+        PrintRangeCheck(BomberFrame.RangeSpellBookId, BomberFrame.RangeSpellBookType);
     end
 
     for i, ability in ipairs(ABILITY_TABLE) do
         if ability.SpellId > 0 then
-            PrintRangeCheck(ability.SpellBookId);
+            PrintRangeCheck(ability.SpellBookId, ability.SpellBookType);
         end
     end
 
@@ -607,28 +606,22 @@ function CheckSpellHasRange()
 end
 
 function DumpSpellBook()
-    local _, _, offs, numspells = GetSpellTabInfo(3);
-	local maxSpellNum = offs -- The offset of the next tab is the max ID of the previous tab.
-	if numspells == 0 then
-		-- New characters pre level 10 only have 2 tabs.
-		local _, _, offs, numspells = GetSpellTabInfo(2);
-		maxSpellNum = offs + numspells
-	end
+    local _, _, offs, numspells = GetSpellTabInfo(2);
+    local maxSpellNum = offs + numspells;
 
-    print("======================")
-
+    print("======================");
     for _, bookType in ipairs({"spell", "pet"}) do
-	    for spellBookID = 1, maxSpellNum do
-		    local type, baseSpellID = GetSpellBookItemInfo(spellBookID, bookType);
-		    if type == "SPELL" then
-                local currentSpellName = GetSpellBookItemName(spellBookID, bookType);
-			    local link = GetSpellLink(currentSpellName);
-			    local currentSpellID = tonumber(link and link:gsub("|", "||"):match("spell:(%d+)"));
-			    local baseSpellName = GetSpellInfo(baseSpellID);
+        print("====>", bookType)
+        for spellBookID = 1, maxSpellNum do
+            local currentSpellName = GetSpellBookItemName(spellBookID, bookType);
+            if currentSpellName then
+                local link = GetSpellLink(currentSpellName);
+                local currentSpellID = tonumber(link and link:gsub("|", "||"):match("spell:(%d+)"));
 
-                print(bookType,spellBookID, currentSpellID, baseSpellID, currentSpellName, baseSpellName)
-		    end
-	    end
+                print(format("|cff00ff00%s|r: [|cff00ff00%d|r] - (|cff6f0a9a%d|r) |cff00ff00%s|r",
+                    bookType, spellBookID, currentSpellID, currentSpellName));
+            end
+        end
     end
 
     print("======================")
