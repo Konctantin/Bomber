@@ -181,7 +181,7 @@ BOMBER_DRUID_3 = {
             { Target = "target" }
         },
         Func = function(ability, targetInfo, target)
-            if IsSpellInRange(GetSpellInfo(109839), "target") == 1 and CheckInterrupt("target") then
+            if CheckInterrupt("target") then
                 return true;
             end
         end
@@ -195,7 +195,7 @@ BOMBER_DRUID_3 = {
         IsUsableCheck     = true,
         RangeCheck        = true,
         TargetList = {
-            { Target = "target" }
+            { Target = "player" }
         },
         Func = function(ability, targetInfo, target)
             if PLAYER.HP < 70 then
@@ -210,15 +210,13 @@ BOMBER_DRUID_3 = {
         CancelCasting     = false,
         IsCheckInCombat   = true,
         IsUsableCheck     = true,
-        RangeCheck        = true,
+        RangeCheck        = false,
         TargetList = {
             { Target = "target" }
         },
         Func = function(ability, targetInfo, target)
             if select(3, HasDebuff("target", 164812, "PLAYER")) < 3 then
-                if IsSpellInRange(GetSpellInfo(8921), "target") == 1 then
-                    return true;
-                end
+                return true;
             end
         end
     },

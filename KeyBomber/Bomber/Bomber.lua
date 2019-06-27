@@ -288,6 +288,7 @@ function CheckAndCastAbility(ability, targetInfo)
         return ability.Func(ability, targetInfo, targetInfo.Target);
     elseif not ability.IsKnown then
         return;
+    -- todo: check and use spellId
     elseif ability.IsUsableCheck and not IsUsableSpell(spellName) then
         return;
     end
@@ -313,6 +314,16 @@ function CheckAndCastAbility(ability, targetInfo)
             return;
         end
     end
+
+    --if SpellHasRange(spellName) == 1 then
+    --    if IsSpellInRange(spellName, targetInfo.Target) ~= 1 then
+    --        return;
+    --    end
+    --else
+    --    if IsSpellInRange(BomberFrame.RangeSpell, "target") ~= 1 then
+    --        return;
+    --    end
+    --end
 
     if ability.RangeCheck then
         assert(BomberFrame.RangeSpell, "Ability: "..ability.Name.." set range check and not set range spell")
