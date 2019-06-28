@@ -161,5 +161,137 @@ BOMBER_WARRIOR_2 = {
 
 -- Protection
 BOMBER_WARRIOR_3 = {
-
+    OnLoad = function()
+        SetInRangeSpell(23922);
+    end,
+    {   SpellId =      0, Name = "Initialization",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = false,
+        RangeCheck        = false,
+        Target            = "none",
+        Func = function(ability)
+            if IsMounted() then
+                return true;
+            end
+        end
+    },
+    {   SpellId =  190456, Name = "Стойкость к боли",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "none",
+        Func = function(ability)
+            if PLAYER.Agro > 1 then
+                return true;
+            end
+        end
+    },
+    {   SpellId =  2565, Name = "Блок щитом",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "none",
+        Func = function(ability)
+            if PLAYER.Agro > 1 and UnitPower("player") > 30 then
+                return true;
+            end
+        end
+    },
+    {   SpellId =  6552, Name = "Зуботычина",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = false,
+        Target            = "target",
+        Func = function(ability)
+            if CheckInterrupt("target") then
+                return true;
+            end
+        end
+    },
+    {   SpellId =  202168, Name = "Верная победа",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = false,
+        Target            = "target",
+        Func = function(ability)
+            if PLAYER.HP < 80 then
+                return true;
+            end
+        end
+    },
+    {   SpellId =  23922, Name = "Мощный удар щитом",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "target",
+        Func = function(ability)
+            return true;
+        end
+    },
+    {   SpellId =  6343, Name = "Удар грома",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "target",
+        Func = function(ability)
+            return true;
+        end
+    },
+    {   SpellId =  6572, Name = "Реванш",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "none",
+        Func = function(ability)
+            return true;
+        end
+    },
+    {   SpellId =  20243, Name = "Сокрушение",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = false,
+        Target            = "target",
+        Func = function(ability)
+            return true;
+        end
+    },
+    {   SpellId =  57755, Name = "Героический бросок",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = false,
+        Target            = "target",
+        Func = function(ability)
+            return true;
+        end
+    },
 }
