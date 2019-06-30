@@ -565,7 +565,7 @@ function BomberFrame_SetColor(color)
     end
 end
 
-local function PrintRangeCheck(spellBookId, spellBookType)
+local function PrintRangeCheck(spellId, spellBookId, spellBookType)
     local currentSpellName = GetSpellBookItemName(spellBookId, spellBookType);
 
     local hasRange = SpellHasRange(spellBookId, spellBookType);
@@ -581,7 +581,7 @@ local function PrintRangeCheck(spellBookId, spellBookType)
         inRangePrefix = "|cff00ff00";
     end
 
-    print("|cff30ff60"..currentSpellName.."|r ("..tostring(spellBookId)..") =>  HasRange: "
+    print("|cff30ff60".."("..tostring(spellId)..") "..currentSpellName.."|r ("..tostring(spellBookId)..") =>  HasRange: "
         ..hasRangePrefix..tostring(hasRange).."|r InRange: "..inRangePrefix..tostring(inRange).."|r")
 end
 
@@ -593,12 +593,12 @@ function CheckSpellHasRange()
     end
 
     if BomberFrame.RangeSpellBookId then
-        PrintRangeCheck(BomberFrame.RangeSpellBookId, BomberFrame.RangeSpellBookType);
+        PrintRangeCheck(0, BomberFrame.RangeSpellBookId, BomberFrame.RangeSpellBookType);
     end
 
     for i, ability in ipairs(ABILITY_TABLE) do
         if ability.SpellId > 0 then
-            PrintRangeCheck(ability.SpellBookId, ability.SpellBookType);
+            PrintRangeCheck(ability.SpellId, ability.SpellBookId, ability.SpellBookType);
         end
     end
 

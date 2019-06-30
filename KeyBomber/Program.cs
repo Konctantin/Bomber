@@ -79,7 +79,7 @@ namespace KeyBomber
                         var keyRec = GetKeyFromColor(keyColor);
                         if (keyRec.HasKey)
                         {
-                            Console.WriteLine($"KeyColor: 0x{keyColor.ToArgb():X08} {keyRec}");
+                            Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} KeyColor: 0x{keyColor.ToArgb():X08} {keyRec}");
                             SendKey(foregroundWindow.Hwd, keyRec);
                         }
                     }
