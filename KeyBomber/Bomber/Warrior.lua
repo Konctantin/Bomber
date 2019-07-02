@@ -178,6 +178,20 @@ BOMBER_WARRIOR_3 = {
             end
         end
     },
+    {   SpellId =  0, Name = "Ярость берсерка",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = false,
+        Target            = "none",
+        Func = function(ability)
+            if IsLossOfControl("FEAR", "PACIFY", "CHARM", "CONFUSE", "POSSESS") then
+                return true;
+            end
+        end
+    },
     {   SpellId =  190456, Name = "Стойкость к боли",
         IsMovingCheck     = "none",
         RecastDelay       = 0,

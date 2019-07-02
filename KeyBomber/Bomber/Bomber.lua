@@ -191,12 +191,42 @@ function CheckInterrupt(unit, sec)
     end
 end
 
+function IsLossOfControl(...)
+    --[[
+    STUN_MECHANIC
+    SCHOOL_INTERRUPT
+    DISARM
+    PACIFYSILENCE
+    SILENCE
+    ROOT
+    PACIFY
+    STUN
+    FEAR
+    CHARM
+    CONFUSE
+    POSSESS
+    ]]
+
+    local numEvents = C_LossOfControl.GetNumEvents() or 0;
+    if numEvents > 0 then
+        local types = { ... };
+        for i = 1, numEvents do
+            local locType, spellID, text, iconTexture, startTime, timeRemaining, duration, lockoutSchool, priority, displayType = C_LossOfControl.GetEventInfo(i);
+            for _, etype in ipairs(types) do
+                if locType == etype then
+                    return true;
+                end
+            end
+        end
+    end
+end
+
 function SetInRangeSpell(spellId)
     BomberFrame.RangeSpellBookId = nil;
     if (spellId or 0) > 0 then
         local name = GetSpellInfo(spellId);
         assert(name, "Unknown spell by Id "..tostring(spellId));
-        assert(SpellHasRange(name), "Spell "..tostring(rangeSpell).." "..name.."not have range");
+        assert(SpellHasRange(name), "Spell "..tostring(rangeSpell).." "..name.." don't have a range");
 
         local bookId, bookType = GetSpellBookId(spellId);
         assert(bookId, "SpellBookId not found for spell "..name.." ("..tostring(spellId)..")");
@@ -269,7 +299,7 @@ function CheckKnownAbility(ability)
     local bookId, bookType = GetSpellBookId(ability.SpellId);
 
     if not bookId then
-        print("|cffff0000*SpellBookId for ("..tostring(ability.SpellId)..") "..ability.SpellName.." not found");
+        print("|cffff0000*SpellBookId for ("..tostring(ability.SpellId)..") "..ability.SpellName.." don't found");
     end
 
     ability.SpellBookId = bookId;
@@ -490,7 +520,6 @@ function BomberFrame_OnEvent(self, event, ...)
     if event == "PLAYER_ENTERING_WORLD" then
         self:Show();
         LoadRotation();
-        CheckAllSpells();
     elseif event == "SPELLS_CHANGED" then
         CheckAllSpells();
     elseif event == "PLAYER_SPECIALIZATION_CHANGED" then
