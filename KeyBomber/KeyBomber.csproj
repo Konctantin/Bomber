@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ForegrounWindow.cs" />
+    <Compile Include="KeyBoardInput.cs" />
     <Compile Include="KeyMap.cs" />
     <Compile Include="KeyMapGenerator.cs" />
     <Compile Include="KeyRecord.cs" />
