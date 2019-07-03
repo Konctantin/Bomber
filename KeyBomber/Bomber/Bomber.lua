@@ -242,14 +242,16 @@ function GetSpellBookId(spellId)
     local maxSpellNum = offs + numspells;
 
     for _, bookType in ipairs({"spell", "pet"}) do
-        for spellBookID = 1, maxSpellNum do
-            local type, baseSpellID = GetSpellBookItemInfo(spellBookID, bookType);
+        for spellBookID = offs, maxSpellNum do
+            --local type, baseSpellID = GetSpellBookItemInfo(spellBookID, bookType);
 
             local currentSpellName = GetSpellBookItemName(spellBookID, bookType);
-            local link = GetSpellLink(currentSpellName);
+            local link = GetSpellLink(spellBookID, bookType);
             local currentSpellID = tonumber(link and link:gsub("|", "||"):match("spell:(%d+)"));
 
             if spellId == currentSpellID or spellName == currentSpellName then
+                print(format("|cff00ff00%s|r: [|cff00ff00%d|r] - (|cff6f0a9a%d|r) |cff00ff00%s|r",
+                    bookType, spellBookID, spellId, link));
                 return spellBookID, bookType;
             end
         end
@@ -366,7 +368,7 @@ function CheckAndCastAbility(ability)
     end
 
     if ability.RecastDelay > 0
-        and tarabilitygetInfo.Guid == UnitGUID(target)
+        and ability.Guid == UnitGUID(target)
         and ((ability.LastCastingTime or 0) + ability.RecastDelay) >= GetTime() then
         return;
     end
@@ -520,13 +522,23 @@ function BomberFrame_OnEvent(self, event, ...)
     if event == "PLAYER_ENTERING_WORLD" then
         self:Show();
         LoadRotation();
+        print(event)
+        for i=1,4 do
+            print(GetSpellTabInfo(i))
+        end
+        DumpSpellBook();
     elseif event == "SPELLS_CHANGED" then
         CheckAllSpells();
+        print(event)
+    elseif event == "LEARNED_SPELL_IN_TAB" then
+        CheckAllSpells();
+        print(event)
     elseif event == "PLAYER_SPECIALIZATION_CHANGED" then
         local unit = ...;
         if UnitGUID(unit) == UnitGUID("player") then
             LoadRotation();
         end
+        print(event)
     elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
         local _,subEvent,_,sourceGUID,_,_,_,destGUID,_,_,_,spellId = CombatLogGetCurrentEventInfo();
         if subEvent == "SPELL_CAST_SUCCESS" and sourceGUID == UnitGUID("player") then
@@ -564,6 +576,7 @@ BomberFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED");
 BomberFrame:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED");
 BomberFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
 BomberFrame:RegisterEvent("MODIFIER_STATE_CHANGED");
+BomberFrame:RegisterEvent("LEARNED_SPELL_IN_TAB");
 BomberFrame:Show();
 
 BomberFrameInfo = CreateFrame("Frame");
@@ -596,6 +609,7 @@ end
 
 local function PrintRangeCheck(spellId, spellBookId, spellBookType)
     local currentSpellName = GetSpellBookItemName(spellBookId, spellBookType);
+    local link = GetSpellLink(spellBookId, spellBookType);
 
     local hasRange = SpellHasRange(spellBookId, spellBookType);
     local inRange = IsSpellInRange(spellBookId, spellBookType, "target");
@@ -610,7 +624,7 @@ local function PrintRangeCheck(spellId, spellBookId, spellBookType)
         inRangePrefix = "|cff00ff00";
     end
 
-    print("|cff30ff60".."("..tostring(spellId)..") "..currentSpellName.."|r ("..tostring(spellBookId)..") =>  HasRange: "
+    print("|cff30ff60".."("..tostring(spellId)..") "..link.."|r ("..tostring(spellBookId)..") =>  HasRange: "
         ..hasRangePrefix..tostring(hasRange).."|r InRange: "..inRangePrefix..tostring(inRange).."|r")
 end
 
@@ -641,14 +655,12 @@ function DumpSpellBook()
     print("======================");
     for _, bookType in ipairs({"spell", "pet"}) do
         print("====>", bookType)
-        for spellBookID = 1, maxSpellNum do
-            local currentSpellName = GetSpellBookItemName(spellBookID, bookType);
-            if currentSpellName then
-                local link = GetSpellLink(currentSpellName);
+        for spellBookID = offs, maxSpellNum do
+            local link = GetSpellLink(spellBookID, bookType);
+            if link then
                 local currentSpellID = tonumber(link and link:gsub("|", "||"):match("spell:(%d+)"));
-
                 print(format("|cff00ff00%s|r: [|cff00ff00%d|r] - (|cff6f0a9a%d|r) |cff00ff00%s|r",
-                    bookType, spellBookID, currentSpellID, currentSpellName));
+                    bookType, spellBookID, currentSpellID, link));
             end
         end
     end
