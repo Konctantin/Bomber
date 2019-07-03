@@ -67,6 +67,15 @@ namespace KeyBomber
                 KeyMapGenerator.MakeSharpMapFiles("KeyMap.cs");
                 Console.ReadLine();
             }
+            else if (args.Contains("-t"))
+            {
+                // delay for select window
+                Thread.Sleep(2_000);
+                // test: SendInput
+                KeyBoardInput.Send(40, KeyEvent.KeyDown);
+                Thread.Sleep(50);
+                KeyBoardInput.Send(40, KeyEvent.KeyUp);
+            }
             else
             {
                 var foregroundWindow = new ForegrounWindow();
@@ -79,7 +88,7 @@ namespace KeyBomber
                         var keyRec = GetKeyFromColor(keyColor);
                         if (keyRec.HasKey)
                         {
-                            Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} KeyColor: 0x{keyColor.ToArgb():X08} {keyRec}");
+                            Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} KeyColor: 0x{keyColor.ToArgb():X08} HotKey: <{keyRec}>");
                             SendKey(foregroundWindow.Hwd, keyRec);
                         }
                     }

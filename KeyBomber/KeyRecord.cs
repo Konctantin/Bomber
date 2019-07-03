@@ -25,9 +25,9 @@ namespace KeyBomber
         public override string ToString()
         {
             if (HasModif)
-                return $"HotKey: <{ModToStr(Modifier)}-{(char)Key}>";
+                return $"{ModToStr(Modifier)}-{(char)Key}";
             else
-                return $"HotKey: <{(char)Key}>";
+                return $"{(char)Key}";
         }
     }
 }
