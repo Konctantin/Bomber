@@ -55,6 +55,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Bomber\Bomber.Commands.lua" />
+    <None Include="Bomber\Bomber.Common.lua" />
+    <None Include="Bomber\Bomber.InfoFrame.lua" />
     <None Include="Bomber\Bomber.KeyMap.lua" />
     <None Include="Bomber\Bomber.lua" />
     <None Include="Bomber\Bomber.toc" />

@@ -5,6 +5,9 @@
 
 Bomber.lua
 Bomber.KeyMap.lua
+Bomber.Common.lua
+Bomber.Commands.lua
+Bomber.InfoFrame.lua
 
 DemonHunter.lua
 DeathKnight.lua

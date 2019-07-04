@@ -52,175 +52,6 @@ function EVENT_MODS.MODIFIER_STATE_CHANGED(modifier, state)
     end
 end
 
-PLAYER = {
-    HP   = 0,
-    Agro = 0,
-    IsMoving  = false,
-    IsMounted = false,
-
-    Init = function(self)
-        self.HP = 100 * (UnitHealth("player") or 1) / (UnitHealthMax("player") or 1) or 0;
-        self.IsMoving = IsMoving();
-        self.IsMounted= IsMounted() and not HasBuff("player", 165803);
-        self.Agro     = UnitThreatSituation("player") or 0;
-    end,
-
-    HasBuff = function(self, spellId, filter)
-        return HasBuff("player", spellId, filter)
-    end
-};
-
-TARGET = {
-    HP = 0,
-    ID = 0,
-
-    Init = function(self)
-        self.HP = 100 * (UnitHealth("target") or 1) / (UnitHealthMax("target") or 1) or 0;
-        self.ID = UnitId("target");
-    end,
-
-    HasDebuf = function (self, spellId, filter)
-        return HasDebuff("target", spellId, filter)
-    end,
-}
-
-function HasBuff(unit, spellId, filter)
-    local spell_table = { };
-    if type(spellId) == "table" then
-        spell_table = spellId;
-    elseif type(spellId) == "number" then
-        spell_table = { spellId };
-    end
-
-    for _,spell_id in ipairs(spell_table) do
-        local spellName, spellRank = GetSpellInfo(spell_id);
-        if spellName then
-           for i = 1, 40 do
-               local name, icon, count, debuffType, duration, expires, unitCaster, canStealOrPurge, _, spellId, canApplyAura, isBossAura = UnitBuff(unit, i, filter);
-               if not name then
-                   return nil, 0, 0, nil, 0, 0;
-               end
-               if name == spellName then
-                   local rem = min(max((expires or 0) - (GetTime() - (BomberFrame.ping or 0)), 0), 0xffff);
-                   return name, count, rem, value1, value2, value3;
-               end
-           end
-        end
-    end
-    return nil, 0, 0, nil, 0, 0;
-end
-
-function HasDebuff(unit, spellId, filter)
-    local spell_table = { };
-    if type(spellId) == "table" then
-        spell_table = spellId;
-    elseif type(spellId) == "number" then
-        spell_table = { spellId };
-    end
-
-    for _,spell_id in ipairs(spell_table) do
-        local spellName, spellRank = GetSpellInfo(spell_id);
-        if spellName then
-           for i = 1, 40 do
-               local name, icon, count, debuffType, duration, expires, unitCaster, canStealOrPurge, _, spellId, canApplyAura, isBossAura = UnitDebuff(unit, i, filter);
-               if not name then
-                   return nil, 0, 0, nil, 0, 0;
-               end
-               if name == spellName then
-                   local rem = min(max((expires or 0) - (GetTime() - (BomberFrame.ping or 0)), 0), 0xffff);
-                   return name, count, rem, value1, value2, value3;
-               end
-           end
-        end
-    end
-    return nil, 0, 0, nil, 0, 0;
-end
-
-function SpellCD(m_spell)
-    local start, duration, enable = GetSpellCooldown(m_spell);
-    local cooldown = duration + start - GetTime();
-    return (cooldown > 0 and cooldown - (BomberFrame.ping or 0) or 0), enable;
-end
-
-function IsMoving()
-    return GetUnitSpeed("player") ~= 0 or IsFalling();
-end
-
--- Return current health by percent
-function HealthByPercent(m_target)
-    return UnitExists(m_target) and 100 * (UnitHealth(m_target) or 1) / (UnitHealthMax(m_target) or 1) or 0;
-end
-
--- Return current value of resource (mana, energy, focus, rage, ...) in percents.
-function PowerByPercent(m_target, m_powertype)
-    return UnitExists(m_target) and 100 * (UnitPower(m_target, m_powertype) or 1) / (UnitPowerMax(m_target, m_powertype) or 1) or 0;
-end
-
---- Check if was pressed modifier key
--- @param m_key modifier key
-function IsModKeyDown(m_key)
-    if not GetCurrentKeyBoardFocus() then
-        return  (m_key == mkLeftShift    and IsLeftShiftKeyDown()   ) or
-                (m_key == mkLeftControl  and IsLeftControlKeyDown() ) or
-                (m_key == mkLeftAlt      and IsLeftAltKeyDown()     ) or
-                (m_key == mkRightShift   and IsRightShiftKeyDown()  ) or
-                (m_key == mkRightAlt     and IsRightAltKeyDown()    ) or
-                (m_key == mkRightControl and IsRightControlKeyDown());
-    end
-end
-
--- Return Unit ID
-function UnitId(unit)
-    return tonumber((UnitGUID(unit) or ""):match("-(%d+)-%x+$"), 10);
-end
-
--- Checking if needs is interrupt unit's cast.
-function CheckInterrupt(unit, sec)
-    if BOMBER_INTERRUPT then
-        local name, text, texture, startTime, endTime, isTradeSkill, castID, notInterruptible, spellID = UnitCastingInfo(unit);
-        if name and not (notInterruptible or isTradeSkill) then
-            if (((endTime / 1000) - GetTime()) - BomberFrame.ping) <= (sec or 1) then
-                return true;
-            end
-        end
-
-        local name, text, texture, startTime, endTime, isTradeSkill, notInterruptible, spellID = UnitChannelInfo(unit);
-        if name and not (notInterruptible or isTradeSkill) then
-            return true;
-        end
-    end
-end
-
-function IsLossOfControl(...)
-    --[[
-    STUN_MECHANIC
-    SCHOOL_INTERRUPT
-    DISARM
-    PACIFYSILENCE
-    SILENCE
-    ROOT
-    PACIFY
-    STUN
-    FEAR
-    CHARM
-    CONFUSE
-    POSSESS
-    ]]
-
-    local numEvents = C_LossOfControl.GetNumEvents() or 0;
-    if numEvents > 0 then
-        local types = { ... };
-        for i = 1, numEvents do
-            local locType, spellID, text, iconTexture, startTime, timeRemaining, duration, lockoutSchool, priority, displayType = C_LossOfControl.GetEventInfo(i);
-            for _, etype in ipairs(types) do
-                if locType == etype then
-                    return true;
-                end
-            end
-        end
-    end
-end
-
 function SetInRangeSpell(spellId)
     BomberFrame.RangeSpellBookId = nil;
     if (spellId or 0) > 0 then
@@ -241,21 +72,22 @@ function GetSpellBookId(spellId)
     local _, _, offs, numspells = GetSpellTabInfo(2);
     local maxSpellNum = offs + numspells;
 
-    for _, bookType in ipairs({"spell", "pet"}) do
-        for spellBookID = offs, maxSpellNum do
-            --local type, baseSpellID = GetSpellBookItemInfo(spellBookID, bookType);
+    --for _, bookType in ipairs({"spell", "pet"}) do
+    local bookType = "spell"
+    for spellBookID = offs, maxSpellNum do
+        --local type, baseSpellID = GetSpellBookItemInfo(spellBookID, bookType);
 
-            local currentSpellName = GetSpellBookItemName(spellBookID, bookType);
-            local link = GetSpellLink(spellBookID, bookType);
-            local currentSpellID = tonumber(link and link:gsub("|", "||"):match("spell:(%d+)"));
+        local currentSpellName = GetSpellBookItemName(spellBookID, bookType);
+        local link = GetSpellLink(spellBookID, bookType);
+        local currentSpellID = tonumber(link and link:gsub("|", "||"):match("spell:(%d+)"));
 
-            if spellId == currentSpellID or spellName == currentSpellName then
-                print(format("|cff00ff00%s|r: [|cff00ff00%d|r] - (|cff6f0a9a%d|r) |cff00ff00%s|r",
-                    bookType, spellBookID, spellId, link));
-                return spellBookID, bookType;
-            end
+        if spellId == currentSpellID or spellName == currentSpellName then
+            --print(format("|cff00ff00%s|r: [|cff00ff00%d|r] - (|cff6f0a9a%d|r) |cff00ff00%s|r",
+            --    bookType, spellBookID, spellId, link));
+            return spellBookID, bookType;
         end
     end
+    --end
 end
 
 function CheckKnownAbility(ability)
@@ -303,6 +135,10 @@ function CheckKnownAbility(ability)
     if not bookId then
         print("|cffff0000*SpellBookId for ("..tostring(ability.SpellId)..") "..ability.SpellName.." don't found");
     end
+
+    --local link = GetSpellLink(bookId, bookType);
+    --print(format("|cff00ff00%s|r: [|cff00ff00%d|r] - (|cff6f0a9a%d|r) |cff00ff00%s|r",
+    --               bookType, bookId, ability.SpellId, link));
 
     ability.SpellBookId = bookId;
     ability.SpellBookType = bookType;
@@ -378,7 +214,14 @@ function CheckAndCastAbility(ability)
             local result = ability.Func(ability);
             return result;
         end
-    elseif not ability.IsKnown then
+        return false;
+    end
+
+    local bookId, bookType = GetSpellBookId(ability.SpellId);
+    ability.SpellBookId = bookId;
+    ability.SpellBookType = bookType;
+
+    if not ability.IsKnown then
         return;
     elseif not IsUsableSpell(ability.SpellBookId, ability.SpellBookType) then
         return;
@@ -522,23 +365,15 @@ function BomberFrame_OnEvent(self, event, ...)
     if event == "PLAYER_ENTERING_WORLD" then
         self:Show();
         LoadRotation();
-        print(event)
-        for i=1,4 do
-            print(GetSpellTabInfo(i))
-        end
-        DumpSpellBook();
     elseif event == "SPELLS_CHANGED" then
         CheckAllSpells();
-        print(event)
     elseif event == "LEARNED_SPELL_IN_TAB" then
         CheckAllSpells();
-        print(event)
     elseif event == "PLAYER_SPECIALIZATION_CHANGED" then
         local unit = ...;
         if UnitGUID(unit) == UnitGUID("player") then
             LoadRotation();
         end
-        print(event)
     elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
         local _,subEvent,_,sourceGUID,_,_,_,destGUID,_,_,_,spellId = CombatLogGetCurrentEventInfo();
         if subEvent == "SPELL_CAST_SUCCESS" and sourceGUID == UnitGUID("player") then
@@ -605,76 +440,4 @@ function BomberFrame_SetColor(color)
     else
         BomberFrame.texture:SetColorTexture(0, 0, 0, 1);
     end
-end
-
-local function PrintRangeCheck(spellId, spellBookId, spellBookType)
-    local currentSpellName = GetSpellBookItemName(spellBookId, spellBookType);
-    local link = GetSpellLink(spellBookId, spellBookType);
-
-    local hasRange = SpellHasRange(spellBookId, spellBookType);
-    local inRange = IsSpellInRange(spellBookId, spellBookType, "target");
-
-    local hasRangePrefix = "|cffff0000";
-    if hasRange then
-        hasRangePrefix = "|cff00ff00";
-    end
-
-    local inRangePrefix = "|cffff0000";
-    if inRange then
-        inRangePrefix = "|cff00ff00";
-    end
-
-    print("|cff30ff60".."("..tostring(spellId)..") "..link.."|r ("..tostring(spellBookId)..") =>  HasRange: "
-        ..hasRangePrefix..tostring(hasRange).."|r InRange: "..inRangePrefix..tostring(inRange).."|r")
-end
-
-function CheckSpellHasRange()
-    print("|cff00ff00 Start range check...")
-    if not UnitExists("target") then
-        print("|cffff0000 You must select a unit of target!")
-        return;
-    end
-
-    if BomberFrame.RangeSpellBookId then
-        PrintRangeCheck(0, BomberFrame.RangeSpellBookId, BomberFrame.RangeSpellBookType);
-    end
-
-    for i, ability in ipairs(ABILITY_TABLE) do
-        if ability.SpellId > 0 then
-            PrintRangeCheck(ability.SpellId, ability.SpellBookId, ability.SpellBookType);
-        end
-    end
-
-    print("|cffff0000 End range check.")
-end
-
-function DumpSpellBook()
-    local _, _, offs, numspells = GetSpellTabInfo(2);
-    local maxSpellNum = offs + numspells;
-
-    print("======================");
-    for _, bookType in ipairs({"spell", "pet"}) do
-        print("====>", bookType)
-        for spellBookID = offs, maxSpellNum do
-            local link = GetSpellLink(spellBookID, bookType);
-            if link then
-                local currentSpellID = tonumber(link and link:gsub("|", "||"):match("spell:(%d+)"));
-                print(format("|cff00ff00%s|r: [|cff00ff00%d|r] - (|cff6f0a9a%d|r) |cff00ff00%s|r",
-                    bookType, spellBookID, currentSpellID, link));
-            end
-        end
-    end
-
-    print("======================")
-end
-
-SLASH_RCHECK1= '/rcheck'
-SLASH_DUMPSP1= '/dumpsp'
-
-function SlashCmdList.RCHECK(msg)
-    CheckSpellHasRange();
-end
-
-function SlashCmdList.DUMPSP(msg)
-    DumpSpellBook();
 end
