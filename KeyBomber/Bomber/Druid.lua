@@ -263,7 +263,7 @@ BOMBER_DRUID_2 = {
 -- Guardian
 BOMBER_DRUID_3 = {
     OnLoad = function()
-        SetInRangeSpell(33917);
+        SetInRangeSpell(6807);
     end,
     {      SpellId =      0, Name = "Initialization",
         IsMovingCheck     = "none",

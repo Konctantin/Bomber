@@ -178,7 +178,7 @@ BOMBER_WARRIOR_3 = {
             end
         end
     },
-    {   SpellId =  0, Name = "Ярость берсерка",
+    {   SpellId =  18499, Name = "Ярость берсерка",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
@@ -215,7 +215,7 @@ BOMBER_WARRIOR_3 = {
         RangeCheck        = true,
         Target            = "none",
         Func = function(ability)
-            if PLAYER.Agro > 1 and UnitPower("player") > 30 then
+            if PLAYER.Agro > 2 and UnitPower("player") > 30 then
                 return true;
             end
         end
@@ -281,7 +281,9 @@ BOMBER_WARRIOR_3 = {
         RangeCheck        = true,
         Target            = "none",
         Func = function(ability)
-            return true;
+            if UnitPower("player") > 40 or HasBuff("player", 5302) then
+                return true;
+            end;
         end
     },
     {   SpellId =  20243, Name = "Сокрушение",

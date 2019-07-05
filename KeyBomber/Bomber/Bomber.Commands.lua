@@ -73,10 +73,10 @@ function SlashCmdList.DUMPSP(msg)
 end
 
 function SlashCmdList.BOMBERPAUSE(msg)
-    local delay = string.match(msg, "(%d+)");
-    if delay and delay > 0 and delay < 10000 then
-        BomberFrame.LastTime = GetTime() + delay;
+    local delay = tonumber(string.match(msg, "(%d+)")) or 0;
+    if delay > 0 and delay < 10000 then
+        BomberFrame.LastTime = GetTime() + (delay/1000);
     else
-        BomberFrame.LastTime = GetTime() + 1000;
+        BomberFrame.LastTime = GetTime() + 1;
     end
 end

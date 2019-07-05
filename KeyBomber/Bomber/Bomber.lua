@@ -28,10 +28,10 @@ function EVENT_MODS.MODIFIER_STATE_CHANGED(modifier, state)
     elseif modifier == "RSHIFT" then
         if BOMBER_COOLDOWN then
             BOMBER_COOLDOWN = false;
-            BomberFrameInfo.print("|cff00fff00Cooldown ON", true);
+            BomberFrameInfo.print("|cffff0000Cooldown OFF", true);
         else
             BOMBER_COOLDOWN = true;
-            BomberFrameInfo.print("|cffff0000Cooldown OFF", true);
+            BomberFrameInfo.print("|cff00ff00Cooldown ON", true);
         end
     elseif modifier == "RCTRL" then
         if BOMBER_INTERRUPT then
@@ -53,6 +53,7 @@ function EVENT_MODS.MODIFIER_STATE_CHANGED(modifier, state)
 end
 
 function SetInRangeSpell(spellId)
+    BomberFrame.RangeSpellId = spellId;
     BomberFrame.RangeSpellBookId = nil;
     if (spellId or 0) > 0 then
         local name = GetSpellInfo(spellId);
@@ -316,10 +317,13 @@ end
 
 function BomberFrame_OnUpdate(self, elapsed)
     if GetTime() >= (BomberFrame.LastTime or 0) then
-        if not UnitIsDeadOrGhost("player") and not UnitIsAFK("player") then
+        if not UnitIsAFK("player") then
             BomberFrame.ping = select(4, GetNetStats()) / 1000;
             PLAYER:Init();
             TARGET:Init();
+            local bookId, bookType = GetSpellBookId(BomberFrame.RangeSpellId);
+            BomberFrame.RangeSpellBookId = bookId;
+            BomberFrame.RangeSpellBookType = bookType;
             AddonFrame_AbilityLoop();
         end
         BomberFrame.LastTime = GetTime() + math.random(150, 250) / 1000;
