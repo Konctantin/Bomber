@@ -10,15 +10,26 @@ namespace KeyBomber
     {
         const uint WM_KEYDOWN = 0x0100;
         const uint WM_KEYUP   = 0x0101;
+        const int VK_MENU     = 0x12; // alt
 
         [DllImport("user32.dll", EntryPoint = "PostMessageA", SetLastError = true)]
         private static extern bool PostMessage(IntPtr hWnd, uint msg, int wParam, int lParam);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern ushort GetKeyState(int nVirtKey);
 
         static readonly Random random = new Random();
 
         private static void RandomSleep(int min, int max)
         {
             Thread.Sleep(random.Next(min, max));
+        }
+
+        private static bool IsAltKeyDown()
+        {
+            var state = GetKeyState(VK_MENU);
+            //Console.WriteLine($"0x{state:X04}");
+            return (state & 0xFF00) == 0xFF00;
         }
 
         private static void SendKey(IntPtr hwd, KeyRecord keyRec)
@@ -82,7 +93,11 @@ namespace KeyBomber
 
                 while (true)
                 {
-                    if (foregroundWindow.IsTitle("World of Warcraft"))
+                    if (IsAltKeyDown())
+                    {
+                        // pause
+                    }
+                    else if (foregroundWindow.IsTitle("World of Warcraft"))
                     {
                         var keyColor = foregroundWindow.GetPixelColor();
                         var keyRec = GetKeyFromColor(keyColor);

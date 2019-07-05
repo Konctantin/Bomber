@@ -2,13 +2,6 @@
 COMBATLOG_MODS = { };
 ABILITY_TABLE = { }
 
-mkLeftShift     = 1;
-mkLeftControl   = 2;
-mkLeftAlt       = 3;
-mkRightShift    = 4;
-mkRightControl  = 5;
-mkRightAlt      = 6;
-
 BOMBER_AOE = false;
 BOMBER_COOLDOWN = false;
 BOMBER_PAUSE = false;
@@ -178,17 +171,11 @@ function GetHotKeyColorBySpellId(spellId)
 end
 
 function CheckAndCastAbility(ability)
-    BomberFrame_SetColor(nil);
-
     if GetCurrentKeyBoardFocus() or IsModKeyDown(mkLeftAlt) or BOMBER_PAUSE then
         return;
     end
 
-    if UnitIsDeadOrGhost("player") then
-        return;
-    end
-
-    if UnitHasVehicleUI("player") then
+    if UnitIsDeadOrGhost("player") or UnitIsAFK("player") or UnitHasVehicleUI("player") then
         return;
     end
 
@@ -315,21 +302,6 @@ function AddonFrame_AbilityLoop()
     end
 end
 
-function BomberFrame_OnUpdate(self, elapsed)
-    if GetTime() >= (BomberFrame.LastTime or 0) then
-        if not UnitIsAFK("player") then
-            BomberFrame.ping = select(4, GetNetStats()) / 1000;
-            PLAYER:Init();
-            TARGET:Init();
-            local bookId, bookType = GetSpellBookId(BomberFrame.RangeSpellId);
-            BomberFrame.RangeSpellBookId = bookId;
-            BomberFrame.RangeSpellBookType = bookType;
-            AddonFrame_AbilityLoop();
-        end
-        BomberFrame.LastTime = GetTime() + math.random(150, 250) / 1000;
-    end
-end
-
 function LoadRotation()
     local className, classMnkd = UnitClass("player");
     local rotationName = "BOMBER_"..classMnkd.."_"..tostring(GetSpecialization());
@@ -400,6 +372,22 @@ function BomberFrame_OnEvent(self, event, ...)
     end
 end
 
+function BomberFrame_OnUpdate(self, elapsed)
+    if GetTime() >= (BomberFrame.LastTime or 0) then
+        BomberFrame_SetColor(nil);
+        BomberFrame.ping = select(4, GetNetStats()) / 1000;
+        PLAYER:Init();
+        TARGET:Init();
+
+        local bookId, bookType = GetSpellBookId(BomberFrame.RangeSpellId);
+        BomberFrame.RangeSpellBookId = bookId;
+        BomberFrame.RangeSpellBookType = bookType;
+
+        AddonFrame_AbilityLoop();
+        BomberFrame.LastTime = GetTime() + math.random(150, 250) / 1000;
+    end
+end
+
 BomberFrame = CreateFrame("Frame", nil, UIParent);
 BomberFrame:SetFrameStrata("BACKGROUND");
 BomberFrame:SetWidth(5);
@@ -426,7 +414,6 @@ BomberFrameInfo:SetScript("OnUpdate", function (self, elapsed)
 end);
 BomberFrameInfo:SetHeight(300);
 BomberFrameInfo:SetWidth(600);
-BomberFrameInfo.Buttons = {};
 BomberFrameInfo.Msg = BomberFrameInfo:CreateFontString(nil, "BACKGROUND", "PVPInfoTextFont");
 BomberFrameInfo.Msg:SetAllPoints();
 BomberFrameInfo.print = function(msg, toChat)

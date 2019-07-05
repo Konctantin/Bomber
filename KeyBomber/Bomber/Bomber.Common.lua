@@ -1,4 +1,10 @@
-﻿
+﻿mkLeftShift     = 1;
+mkLeftControl   = 2;
+mkLeftAlt       = 3;
+mkRightShift    = 4;
+mkRightControl  = 5;
+mkRightAlt      = 6;
+
 PLAYER = {
     HP   = 0,
     Agro = 0,
