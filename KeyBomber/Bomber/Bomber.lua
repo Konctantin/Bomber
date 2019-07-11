@@ -239,7 +239,7 @@ function CheckAndCastAbility(ability)
 
     if ability.RangeCheck then
         assert(BomberFrame.RangeSpellBookId, "Ability: "..ability.Name.." set range check and not set range spell");
-        if IsSpellInRange(BomberFrame.RangeSpellBookId, BomberFrame.RangeSpellBookType, "target") == 0 then
+        if IsSpellInRange(BomberFrame.RangeSpellBookId, BomberFrame.RangeSpellBookType, "target") ~= 1 then
             return;
         end
     end
@@ -289,12 +289,14 @@ function CheckAndCastAbility(ability)
 end
 
 function AddonFrame_AbilityLoop()
-    if type(ABILITY_TABLE) == "table" then 
-        for _, ability in ipairs(ABILITY_TABLE) do
-            if type(ability) == "table" and not ability.Failed then
-                if not ability.IsDisable then
-                    if CheckAndCastAbility(ability) then
-                        return;
+    if type(ABILITY_TABLE) == "table" then
+        if not ABILITY_TABLE.OnTackt or ABILITY_TABLE.OnTackt() then
+            for _, ability in ipairs(ABILITY_TABLE) do
+                if type(ability) == "table" and not ability.Failed then
+                    if not ability.IsDisable then
+                        if CheckAndCastAbility(ability) then
+                            return;
+                        end
                     end
                 end
             end
@@ -303,7 +305,7 @@ function AddonFrame_AbilityLoop()
 end
 
 function LoadRotation()
-    local className, classMnkd = UnitClass("player");
+    local classDisplayName, classMnkd = UnitClass("player");
     local rotationName = "BOMBER_"..classMnkd.."_"..tostring(GetSpecialization());
     ABILITY_TABLE = _G[rotationName];
 
@@ -318,7 +320,7 @@ function LoadRotation()
             ABILITY_TABLE.OnLoad();
         end
         local spec = select(2, GetSpecializationInfo(GetSpecialization()));
-        BomberFrameInfo.print("|cff15bd05Rotation: |r|cff6f0a9a"..className..": "..spec.."|r|cff15bd05 is enabled.|r", true);
+        BomberFrameInfo.print("|cff15bd05Rotation: |r|cff6f0a9a"..classDisplayName..": "..spec.."|r|cff15bd05 is enabled.|r", true);
         CheckAllSpells();
     end
 end

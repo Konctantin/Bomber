@@ -265,7 +265,13 @@ BOMBER_DRUID_3 = {
     OnLoad = function()
         SetInRangeSpell(6807);
     end,
-    {      SpellId =      0, Name = "Initialization",
+    OnTackt = function()
+        if IsMounted() or IsStealthed() or GetShapeshiftForm() ~= 1 then
+            return false;
+        end
+        return true;
+    end,
+    {   SpellId =      0, Name = "Initialization",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
@@ -278,7 +284,8 @@ BOMBER_DRUID_3 = {
                 return true;
             end
         end
-    }, {   SpellId = 106839, Name = "Лобовая атака",
+    },
+    {   SpellId = 106839, Name = "Лобовая атака",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
@@ -291,7 +298,8 @@ BOMBER_DRUID_3 = {
                 return true;
             end
         end
-    }, {   SpellId =  22842, Name = "Неистовое восстановление",
+    },
+    {   SpellId =  22842, Name = "Неистовое восстановление",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
@@ -304,7 +312,8 @@ BOMBER_DRUID_3 = {
                 return true;
             end
         end
-    }, {   SpellId =   8921, Name = "Лунный огонь",
+    },
+    {   SpellId =   8921, Name = "Лунный огонь",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
@@ -313,11 +322,15 @@ BOMBER_DRUID_3 = {
         RangeCheck        = false,
         Target            = "target",
         Func = function(ability)
-            if select(3, HasDebuff("target", 164812, "PLAYER")) < 3 then
+            if (select(3, HasDebuff("target", 164812, "PLAYER")) < 3)
+            or HasBuff("player", 213708)
+            or IsSpellInRange(GetSpellInfo(6807), "target") == 0
+            then
                 return true;
             end
         end
-    }, {   SpellId =  77758, Name = "Взбучка",
+    },
+    {   SpellId =  77758, Name = "Взбучка",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
@@ -328,7 +341,8 @@ BOMBER_DRUID_3 = {
         Func = function(ability)
             return true;
         end
-    }, {   SpellId =   6807, Name = "Трепка",
+    },
+    {   SpellId =   6807, Name = "Трепка",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
@@ -341,7 +355,8 @@ BOMBER_DRUID_3 = {
                 return true;
             --end
         end
-    }, {   SpellId =  33917, Name = "Увечье",
+    },
+    {   SpellId =  33917, Name = "Увечье",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
@@ -352,7 +367,8 @@ BOMBER_DRUID_3 = {
         Func = function(ability)
             return true;
         end
-    }, {   SpellId = 213771, Name = "Размах",
+    },
+    {   SpellId = 213771, Name = "Размах",
         IsMovingCheck = "none",
         RecastDelay       = 0,
         DropChanel        = false,

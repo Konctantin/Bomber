@@ -6,7 +6,7 @@ BOMBER_WARRIOR_1 = {
 -- Furry
 BOMBER_WARRIOR_2 = {
     OnLoad = function()
-        SetInRangeSpell(23881);
+        SetInRangeSpell(6552);
     end,
     {   SpellId =      0, Name = "Initialization",
         IsMovingCheck     = "none",
@@ -78,7 +78,7 @@ BOMBER_WARRIOR_2 = {
         RangeCheck        = true,
         Target            = "target",
         Func = function(ability)
-            if HealthByPercent("player") < 70 then
+            if HealthByPercent("player") < 80 then
                 return true;
             end
         end
@@ -152,9 +152,7 @@ BOMBER_WARRIOR_2 = {
         RangeCheck        = false,
         Target            = "target",
         Func = function(ability)
-            if IsSpellInRange(GetSpellInfo(57755), "target") == 1 then
-                return true;
-            end
+            return true;
         end
     },
 }
