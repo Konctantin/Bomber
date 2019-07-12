@@ -157,7 +157,7 @@ function GetHotKeyColorBySpellId(spellId)
             for _, barName in pairs(ACTION_BAR_TYPES) do
                 for i = 1, 12 do
                     local button = _G[barName .. 'Button' .. i];
-                    if button and button.action == actionID then
+                    if button and button.action == actionID and button.HotKey then
                         local hotKey = string.upper(tostring(button.HotKey:GetText()));
                         local color = BOMBER_KEYMAP[hotKey]
                         if color then
