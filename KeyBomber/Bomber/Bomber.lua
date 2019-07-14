@@ -69,13 +69,15 @@ function GetSpellBookId(spellId)
     --for _, bookType in ipairs({"spell", "pet"}) do
     local bookType = "spell"
     for spellBookID = offs, maxSpellNum do
-        --local type, baseSpellID = GetSpellBookItemInfo(spellBookID, bookType);
-
+        local type, baseSpellID = GetSpellBookItemInfo(spellBookID, bookType);
         local currentSpellName = GetSpellBookItemName(spellBookID, bookType);
         local link = GetSpellLink(spellBookID, bookType);
         local currentSpellID = tonumber(link and link:gsub("|", "||"):match("spell:(%d+)"));
 
-        if spellId == currentSpellID or spellName == currentSpellName then
+        if spellId == currentSpellID
+        or spellId == baseSpellID
+        or spellName == currentSpellName
+        then
             --print(format("|cff00ff00%s|r: [|cff00ff00%d|r] - (|cff6f0a9a%d|r) |cff00ff00%s|r",
             --    bookType, spellBookID, spellId, link));
             return spellBookID, bookType;
