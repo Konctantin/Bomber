@@ -12,7 +12,10 @@ BOMBER_DRUID_1 = {
         RangeCheck        = false,
         Target            = "none",
         Func = function(ability)
-            if IsMounted() or IsStealthed() or GetShapeshiftForm() ~= 4 then
+            if IsMounted()
+            or IsStealthed()
+            or GetShapeshiftForm() ~= 4
+            then
                 return true;
             end
         end

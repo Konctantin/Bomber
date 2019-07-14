@@ -49,10 +49,12 @@ function DumpSpellBook()
         print("====>", bookType)
         for spellBookID = offs, maxSpellNum do
             local link = GetSpellLink(spellBookID, bookType);
+            local type, baseSpellID = GetSpellBookItemInfo(spellBookID, bookType);
+            local baseLink = GetSpellLink(baseSpellID);
             if link then
                 local currentSpellID = tonumber(link and link:gsub("|", "||"):match("spell:(%d+)"));
-                print(format("|cff00ff00%s|r: [|cff00ff00%d|r] - (|cff6f0a9a%d|r) |cff00ff00%s|r",
-                    bookType, spellBookID, currentSpellID, link));
+                print(format("|cff00ff00%s|r: [|cff00ff00%d|r] - (|cff6f0a9a%d|r) |cff00ff00%s|r -> %s",
+                    bookType, spellBookID, currentSpellID, link, baseLink));
             end
         end
     end

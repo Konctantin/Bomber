@@ -26,6 +26,7 @@ PLAYER = {
 TARGET = {
     HP = 0,
     ID = 0,
+    IsMeele = false,
 
     Init = function(self)
         self.HP = 100 * (UnitHealth("target") or 1) / (UnitHealthMax("target") or 1) or 0;

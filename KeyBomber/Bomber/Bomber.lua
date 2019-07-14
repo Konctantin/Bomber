@@ -128,9 +128,10 @@ function CheckKnownAbility(ability)
 
     local bookId, bookType = GetSpellBookId(ability.SpellId);
 
-    if not bookId then
-        print("|cffff0000*SpellBookId for ("..tostring(ability.SpellId)..") "..ability.SpellName.." don't found");
-    end
+    -- todo: move to test case
+    --if not bookId then
+    --    print("|cffff0000*SpellBookId for ("..tostring(ability.SpellId)..") "..ability.SpellName.." don't found");
+    --end
 
     --local link = GetSpellLink(bookId, bookType);
     --print(format("|cff00ff00%s|r: [|cff00ff00%d|r] - (|cff6f0a9a%d|r) |cff00ff00%s|r",
@@ -283,9 +284,10 @@ function CheckAndCastAbility(ability)
     ability.Guid = UnitGUID(target);
     ability.LastCastingTime = GetTime() + (spellCastTime / 1000);
 
-    if not hotKeyColor and ability.SpellId > 0 then
-        print("HotKey color by ("..spellName..") not found");
-    end
+    -- todo: move to test case
+    --if not hotKeyColor and ability.SpellId > 0 then
+    --    print("HotKey color by ("..spellName..") not found");
+    --end
 
     return hotKeyColor ~= nil;
 end
