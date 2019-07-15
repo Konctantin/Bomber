@@ -36,13 +36,7 @@ BOMBER_MONK_3 = {
         RangeCheck        = false,
         Target            = "none",
         Func = function(ability)
-            if BOMBER_COOLDOWN
-            and UnitExists("target")
-            and not UnitIsDeadOrGhost("target")
-            and UnitCanAttack("player", "target")
-            and IsSpellInRange(BomberFrame.RangeSpell, "target") == 1
-            and not HasBuff("player", 137639)
-            then
+            if CheckUsedCooldown() and not HasBuff("player", 137639) then
                 return true;
             end
         end
@@ -56,12 +50,7 @@ BOMBER_MONK_3 = {
         RangeCheck        = false,
         Target            = "none",
         Func = function(ability)
-            if BOMBER_COOLDOWN
-            and UnitExists("target")
-            and not UnitIsDeadOrGhost("target")
-            and UnitCanAttack("player", "target")
-            and IsSpellInRange(BomberFrame.RangeSpell, "target") == 1
-            then
+            if CheckUsedCooldown() then
                 return true;
             end
         end

@@ -45,12 +45,7 @@ BOMBER_WARRIOR_2 = {
         RangeCheck        = false,
         Target            = "none",
         Func = function(ability)
-            if BOMBER_COOLDOWN
-            and UnitExists("target")
-            and not UnitIsDeadOrGhost("target")
-            and UnitCanAttack("player", "target")
-            and IsSpellInRange(BomberFrame.RangeSpell, "target") == 1
-            then
+            if CheckUsedCooldown() then
                 return true;
             end
         end

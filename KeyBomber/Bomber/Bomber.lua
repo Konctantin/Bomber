@@ -1,47 +1,32 @@
 ﻿EVENT_MODS = { };
 COMBATLOG_MODS = { };
-ABILITY_TABLE = { }
+ABILITY_TABLE = { };
 
 BOMBER_AOE = false;
-BOMBER_COOLDOWN = false;
+BOMBER_COOLDOWN = true;
 BOMBER_PAUSE = false;
 BOMBER_INTERRUPT = true;
+
+function PrintStateChangeText(text, onoff)
+    local state = onoff and "|cff00ff00 ON|r" or "|cffff0000 OFF|r";
+    BomberFrameInfo.print("|cff6f0a9a "..text.."|r"..state, true);
+end
 
 function EVENT_MODS.MODIFIER_STATE_CHANGED(modifier, state)
     if state == 0 then return end; -- release key
 
     if modifier == "LCTRL" then
-        if BOMBER_AOE then
-            BOMBER_AOE = false;
-            BomberFrameInfo.print("|cff00ff00Single target", true);
-        else
-            BOMBER_AOE = true;
-            BomberFrameInfo.print("|cffff0000AOE", true);
-        end
+        BOMBER_AOE = not BOMBER_AOE;
+        PrintStateChangeText("AOE Mode", BOMBER_AOE);
     elseif modifier == "RSHIFT" then
-        if BOMBER_COOLDOWN then
-            BOMBER_COOLDOWN = false;
-            BomberFrameInfo.print("|cffff0000Cooldown OFF", true);
-        else
-            BOMBER_COOLDOWN = true;
-            BomberFrameInfo.print("|cff00ff00Cooldown ON", true);
-        end
+        BOMBER_COOLDOWN = not BOMBER_COOLDOWN;
+        PrintStateChangeText("Cooldowns", BOMBER_COOLDOWN);
     elseif modifier == "RCTRL" then
-        if BOMBER_INTERRUPT then
-            BOMBER_INTERRUPT = false;
-            BomberFrameInfo.print("|cff00ff00Spell interrupt OFF", true);
-        else
-            BOMBER_INTERRUPT = true;
-            BomberFrameInfo.print("|cffff0000Spell interrupt ON", true);
-        end
+        BOMBER_INTERRUPT = not BOMBER_INTERRUPT;
+        PrintStateChangeText("Spell interrupt", BOMBER_INTERRUPT);
     elseif modifier == "RALT" then
-        if BOMBER_PAUSE then
-            BOMBER_PAUSE = false;
-            BomberFrameInfo.print("|cffff0000Pause OFF", true);
-        else
-            BOMBER_PAUSE = true;
-            BomberFrameInfo.print("|cff00ff00Pause ON", true);
-        end
+        BOMBER_PAUSE = not BOMBER_PAUSE;
+        PrintStateChangeText("Global rotation pause", BOMBER_PAUSE);
     end
 end
 
@@ -314,17 +299,21 @@ function LoadRotation()
     ABILITY_TABLE = _G[rotationName];
 
     BOMBER_AOE = false;
-    BOMBER_COOLDOWN = false;
+    BOMBER_COOLDOWN = true;
     BOMBER_PAUSE = false;
     BomberFrame.RangeSpellBookId = nil;
     BomberFrame.RangeSpellBookType = nil;
 
-    if type(ABILITY_TABLE) == "table" and #ABILITY_TABLE > 0 then
+    if type(ABILITY_TABLE) == "table" and #ABILITY_TABLE > 0 and UnitLevel("player") >= 10 then
         if type(ABILITY_TABLE.OnLoad) == "function" then
             ABILITY_TABLE.OnLoad();
         end
+
+        local classColorStr = RAID_CLASS_COLORS[classMnkd].colorStr;
+        local classColoredText = HEIRLOOMS_CLASS_FILTER_FORMAT:format(classColorStr, classDisplayName);
+
         local spec = select(2, GetSpecializationInfo(GetSpecialization()));
-        BomberFrameInfo.print("|cff15bd05Rotation: |r|cff6f0a9a"..classDisplayName..": "..spec.."|r|cff15bd05 is enabled.|r", true);
+        BomberFrameInfo.print("|cff15bd05Rotation:|r "..classColoredText.." |cff6f0a9a"..spec.."|r|cff15bd05 is enabled.|r", true);
         CheckAllSpells();
     end
 end

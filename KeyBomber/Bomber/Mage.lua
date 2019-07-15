@@ -71,11 +71,7 @@ BOMBER_MAGE_2 = {
         RangeCheck        = true,
         Target            = "none",
         Func = function(ability)
-            if BOMBER_COOLDOWN
-            and UnitExists("target")
-            and not UnitIsDeadOrGhost("target")
-            and UnitCanAttack("player", "target")
-            then
+            if CheckUsedCooldown() then
                 return true;
             end
         end

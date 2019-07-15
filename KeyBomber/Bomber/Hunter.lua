@@ -24,12 +24,7 @@ BOMBER_HUNTER_1 = {
         RangeCheck        = true,
         Target            = "none",
         Func = function(ability)
-            if BOMBER_COOLDOWN
-            and UnitExists("pet")
-            and UnitExists("target")
-            and not UnitIsDeadOrGhost("target")
-            and UnitCanAttack("player", "target")
-            then
+            if CheckUsedCooldown() and UnitExists("pet") then
                 return true;
             end
         end
@@ -43,12 +38,7 @@ BOMBER_HUNTER_1 = {
         RangeCheck        = true,
         Target            = "none",
         Func = function(ability)
-            if BOMBER_COOLDOWN
-            and UnitExists("pet")
-            and UnitExists("target")
-            and not UnitIsDeadOrGhost("target")
-            and UnitCanAttack("player", "target")
-            then
+            if CheckUsedCooldown() and UnitExists("pet") then
                 return true;
             end
         end

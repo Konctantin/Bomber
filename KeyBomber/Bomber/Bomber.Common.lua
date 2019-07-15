@@ -96,6 +96,10 @@ function SpellCD(m_spell)
     return (cooldown > 0 and cooldown - (BomberFrame.ping or 0) or 0), enable;
 end
 
+function IsInRange(unit)
+    return IsSpellInRange(BomberFrame.RangeSpellBookId, BomberFrame.RangeSpellBookType, unit) == 1;
+end
+
 function IsMoving()
     return GetUnitSpeed("player") ~= 0 or IsFalling();
 end
@@ -141,6 +145,32 @@ function CheckInterrupt(unit, sec)
         local name, text, texture, startTime, endTime, isTradeSkill, notInterruptible, spellID = UnitChannelInfo(unit);
         if name and not (notInterruptible or isTradeSkill) then
             return true;
+        end
+    end
+end
+
+function UnitIsEncounterBoss(target)
+    return UnitIsUnit(target, "boss1")
+        or UnitIsUnit(target, "boss2")
+        or UnitIsUnit(target, "boss3")
+        or UnitIsUnit(target, "boss4")
+end
+
+function CheckUsedCooldown(soloMod)
+    if BOMBER_COOLDOWN
+    and UnitExists("target")
+    and not UnitIsDeadOrGhost("target")
+    and UnitCanAttack("player", "target") then
+        if IsInRaid() then
+            return IsInRange("target") and (UnitIsEncounterBoss("target")
+                or (UnitHealthMax("target") or 0) > ((UnitHealthMax("player") or 0)*20))
+        elseif IsInGroup() then
+            return IsInRange("target")
+                and ((UnitHealthMax("target") or 0) > ((UnitHealthMax("player") or 0)*10));
+        else
+            soloMod = soloMod or 3;
+            return IsInRange("target")
+                and ((UnitHealthMax("target") or 0) > ((UnitHealthMax("player") or 0)*soloMod));
         end
     end
 end
