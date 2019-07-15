@@ -342,7 +342,7 @@ function BomberFrame_OnEvent(self, event, ...)
         CheckAllSpells();
     elseif event == "PLAYER_SPECIALIZATION_CHANGED" then
         local unit = ...;
-        if UnitGUID(unit) == UnitGUID("player") then
+        if UnitIsUnit(unit, "player") then
             LoadRotation();
         end
     elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then

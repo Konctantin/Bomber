@@ -57,7 +57,7 @@ BOMBER_DRUID_1 = {
         RangeCheck        = true,
         Target            = "target",
         Func = function(ability)
-            return not BOMBER_AOE and UnitPower("player") > 40;
+            return not BOMBER_AOE or UnitPower("player") > 90;
         end
     },
     {   SpellId = 93402, Name = "Солнечный огонь",
