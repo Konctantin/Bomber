@@ -167,9 +167,9 @@ function CheckUsedCooldown(soloMod)
     and UnitCanAttack("player", "target")
     and IsInRange("target") then
         if IsInRaid() then
-            return (UnitIsEncounterBoss("target") or UnitHpIsGreat("target", 10);
+            return UnitIsEncounterBoss("target") or UnitHpIsGreat("target", 10);
         elseif IsInGroup() then
-            return (UnitIsEncounterBoss("target") or UnitHpIsGreat("target", 6);
+            return UnitIsEncounterBoss("target") or UnitHpIsGreat("target", 6);
         else
             return UnitHpIsGreat("target", soloMod or 2);
         end
