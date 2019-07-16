@@ -173,9 +173,7 @@ function CheckAndCastAbility(ability)
     end
 
     local target = ability.Target or "none";
-    local spellName, _, spellIcon, spellCost, spellIsFunnel, spellPowerType, spellCastTime, spellMinRage, spellMaxRange = GetSpellInfo(ability.SpellId);
-    spellCastTime = spellCastTime or 0;
-
+    local spellName = GetSpellInfo(ability.SpellId);
     if not spellName and ability.SpellId > 0 then
         return;
     end
@@ -229,13 +227,6 @@ function CheckAndCastAbility(ability)
     if ability.RangeCheck then
         assert(BomberFrame.RangeSpellBookId, "Ability: "..ability.Name.." set range check and not set range spell");
         if IsSpellInRange(BomberFrame.RangeSpellBookId, BomberFrame.RangeSpellBookType, "target") ~= 1 then
-            return;
-        end
-    end
-
-    if spellCastTime > 0 then
-        if (ability.IsMovingCheck == "notmoving"  and PLAYER.IsMoving)
-        or (ability.IsMovingCheck == "moving" and not PLAYER.IsMoving) then
             return;
         end
     end

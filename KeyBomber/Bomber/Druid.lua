@@ -4,7 +4,6 @@ BOMBER_DRUID_1 = {
         SetInRangeSpell(8921);
     end,
     {   SpellId =      0, Name = "Initialization",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -21,7 +20,6 @@ BOMBER_DRUID_1 = {
         end
     },
     {   SpellId = 78674, Name = "Столб солнечного света",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -35,7 +33,6 @@ BOMBER_DRUID_1 = {
         end
     },
     {   SpellId =  194223, Name = "Парад планет",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -49,7 +46,6 @@ BOMBER_DRUID_1 = {
         end
     },
     {   SpellId = 78674, Name = "Звездный поток",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -61,7 +57,6 @@ BOMBER_DRUID_1 = {
         end
     },
     {   SpellId = 93402, Name = "Солнечный огонь",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -75,7 +70,6 @@ BOMBER_DRUID_1 = {
         end
     },
     {   SpellId = 8921, Name = "Лунный огонь",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -89,7 +83,6 @@ BOMBER_DRUID_1 = {
         end
     },
     {   SpellId = 194153, Name = "Лунный удар",
-        IsMovingCheck     = "notmoving",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -97,13 +90,12 @@ BOMBER_DRUID_1 = {
         RangeCheck        = true,
         Target            = "target",
         Func = function(ability)
-            if BOMBER_AOE or HasBuff("player", 164547) then
+            if not PLAYER.IsMoving and BOMBER_AOE or HasBuff("player", 164547) then
                 return true;
             end
         end
     },
     {   SpellId = 190984, Name = "Солнечный гнев",
-        IsMovingCheck     = "notmoving",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -111,7 +103,7 @@ BOMBER_DRUID_1 = {
         RangeCheck        = true,
         Target            = "target",
         Func = function(ability)
-            return true;
+            return not PLAYER.IsMoving;
         end
     },
 }
@@ -122,7 +114,6 @@ BOMBER_DRUID_2 = {
         SetInRangeSpell(5221);
     end,
     {      SpellId =      0, Name = "Initialization",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -135,7 +126,6 @@ BOMBER_DRUID_2 = {
             end
         end
     }, {   SpellId = 106839, Name = "Лобовая атака",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -149,7 +139,6 @@ BOMBER_DRUID_2 = {
         end
     },
     {   SpellId = 106951, Name = "Берсерк",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -163,7 +152,6 @@ BOMBER_DRUID_2 = {
         end
     },
     {   SpellId = 5217, Name = "Тигриное неистовство",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -182,7 +170,6 @@ BOMBER_DRUID_2 = {
         end
     },
     {   SpellId =  1822, Name = "Глубокая рана",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -196,7 +183,6 @@ BOMBER_DRUID_2 = {
         end
     },
     {   SpellId =  155625, Name = "Лунный огонь",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -211,7 +197,6 @@ BOMBER_DRUID_2 = {
         end
     }, 
     {   SpellId =  1079, Name = "Разорвать",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -226,7 +211,6 @@ BOMBER_DRUID_2 = {
             end
         end
     }, {   SpellId =  22568, Name = "Свирепый укус",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -239,7 +223,6 @@ BOMBER_DRUID_2 = {
             end
         end
     }, {   SpellId =  5221, Name = "Полоснуть",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -266,7 +249,6 @@ BOMBER_DRUID_3 = {
         return true;
     end,
     {   SpellId =      0, Name = "Initialization",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -280,7 +262,6 @@ BOMBER_DRUID_3 = {
         end
     },
     {   SpellId = 106839, Name = "Лобовая атака",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -294,7 +275,6 @@ BOMBER_DRUID_3 = {
         end
     },
     {   SpellId =  22842, Name = "Неистовое восстановление",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -308,7 +288,6 @@ BOMBER_DRUID_3 = {
         end
     },
     {   SpellId =   8921, Name = "Лунный огонь",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -325,7 +304,6 @@ BOMBER_DRUID_3 = {
         end
     },
     {   SpellId =  77758, Name = "Взбучка",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -337,7 +315,6 @@ BOMBER_DRUID_3 = {
         end
     },
     {   SpellId =   6807, Name = "Трепка",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -351,7 +328,6 @@ BOMBER_DRUID_3 = {
         end
     },
     {   SpellId =  33917, Name = "Увечье",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -363,7 +339,6 @@ BOMBER_DRUID_3 = {
         end
     },
     {   SpellId = 213771, Name = "Размах",
-        IsMovingCheck = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,

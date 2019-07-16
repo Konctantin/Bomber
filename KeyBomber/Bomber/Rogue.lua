@@ -4,7 +4,6 @@ BOMBER_ROGUE_1 = {
         SetInRangeSpell(703);
     end,
     {   SpellId =      0, Name = "Initialization",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -18,7 +17,6 @@ BOMBER_ROGUE_1 = {
         end
     },
     {   SpellId =    1766, Name = "Пинок",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -32,7 +30,6 @@ BOMBER_ROGUE_1 = {
         end
     },
     {   SpellId =    703, Name = "Гаротта",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -46,7 +43,6 @@ BOMBER_ROGUE_1 = {
         end
     },
     {   SpellId =   1943, Name = "Рваная рана",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -62,7 +58,6 @@ BOMBER_ROGUE_1 = {
         end
     },
     {   SpellId =  32645, Name = "Отравленеие",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -78,7 +73,6 @@ BOMBER_ROGUE_1 = {
         end
     },
     {   SpellId =   1329, Name = "Расправа",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -90,7 +84,6 @@ BOMBER_ROGUE_1 = {
         end
     },
     {   SpellId =  51723, Name = "Веер клинков",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -102,7 +95,6 @@ BOMBER_ROGUE_1 = {
         end
     },
     {   SpellId =   185565, Name = "Отравленный нож",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
