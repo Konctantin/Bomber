@@ -159,11 +159,12 @@ function GetHotKeyColorBySpellId(spellId)
 end
 
 function CheckAndCastAbility(ability)
-    if GetCurrentKeyBoardFocus() or IsModKeyDown(mkLeftAlt) or BOMBER_PAUSE then
-        return;
-    end
-
-    if UnitIsDeadOrGhost("player") or UnitIsAFK("player") or UnitHasVehicleUI("player") then
+    if BOMBER_PAUSE
+    or GetCurrentKeyBoardFocus()
+    or IsLeftAltKeyDown()
+    or UnitIsDeadOrGhost("player")
+    or UnitIsAFK("player")
+    or UnitHasVehicleUI("player") then
         return;
     end
 

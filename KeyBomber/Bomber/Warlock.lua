@@ -137,7 +137,8 @@ BOMBER_WARLOCK_3 = {
                 return true;
             end
         end
-    }, {   SpellId = 17962, Name = "Поджигание", -- lol
+    },
+    {   SpellId = 17962, Name = "Поджигание", -- lol
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
@@ -150,7 +151,8 @@ BOMBER_WARLOCK_3 = {
                 return true;
             end
         end
-    }, {   SpellId = 116858, Name = "Стрела Хаоса",
+    },
+    {   SpellId = 116858, Name = "Стрела Хаоса",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
@@ -163,7 +165,8 @@ BOMBER_WARLOCK_3 = {
                 return true;
             end
         end
-    }, {   SpellId = 29722, Name = "Испепеление",
+    },
+    {   SpellId = 29722, Name = "Испепеление",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,

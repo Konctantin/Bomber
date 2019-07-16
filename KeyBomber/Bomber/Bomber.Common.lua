@@ -156,21 +156,22 @@ function UnitIsEncounterBoss(target)
         or UnitIsUnit(target, "boss4")
 end
 
+local function UnitHpIsGreat(target, koef)
+    return (UnitHealth(target) or 0) > ((UnitHealthMax("player") or 0) * koef);
+end
+
 function CheckUsedCooldown(soloMod)
     if BOMBER_COOLDOWN
     and UnitExists("target")
     and not UnitIsDeadOrGhost("target")
-    and UnitCanAttack("player", "target") then
+    and UnitCanAttack("player", "target")
+    and IsInRange("target") then
         if IsInRaid() then
-            return IsInRange("target") and (UnitIsEncounterBoss("target")
-                or (UnitHealth("target") or 0) > ((UnitHealthMax("player") or 0)*10))
+            return (UnitIsEncounterBoss("target") or UnitHpIsGreat("target", 10);
         elseif IsInGroup() then
-            return IsInRange("target") and (UnitIsEncounterBoss("target")
-                or (UnitHealth("target") or 0) > ((UnitHealthMax("player") or 0)*6))
+            return (UnitIsEncounterBoss("target") or UnitHpIsGreat("target", 6);
         else
-            soloMod = soloMod or 2;
-            return IsInRange("target")
-                and ((UnitHealth("target") or 0) > ((UnitHealthMax("player") or 0)*soloMod));
+            return UnitHpIsGreat("target", soloMod or 2);
         end
     end
 end
