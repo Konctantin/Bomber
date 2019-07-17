@@ -258,7 +258,7 @@ function CheckAndCastAbility(ability)
     BomberFrame_SetColor(hotKeyColor);
 
     ability.Guid = UnitGUID(target);
-    ability.LastCastingTime = GetTime() + (spellCastTime / 1000);
+    ability.LastCastingTime = GetTime() + (2 / 1000);
 
     -- todo: move to test case
     --if not hotKeyColor and ability.SpellId > 0 then
