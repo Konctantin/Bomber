@@ -31,6 +31,21 @@ BOMBER_ROGUE_1 = {
             end
         end
     },
+    {   SpellId =  79140, Name = "Вендетта",
+        IsMovingCheck     = "none",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = false,
+        Target            = "none",
+        Func = function(ability)
+            if CheckUsedCooldown()
+            and (UnitPower("player") + 60) < UnitPowerMax("player") then
+                return true;
+            end
+        end
+    },
     {   SpellId =    703, Name = "Гаротта",
         IsMovingCheck     = "none",
         RecastDelay       = 0,
