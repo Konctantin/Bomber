@@ -13,16 +13,16 @@ namespace KeyBomber
         Unicode   = 0x0004
     }
 
-    class KeyBoardInput
+    internal static class KeyBoardInput
     {
-        enum InputType: int
+        private enum InputType: int
         {
             Mouse    = 0,
             KeyBoard = 1,
             Hardware = 2
         }
 
-        struct INPUT
+        private struct INPUT
         {
             public InputType type;
             public ushort wVk;
@@ -38,10 +38,10 @@ namespace KeyBomber
         /// Synthesizes keystrokes, mouse motions, and button clicks.
         /// </summary>
         [DllImport("user32.dll")]
-        static extern uint SendInput(int nInputs, [MarshalAs(UnmanagedType.LPArray), In] INPUT[] pInputs, int cbSize);
+        private static extern uint SendInput(int nInputs, [MarshalAs(UnmanagedType.LPArray), In] INPUT[] pInputs, int cbSize);
 
         [DllImport("user32.dll")]
-        static extern uint MapVirtualKey(uint uCode, uint uMapType);
+        private static extern uint MapVirtualKey(uint uCode, uint uMapType);
 
         public static void Send(ushort key, KeyEvent flag)
         {

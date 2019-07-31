@@ -14,7 +14,6 @@ BOMBER_MONK_3 = {
         SetInRangeSpell(100780);
     end,
     {   SpellId =      0, Name = "Initialization",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -28,7 +27,6 @@ BOMBER_MONK_3 = {
         end
     },
     {   SpellId =  137639, Name = "Буря, земля и огонь",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -42,7 +40,6 @@ BOMBER_MONK_3 = {
         end
     },
     {   SpellId =  115080, Name = "Смертельное касание",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -56,7 +53,6 @@ BOMBER_MONK_3 = {
         end
     },
     {   SpellId =  116705, Name = "Рука-копье",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -70,7 +66,6 @@ BOMBER_MONK_3 = {
         end
     },
     {   SpellId =  152175, Name = "Удар крутящегося дракона",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -82,7 +77,6 @@ BOMBER_MONK_3 = {
         end
     },
     {   SpellId =  107428, Name = "Удар восходящего солнца",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -94,7 +88,6 @@ BOMBER_MONK_3 = {
         end
     },
     {   SpellId =  113656, Name = "Неистовые кулаки",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -106,7 +99,6 @@ BOMBER_MONK_3 = {
         end
     },
     {   SpellId =  101546, Name = "Танцующий журавль",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -118,7 +110,6 @@ BOMBER_MONK_3 = {
         end
     },
     {   SpellId =  100784, Name = "Нокаутирующий удар",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -132,7 +123,6 @@ BOMBER_MONK_3 = {
         end
     },
     {   SpellId =  100780, Name = "Лапа тигра",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,

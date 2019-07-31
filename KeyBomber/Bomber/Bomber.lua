@@ -1,6 +1,5 @@
 ﻿EVENT_MODS = { };
 COMBATLOG_MODS = { };
-ABILITY_TABLE = { };
 
 BOMBER_AOE = false;
 BOMBER_COOLDOWN = true;
@@ -127,8 +126,8 @@ function CheckKnownAbility(ability)
 end
 
 function CheckAllSpells()
-    if type(ABILITY_TABLE) == "table" then
-        for _, ability in ipairs(ABILITY_TABLE) do
+    if type(BomberFrame.AbilityList) == "table" then
+        for _, ability in ipairs(BomberFrame.AbilityList) do
             if ability.SpellId > 0 then
                 CheckKnownAbility(ability);
             end
@@ -173,9 +172,7 @@ function CheckAndCastAbility(ability)
     end
 
     local target = ability.Target or "none";
-    local spellName, _, spellIcon, spellCost, spellIsFunnel, spellPowerType, spellCastTime, spellMinRage, spellMaxRange = GetSpellInfo(ability.SpellId);
-    spellCastTime = spellCastTime or 0;
-
+    local spellName = GetSpellInfo(ability.SpellId);
     if not spellName and ability.SpellId > 0 then
         return;
     end
@@ -233,13 +230,6 @@ function CheckAndCastAbility(ability)
         end
     end
 
-    if spellCastTime > 0 then
-        if (ability.IsMovingCheck == "notmoving"  and PLAYER.IsMoving)
-        or (ability.IsMovingCheck == "moving" and not PLAYER.IsMoving) then
-            return;
-        end
-    end
-
     if type(ability.Func) == "function" then
         local result = ability.Func(ability);
         if not result then
@@ -268,7 +258,7 @@ function CheckAndCastAbility(ability)
     BomberFrame_SetColor(hotKeyColor);
 
     ability.Guid = UnitGUID(target);
-    ability.LastCastingTime = GetTime() + (spellCastTime / 1000);
+    ability.LastCastingTime = GetTime() + (2 / 1000);
 
     -- todo: move to test case
     --if not hotKeyColor and ability.SpellId > 0 then
@@ -279,9 +269,9 @@ function CheckAndCastAbility(ability)
 end
 
 function AddonFrame_AbilityLoop()
-    if type(ABILITY_TABLE) == "table" then
-        if not ABILITY_TABLE.OnTackt or ABILITY_TABLE.OnTackt() then
-            for _, ability in ipairs(ABILITY_TABLE) do
+    if type(BomberFrame.AbilityList) == "table" then
+        if not BomberFrame.AbilityList.OnTackt or BomberFrame.AbilityList.OnTackt() then
+            for _, ability in ipairs(BomberFrame.AbilityList) do
                 if type(ability) == "table" and not ability.Failed then
                     if not ability.IsDisable then
                         if CheckAndCastAbility(ability) then
@@ -297,7 +287,7 @@ end
 function LoadRotation()
     local classDisplayName, classMnkd = UnitClass("player");
     local rotationName = "BOMBER_"..classMnkd.."_"..tostring(GetSpecialization());
-    ABILITY_TABLE = _G[rotationName];
+    BomberFrame.AbilityList = _G[rotationName];
 
     BOMBER_AOE = false;
     BOMBER_COOLDOWN = true;
@@ -305,9 +295,9 @@ function LoadRotation()
     BomberFrame.RangeSpellBookId = nil;
     BomberFrame.RangeSpellBookType = nil;
 
-    if type(ABILITY_TABLE) == "table" and #ABILITY_TABLE > 0 and UnitLevel("player") >= 10 then
-        if type(ABILITY_TABLE.OnLoad) == "function" then
-            ABILITY_TABLE.OnLoad();
+    if type(BomberFrame.AbilityList) == "table" and #BomberFrame.AbilityList > 0 and UnitLevel("player") >= 10 then
+        if type(BomberFrame.AbilityList.OnLoad) == "function" then
+            BomberFrame.AbilityList.OnLoad();
         end
 
         local classColorStr = RAID_CLASS_COLORS[classMnkd].colorStr;
@@ -320,9 +310,9 @@ function LoadRotation()
 end
 
 function SetTargetCastintInfo(spellId, guid, castTime)
-    if type(ABILITY_TABLE) == "table" then
+    if type(BomberFrame.AbilityList) == "table" then
         local dstGuid = guid and guid or LAST_TARGET;
-        for _, ability in ipairs(ABILITY_TABLE) do
+        for _, ability in ipairs(BomberFrame.AbilityList) do
             if type(ability) == "table" and ability.Target then
                 if spellId == ability.SpellId and (not guid or (UnitGUID(ability.Target) == dstGuid)) then
                     ability.Guid = guid;
@@ -400,6 +390,7 @@ BomberFrame:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED");
 BomberFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
 BomberFrame:RegisterEvent("MODIFIER_STATE_CHANGED");
 BomberFrame:RegisterEvent("LEARNED_SPELL_IN_TAB");
+BomberFrame.AbilityList = {};
 BomberFrame:Show();
 
 BomberFrameInfo = CreateFrame("Frame");

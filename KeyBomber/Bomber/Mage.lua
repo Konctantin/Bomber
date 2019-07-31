@@ -9,7 +9,6 @@ BOMBER_MAGE_2 = {
         SetInRangeSpell(133);
     end,
     {   SpellId =      0, Name = "Initialization",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -23,7 +22,6 @@ BOMBER_MAGE_2 = {
         end
     },
     {   SpellId = 2139, Name = "Антимагия",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -37,7 +35,6 @@ BOMBER_MAGE_2 = {
         end
     },
     {   SpellId = 235313, Name = "Ледяная преграда",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -51,7 +48,6 @@ BOMBER_MAGE_2 = {
         end
     },
     {   SpellId = 44457, Name = "Живая бомба",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -63,7 +59,6 @@ BOMBER_MAGE_2 = {
         end
     },
     {   SpellId =  190319, Name = "Возгорание",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -77,7 +72,6 @@ BOMBER_MAGE_2 = {
         end
     },
     {   SpellId = 11366, Name = "Огненная глыба",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -91,7 +85,6 @@ BOMBER_MAGE_2 = {
         end
     },
     {   SpellId = 257541, Name = "Пламя феникса",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -105,7 +98,6 @@ BOMBER_MAGE_2 = {
         end
     },
     {   SpellId = 108853, Name = "Огненный взрыв",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -119,7 +111,6 @@ BOMBER_MAGE_2 = {
         end
     },
     {   SpellId = 133, Name = "Огненный шар",
-        IsMovingCheck     = "notmoving",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -127,11 +118,10 @@ BOMBER_MAGE_2 = {
         RangeCheck        = false,
         Target            = "target",
         Func = function(ability)
-            return true
+            return not PLAYER.IsMoving;
         end
     },
     {   SpellId = 2948, Name = "Ожог",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -150,7 +140,6 @@ BOMBER_MAGE_3 = {
         SetInRangeSpell(116);
     end,
     {   SpellId =      0, Name = "Initialization",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -164,7 +153,6 @@ BOMBER_MAGE_3 = {
         end
     },
     {   SpellId = 11426, Name = "Ледяная преграда",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -178,7 +166,6 @@ BOMBER_MAGE_3 = {
         end
     },
     {   SpellId = 2139, Name = "Антимагия",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -192,7 +179,6 @@ BOMBER_MAGE_3 = {
         end
     },
     {   SpellId = 30455, Name = "Ледяное копье",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -206,7 +192,6 @@ BOMBER_MAGE_3 = {
         end
     },
     {   SpellId = 199786, Name = "Ледовый шип",
-        IsMovingCheck     = "notmoving",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -214,11 +199,10 @@ BOMBER_MAGE_3 = {
         RangeCheck        = false,
         Target            = "target",
         Func = function(ability)
-            return true
+            return not PLAYER.IsMoving;
         end
     },
     {   SpellId = 44614, Name = "Шквал",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -232,7 +216,6 @@ BOMBER_MAGE_3 = {
         end
     },
     {   SpellId = 116, Name = "Ледяная стрела",
-        IsMovingCheck     = "notmoving",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -240,7 +223,7 @@ BOMBER_MAGE_3 = {
         RangeCheck        = false,
         Target            = "target",
         Func = function(ability)
-            return true
+            return not PLAYER.IsMoving;
         end
     },
 }

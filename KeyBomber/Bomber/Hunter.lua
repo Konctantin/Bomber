@@ -4,7 +4,6 @@ BOMBER_HUNTER_1 = {
         SetInRangeSpell(193455);
     end,
     {   SpellId =      0, Name = "Initialization",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         IsCheckInCombat   = false,
         RangeCheck        = false,
@@ -16,7 +15,6 @@ BOMBER_HUNTER_1 = {
         end
     },
     {   SpellId = 193530, Name = "Дух дикой природы",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -30,7 +28,6 @@ BOMBER_HUNTER_1 = {
         end
     },
     {   SpellId =  19574, Name = "Звериный гнев",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -44,7 +41,6 @@ BOMBER_HUNTER_1 = {
         end
     },
     {   SpellId =  53209, Name = "Выстрел химеры",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -58,7 +54,6 @@ BOMBER_HUNTER_1 = {
         end
     },
     {   SpellId = 217200, Name = "Разрывающий выстрел",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -72,7 +67,6 @@ BOMBER_HUNTER_1 = {
         end
     },
     {   SpellId =  34026, Name = "Команда Взять",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -86,7 +80,6 @@ BOMBER_HUNTER_1 = {
         end
     },
     {   SpellId =   2643, Name = "Залп",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -100,7 +93,6 @@ BOMBER_HUNTER_1 = {
         end
     },
     {   SpellId =   193455, Name = "Выстрел кобры",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,

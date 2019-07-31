@@ -31,7 +31,7 @@ function CheckSpellHasRange()
         PrintRangeCheck(0, BomberFrame.RangeSpellBookId, BomberFrame.RangeSpellBookType);
     end
 
-    for i, ability in ipairs(ABILITY_TABLE) do
+    for i, ability in ipairs(BomberFrame.AbilityList) do
         if ability.SpellId > 0 then
             PrintRangeCheck(ability.SpellId, ability.SpellBookId, ability.SpellBookType);
         end

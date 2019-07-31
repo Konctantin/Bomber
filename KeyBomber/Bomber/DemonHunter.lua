@@ -4,7 +4,6 @@ BOMBER_DEMONHUNTER_1 = {
         SetInRangeSpell(162243);
     end,
     {   SpellId =      0, Name = "Initialization",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -18,7 +17,6 @@ BOMBER_DEMONHUNTER_1 = {
         end
     },
     {   SpellId = 183752, Name = "Прерывание",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -32,7 +30,6 @@ BOMBER_DEMONHUNTER_1 = {
         end
     },
     {   SpellId = 198013, Name = "Пронзающий взгляд",
-        IsMovingCheck     = "notmoving",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -40,11 +37,10 @@ BOMBER_DEMONHUNTER_1 = {
         RangeCheck        = true,
         Target            = "none",
         Func = function(ability)
-            return true;
+            return not PLAYER.IsMoving;
         end
     },
     {   SpellId = 188499, Name = "Танец клинков",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -56,7 +52,6 @@ BOMBER_DEMONHUNTER_1 = {
         end
     },
     {   SpellId = 162794, Name = "Удар хаоса",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -68,7 +63,6 @@ BOMBER_DEMONHUNTER_1 = {
         end
     },
     {   SpellId = 162243, Name = "Укус демона",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -80,7 +74,6 @@ BOMBER_DEMONHUNTER_1 = {
         end
     },
     {   SpellId = 185123, Name = "Бросок боевого клинка",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,

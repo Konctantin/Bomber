@@ -4,7 +4,6 @@ BOMBER_DEATHKNIGHT_1 = {
         SetInRangeSpell(47528);
     end,
     {   SpellId =      0, Name = "Initialization",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -18,7 +17,6 @@ BOMBER_DEATHKNIGHT_1 = {
         end
     },
     {   SpellId =  47528, Name = "Заморозка мозгов",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -32,7 +30,6 @@ BOMBER_DEATHKNIGHT_1 = {
         end
     },
     {   SpellId =  49998, Name = "Удар смерти",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -44,7 +41,6 @@ BOMBER_DEATHKNIGHT_1 = {
         end
     },
     {   SpellId =  195182, Name = "Дробление хребта",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -58,7 +54,6 @@ BOMBER_DEATHKNIGHT_1 = {
         end
     },
     {   SpellId =  50842, Name = "Вскипание крови",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -70,7 +65,6 @@ BOMBER_DEATHKNIGHT_1 = {
         end
     },
     {   SpellId =  206930, Name = "Удар в сердце",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -82,7 +76,6 @@ BOMBER_DEATHKNIGHT_1 = {
         end
     },
     {   SpellId =  195292, Name = "Прикосновение смерти",
-        IsMovingCheck     = "none",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
