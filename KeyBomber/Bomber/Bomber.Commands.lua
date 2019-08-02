@@ -76,7 +76,8 @@ end
 
 function SlashCmdList.BOMBERPAUSE(msg)
     local delay = tonumber(string.match(msg, "(%d+)")) or 0;
-    if delay > 0 and delay < 10000 then
+    delay = min(delay, 10000);
+    if delay > 0 then
         BomberFrame.LastTime = GetTime() + (delay/1000);
     else
         BomberFrame.LastTime = GetTime() + 1;

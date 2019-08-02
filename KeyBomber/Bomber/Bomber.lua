@@ -172,7 +172,7 @@ function CheckAndCastAbility(ability)
     end
 
     local target = ability.Target or "none";
-    local spellName = GetSpellInfo(ability.SpellId);
+    local spellName, _, icon, cost, isFunnel, powerType, castTime, minRage, maxRange = GetSpellInfo(ability.SpellBookId, ability.SpellBookType);
     if not spellName and ability.SpellId > 0 then
         return;
     end
@@ -258,7 +258,7 @@ function CheckAndCastAbility(ability)
     BomberFrame_SetColor(hotKeyColor);
 
     ability.Guid = UnitGUID(target);
-    ability.LastCastingTime = GetTime() + (2 / 1000);
+    ability.LastCastingTime = GetTime() + (castTime / 1000);
 
     -- todo: move to test case
     --if not hotKeyColor and ability.SpellId > 0 then
@@ -348,13 +348,15 @@ function BomberFrame_OnEvent(self, event, ...)
             BomberFrame_SetColor(nil);
         end
 
-        if COMBATLOG_MODS[subEvent] then
-            COMBATLOG_MODS[subEvent](...);
+        local combatMod = COMBATLOG_MODS[subEvent];
+        if combatMod then
+            combatMod(...);
         end
     end
 
-    if EVENT_MODS[event] then
-        EVENT_MODS[event](...);
+    local eventMod = EVENT_MODS[event];
+    if eventMod then
+        eventMod(...);
     end
 end
 

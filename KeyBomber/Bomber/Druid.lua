@@ -287,6 +287,19 @@ BOMBER_DRUID_3 = {
             end
         end
     },
+    {   SpellId =  22842, Name = "Железный мех",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "none",
+        Func = function(ability)
+            if PLAYER.HP < 80 and PLAYER.Agro > 2 then
+                return true;
+            end
+        end
+    },
     {   SpellId =   8921, Name = "Лунный огонь",
         RecastDelay       = 0,
         DropChanel        = false,
@@ -322,9 +335,9 @@ BOMBER_DRUID_3 = {
         RangeCheck        = false,
         Target            = "target",
         Func = function(ability)
-            --if UnitPower("player") > 20 then
+            if PLAYER.Agro < 3 or (UnitPower("player") > 80 and PLAYER.HP > 80) then
                 return true;
-            --end
+            end
         end
     },
     {   SpellId =  33917, Name = "Увечье",

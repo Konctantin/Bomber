@@ -56,7 +56,7 @@ BOMBER_PRIEST_3 = {
         end
     },
     {   SpellId = 34914, Name = "Прикосновение вампира",
-        RecastDelay       = 0,
+        RecastDelay       = 2,
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
