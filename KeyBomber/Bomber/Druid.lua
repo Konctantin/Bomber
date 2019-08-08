@@ -287,7 +287,7 @@ BOMBER_DRUID_3 = {
             end
         end
     },
-    {   SpellId =  22842, Name = "Железный мех",
+    {   SpellId = 192081, Name = "Железный мех",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -316,7 +316,7 @@ BOMBER_DRUID_3 = {
             end
         end
     },
-    {   SpellId =  77758, Name = "Взбучка",
+    {   SpellId = 106832, Name = "Взбучка",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,

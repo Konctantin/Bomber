@@ -166,8 +166,8 @@ function CheckUsedCooldown(soloMod)
     and not UnitIsDeadOrGhost("target")
     and UnitCanAttack("player", "target")
     and IsInRange("target") then
-        local count = max(GetNumGroupMembers() or 1, 1);
-        local coefficient = (soloMod or 2) * count;
+        local count = max(GetNumGroupMembers(), 1);
+        local coefficient = (soloMod or 1) * count;
         return UnitHpIsGreat("target", coefficient) or UnitIsPlayer("target");
         --if IsInRaid() and GetNumGroupMembers() > 2 then
         --    return UnitIsEncounterBoss("target") or UnitHpIsGreat("target", 10);

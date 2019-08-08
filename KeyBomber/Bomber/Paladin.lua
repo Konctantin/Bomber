@@ -191,7 +191,7 @@ BOMBER_PALADIN_3 = {
         RangeCheck        = false,
         Target            = "player",
         Func = function(ability)
-            if HealthByPercent("player") < 80 and select(2, HasBuff("player", 114250)) > 4 then
+            if HealthByPercent("player") < 80 and select(2, HasBuff("player", 114250)) > 3 then
                 return true;
             end
         end

@@ -179,7 +179,7 @@ function CheckAndCastAbility(ability)
 
     if ability.RecastDelay > 0
         and ability.Guid == UnitGUID(target)
-        and ((ability.LastCastingTime or 0) + ability.RecastDelay) >= GetTime() then
+        and ((ability.LastCastingTime or 0) + (ability.RecastDelay*0.001)) >= GetTime() then
         return;
     end
 
@@ -201,7 +201,7 @@ function CheckAndCastAbility(ability)
         return;
     end
 
-    local start, duration = GetSpellCooldown(ability.SpellId);
+    local start, duration = GetSpellCooldown(ability.SpellBookId, ability.SpellBookType);
     if (duration + start - GetTime()) > BomberFrame.ping then
         return;
     end
@@ -257,8 +257,8 @@ function CheckAndCastAbility(ability)
 
     BomberFrame_SetColor(hotKeyColor);
 
-    ability.Guid = UnitGUID(target);
-    ability.LastCastingTime = GetTime() + (castTime / 1000);
+    --ability.Guid = UnitGUID(target);
+    --ability.LastCastingTime = GetTime() + (castTime / 1000);
 
     -- todo: move to test case
     --if not hotKeyColor and ability.SpellId > 0 then
@@ -345,6 +345,7 @@ function BomberFrame_OnEvent(self, event, ...)
         elseif subEvent == "SPELL_CAST_START" then
             -- after start spell cast need reset frame color
             --print(CombatLogGetCurrentEventInfo())
+            SetTargetCastintInfo(spellId, destGUID, GetTime()+0.001);
             BomberFrame_SetColor(nil);
         end
 
