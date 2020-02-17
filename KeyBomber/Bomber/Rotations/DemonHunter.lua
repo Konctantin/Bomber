@@ -1,10 +1,12 @@
-﻿-- Beastmaster
-BOMBER_HUNTER_1 = {
+﻿-- Havoc
+BOMBER_DEMONHUNTER_1 = {
     OnLoad = function()
-        SetInRangeSpell(193455);
+        SetInRangeSpell(162243);
     end,
     {   SpellId =      0, Name = "Initialization",
         RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
         IsCheckInCombat   = false,
         RangeCheck        = false,
         Target            = "none",
@@ -14,7 +16,31 @@ BOMBER_HUNTER_1 = {
             end
         end
     },
-    {   SpellId = 193530, Name = "Дух дикой природы",
+    {   SpellId = 183752, Name = "Прерывание",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "target",
+        Func = function(ability)
+            if CheckInterrupt("target") then
+                return true;
+            end
+        end
+    },
+    {   SpellId =  310690, Name = "Голодное пламя",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "target",
+        Func = function(ability)
+            return true;
+        end
+    },
+    {   SpellId = 198013, Name = "Пронзающий взгляд",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -22,12 +48,10 @@ BOMBER_HUNTER_1 = {
         RangeCheck        = true,
         Target            = "none",
         Func = function(ability)
-            if CheckUsedCooldown() and UnitExists("pet") then
-                return true;
-            end
+            return not PLAYER.IsMoving;
         end
     },
-    {   SpellId =  19574, Name = "Звериный гнев",
+    {   SpellId = 188499, Name = "Танец клинков",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -35,84 +59,45 @@ BOMBER_HUNTER_1 = {
         RangeCheck        = true,
         Target            = "none",
         Func = function(ability)
-            if CheckUsedCooldown() and UnitExists("pet") then
-                return true;
-            end
+            return true;
         end
     },
-    {   SpellId =  53209, Name = "Выстрел химеры",
+    {   SpellId = 162794, Name = "Удар хаоса",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        RangeCheck        = true,
+        RangeCheck        = false,
         Target            = "target",
         Func = function(ability)
-            if UnitPower("player") < 70 then
-                return true;
-            end
+            return true;
         end
     },
-    {   SpellId = 217200, Name = "Разрывающий выстрел",
+    {   SpellId = 162243, Name = "Укус демона",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        RangeCheck        = true,
+        RangeCheck        = false,
         Target            = "target",
         Func = function(ability)
-            if select(3, HasDebuff("target", 217200, "PLAYER")) < 3 then
-                return true;
-            end
+            return true;
         end
     },
-    {   SpellId =  34026, Name = "Команда Взять",
+    {   SpellId = 185123, Name = "Бросок боевого клинка",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        RangeCheck        = true,
+        RangeCheck        = false,
         Target            = "target",
         Func = function(ability)
-            if UnitExists("pet") then
-                return true;
-            end
-        end
-    },
-    {   SpellId =   2643, Name = "Залп",
-        RecastDelay       = 0,
-        DropChanel        = false,
-        CancelCasting     = false,
-        IsCheckInCombat   = true,
-        RangeCheck        = true,
-        Target            = "target",
-        Func = function(ability)
-            if BOMBER_AOE then
-                return true;
-            end
-        end
-    },
-    {   SpellId =   193455, Name = "Выстрел кобры",
-        RecastDelay       = 0,
-        DropChanel        = false,
-        CancelCasting     = false,
-        IsCheckInCombat   = true,
-        RangeCheck        = true,
-        Target            = "target",
-        Func = function(ability)
-            if not BOMBER_AOE then
-                return true;
-            end
+            return true;
         end
     },
 }
 
--- Marksmanship
-BOMBER_HUNTER_2 = {
-
-}
-
--- Survival
-BOMBER_HUNTER_3 = {
+-- Vengeance
+BOMBER_DEMONHUNTER_2 = {
 
 }

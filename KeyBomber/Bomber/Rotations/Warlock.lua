@@ -17,6 +17,17 @@ BOMBER_WARLOCK_1 = {
             end
         end
     },
+    {   SpellId =  310690, Name = "Голодное пламя",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "target",
+        Func = function(ability)
+            return true;
+        end
+    },
     {   SpellId = 980, Name = "Агония",
         RecastDelay       = 0,
         DropChanel        = false,
@@ -117,6 +128,17 @@ BOMBER_WARLOCK_3 = {
             end
         end
     },
+    {   SpellId =  310690, Name = "Голодное пламя",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "target",
+        Func = function(ability)
+            return true;
+        end
+    },
     {   SpellId = 348, Name = "Жертвенный огонь",
         RecastDelay       = 2,
         DropChanel        = false,
@@ -125,7 +147,7 @@ BOMBER_WARLOCK_3 = {
         RangeCheck        = true,
         Target            = "target",
         Func = function(ability)
-            if select(3, HasDebuff("target", 157736, "PLAYER")) < 4 then
+            if not IsMoving() and select(3, HasDebuff("target", 157736, "PLAYER")) < 4 then
                 return true;
             end
         end

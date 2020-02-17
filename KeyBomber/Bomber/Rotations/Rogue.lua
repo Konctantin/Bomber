@@ -44,6 +44,17 @@ BOMBER_ROGUE_1 = {
             end
         end
     },
+    {   SpellId =  310690, Name = "Голодное пламя",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "target",
+        Func = function(ability)
+            return true;
+        end
+    },
     {   SpellId =    703, Name = "Гаротта",
         RecastDelay       = 0,
         DropChanel        = false,

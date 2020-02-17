@@ -163,6 +163,7 @@ end
 function CheckUsedCooldown(soloMod)
     if BOMBER_COOLDOWN
     and UnitExists("target")
+    and (UnitLevel("target") == -1 or UnitLevel("target") >= UnitLevel("player"))
     and not UnitIsDeadOrGhost("target")
     and UnitCanAttack("player", "target")
     and IsInRange("target") then

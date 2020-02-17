@@ -196,6 +196,17 @@ BOMBER_PALADIN_3 = {
             end
         end
     },
+    {   SpellId =  310690, Name = "Голодное пламя",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "target",
+        Func = function(ability)
+            return true;
+        end
+    },
     {   SpellId =  255937, Name = "Испепеляющий след",
         RecastDelay       = 0,
         DropChanel        = false,

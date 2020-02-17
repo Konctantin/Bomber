@@ -1,71 +1,20 @@
-﻿-- Brewmaster
-BOMBER_MONK_1 = {
-
-}
-
--- Mistweaver
-BOMBER_MONK_2 = {
-    -- Healer spec impossible implemented
-}
-
--- Windwalker
-BOMBER_MONK_3 = {
+﻿-- Beastmaster
+BOMBER_HUNTER_1 = {
     OnLoad = function()
-        SetInRangeSpell(100780);
+        SetInRangeSpell(193455);
     end,
     {   SpellId =      0, Name = "Initialization",
         RecastDelay       = 0,
-        DropChanel        = false,
-        CancelCasting     = false,
         IsCheckInCombat   = false,
         RangeCheck        = false,
         Target            = "none",
         Func = function(ability)
-            if IsMounted() then
+            if IsMounted() or IsStealthed() then
                 return true;
             end
         end
     },
-    {   SpellId =  137639, Name = "Буря, земля и огонь",
-        RecastDelay       = 0,
-        DropChanel        = false,
-        CancelCasting     = false,
-        IsCheckInCombat   = true,
-        RangeCheck        = false,
-        Target            = "none",
-        Func = function(ability)
-            if CheckUsedCooldown() and not HasBuff("player", 137639) then
-                return true;
-            end
-        end
-    },
-    {   SpellId =  115080, Name = "Смертельное касание",
-        RecastDelay       = 0,
-        DropChanel        = false,
-        CancelCasting     = false,
-        IsCheckInCombat   = true,
-        RangeCheck        = false,
-        Target            = "none",
-        Func = function(ability)
-            if CheckUsedCooldown() then
-                return true;
-            end
-        end
-    },
-    {   SpellId =  116705, Name = "Рука-копье",
-        RecastDelay       = 0,
-        DropChanel        = false,
-        CancelCasting     = false,
-        IsCheckInCombat   = true,
-        RangeCheck        = true,
-        Target            = "target",
-        Func = function(ability)
-            if CheckInterrupt("target") then
-                return true;
-            end
-        end
-    },
-    {   SpellId =  152175, Name = "Удар крутящегося дракона",
+    {   SpellId = 193530, Name = "Дух дикой природы",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -73,10 +22,25 @@ BOMBER_MONK_3 = {
         RangeCheck        = true,
         Target            = "none",
         Func = function(ability)
-            return true;
+            if CheckUsedCooldown() and UnitExists("pet") then
+                return true;
+            end
         end
     },
-    {   SpellId =  107428, Name = "Удар восходящего солнца",
+    {   SpellId =  19574, Name = "Звериный гнев",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "none",
+        Func = function(ability)
+            if CheckUsedCooldown() and UnitExists("pet") then
+                return true;
+            end
+        end
+    },
+    {   SpellId =  310690, Name = "Голодное пламя",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -87,29 +51,7 @@ BOMBER_MONK_3 = {
             return true;
         end
     },
-    {   SpellId =  113656, Name = "Неистовые кулаки",
-        RecastDelay       = 0,
-        DropChanel        = false,
-        CancelCasting     = false,
-        IsCheckInCombat   = true,
-        RangeCheck        = true,
-        Target            = "none",
-        Func = function(ability)
-            return true;
-        end
-    },
-    {   SpellId =  101546, Name = "Танцующий журавль",
-        RecastDelay       = 0,
-        DropChanel        = false,
-        CancelCasting     = false,
-        IsCheckInCombat   = true,
-        RangeCheck        = true,
-        Target            = "none",
-        Func = function(ability)
-            return BOMBER_AOE;
-        end
-    },
-    {   SpellId =  100784, Name = "Нокаутирующий удар",
+    {   SpellId =  53209, Name = "Выстрел химеры",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -117,12 +59,12 @@ BOMBER_MONK_3 = {
         RangeCheck        = true,
         Target            = "target",
         Func = function(ability)
-            if HasBuff("player", 116768) or SpellCD(113656) > 4 or UnitPower("player", 12) > 3 then
+            if UnitPower("player") < 70 then
                 return true;
             end
         end
     },
-    {   SpellId =  100780, Name = "Лапа тигра",
+    {   SpellId = 217200, Name = "Разрывающий выстрел",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -130,7 +72,58 @@ BOMBER_MONK_3 = {
         RangeCheck        = true,
         Target            = "target",
         Func = function(ability)
-            return true;
+            if select(3, HasDebuff("target", 217200, "PLAYER")) < 3 then
+                return true;
+            end
         end
     },
+    {   SpellId =  34026, Name = "Команда Взять",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "target",
+        Func = function(ability)
+            if UnitExists("pet") then
+                return true;
+            end
+        end
+    },
+    {   SpellId =   2643, Name = "Залп",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "target",
+        Func = function(ability)
+            if BOMBER_AOE then
+                return true;
+            end
+        end
+    },
+    {   SpellId =   193455, Name = "Выстрел кобры",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "target",
+        Func = function(ability)
+            if not BOMBER_AOE then
+                return true;
+            end
+        end
+    },
+}
+
+-- Marksmanship
+BOMBER_HUNTER_2 = {
+
+}
+
+-- Survival
+BOMBER_HUNTER_3 = {
+
 }

@@ -1,7 +1,17 @@
-﻿-- Elemental
-BOMBER_SHAMAN_1 = {
+﻿-- Discipline
+BOMBER_PRIEST_1 = {
+    -- Healer spec impossible implemented
+}
+
+-- Holy
+BOMBER_PRIEST_2 = {
+    -- Healer spec impossible implemented
+}
+
+-- Shadow
+BOMBER_PRIEST_3 = {
     OnLoad = function()
-        SetInRangeSpell(188196);
+        SetInRangeSpell(8092);
     end,
     {   SpellId =      0, Name = "Initialization",
         RecastDelay       = 0,
@@ -13,14 +23,13 @@ BOMBER_SHAMAN_1 = {
         Func = function(ability)
             if IsMounted()
             or IsStealthed()
-            or HasBuff("player", 2645)
             --or GetShapeshiftForm() ~= 4
             then
                 return true;
             end
         end
     },
-    {   SpellId = 57994, Name = "Пронзающий ветер",
+    {   SpellId = 15487, Name = "Безмолвие",
         RecastDelay       = 0,
         DropChanel        = true,
         CancelCasting     = true,
@@ -33,7 +42,20 @@ BOMBER_SHAMAN_1 = {
             end
         end
     },
-    {   SpellId = 188389, Name = "Огненный шок",
+    {   SpellId =  34433, Name = "Исчадие тьмы",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "none",
+        Func = function(ability)
+            if CheckUsedCooldown() then
+                return true;
+            end
+        end
+    },
+    {   SpellId =  310690, Name = "Голодное пламя",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
@@ -41,63 +63,51 @@ BOMBER_SHAMAN_1 = {
         RangeCheck        = true,
         Target            = "target",
         Func = function(ability)
-            if IsMoving() or select(3, HasDebuff("target", 188389, "PLAYER")) < 4 then
-                return true;
-            end
+            return true;
         end
     },
-    {   SpellId = 8042, Name = "Земной шок",
-        RecastDelay       = 0,
+    {   SpellId = 34914, Name = "Прикосновение вампира",
+        RecastDelay       = 2,
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
         RangeCheck        = false,
         Target            = "target",
         Func = function(ability)
-            return not BOMBER_AOE;
+            return not PLAYER.IsMoving and select(3, HasDebuff("target", 589, "PLAYER")) < 3;
         end
     },
-    {   SpellId = 51505, Name = "Выброс лавы",
+    {   SpellId = 8092, Name = "Взрыв разума",
         RecastDelay       = 0,
-        DropChanel        = false,
+        DropChanel        = true,
         CancelCasting     = false,
         IsCheckInCombat   = true,
         RangeCheck        = false,
         Target            = "target",
         Func = function(ability)
-            return not PLAYER.IsMoving or HasBuff("player", 77762);
+            return not PLAYER.IsMoving;
         end
     },
-    {   SpellId = 188443, Name = "Цепная молния",
+    {   SpellId = 228260, Name = "Извержение бездны",
+        RecastDelay       = 0,
+        DropChanel        = true,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "target",
+        Func = function(ability)
+            return true;
+        end
+    },
+    {   SpellId = 15407, Name = "Пытка разума",
         RecastDelay       = 0,
         DropChanel        = false,
         CancelCasting     = false,
         IsCheckInCombat   = true,
-        RangeCheck        = false,
+        RangeCheck        = true,
         Target            = "target",
         Func = function(ability)
-            return not PLAYER.IsMoving and BOMBER_AOE;
+            return not PLAYER.IsMoving;
         end
     },
-    {   SpellId = 188196, Name = "Молния",
-        RecastDelay       = 0,
-        DropChanel        = false,
-        CancelCasting     = false,
-        IsCheckInCombat   = true,
-        RangeCheck        = false,
-        Target            = "target",
-        Func = function(ability)
-            return not PLAYER.IsMoving and not BOMBER_AOE;
-        end
-    },
-}
-
--- Enhancement
-BOMBER_SHAMAN_2 = {
-
-}
-
--- Restoration
-BOMBER_SHAMAN_3 = {
-    -- Healer spec impossible implemented
 }

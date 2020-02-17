@@ -47,27 +47,31 @@ end
 function GetSpellBookId(spellId)
     local spellName = GetSpellInfo(spellId);
 
-    local _, _, offs, numspells = GetSpellTabInfo(2);
-    local maxSpellNum = offs + numspells;
+    for i = 1, 2 do
+        local _, _, offs, numspells = GetSpellTabInfo(i);
+        local maxSpellNum = offs + numspells;
 
-    --for _, bookType in ipairs({"spell", "pet"}) do
-    local bookType = "spell"
-    for spellBookID = offs, maxSpellNum do
-        local type, baseSpellID = GetSpellBookItemInfo(spellBookID, bookType);
-        local currentSpellName = GetSpellBookItemName(spellBookID, bookType);
-        local link = GetSpellLink(spellBookID, bookType);
-        local currentSpellID = tonumber(link and link:gsub("|", "||"):match("spell:(%d+)"));
+        --for _, bookType in ipairs({"spell", "pet"}) do
+        local bookType = "spell"
+        for spellBookID = offs, maxSpellNum do
+            if spellBookID > 0 then
+                local type, baseSpellID = GetSpellBookItemInfo(spellBookID, bookType);
+                local currentSpellName = GetSpellBookItemName(spellBookID, bookType);
+                --print(spellBookID, bookType)
+                local link = GetSpellLink(spellBookID, bookType);
+                local currentSpellID = tonumber(link and link:gsub("|", "||"):match("spell:(%d+)"));
 
-        if spellId == currentSpellID
-        or spellId == baseSpellID
-        or spellName == currentSpellName
-        then
-            --print(format("|cff00ff00%s|r: [|cff00ff00%d|r] - (|cff6f0a9a%d|r) |cff00ff00%s|r",
-            --    bookType, spellBookID, spellId, link));
-            return spellBookID, bookType;
+                if spellId == currentSpellID
+                or spellId == baseSpellID
+                or spellName == currentSpellName
+                then
+                    --print(format("|cff00ff00%s|r: [|cff00ff00%d|r] - (|cff6f0a9a%d|r) |cff00ff00%s|r",
+                    --    bookType, spellBookID, spellId, link));
+                    return spellBookID, bookType;
+                end
+            end
         end
     end
-    --end
 end
 
 function CheckKnownAbility(ability)
@@ -296,6 +300,10 @@ function LoadRotation()
     BomberFrame.RangeSpellBookType = nil;
 
     if type(BomberFrame.AbilityList) == "table" and #BomberFrame.AbilityList > 0 and UnitLevel("player") >= 10 then
+        for _, ability in ipairs(BomberFrame.AbilityList) do
+            setmetatable(ability, BOMBER_ABILITY);
+        end
+
         if type(BomberFrame.AbilityList.OnLoad) == "function" then
             BomberFrame.AbilityList.OnLoad();
         end
@@ -393,7 +401,7 @@ BomberFrame:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED");
 BomberFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
 BomberFrame:RegisterEvent("MODIFIER_STATE_CHANGED");
 BomberFrame:RegisterEvent("LEARNED_SPELL_IN_TAB");
-BomberFrame.AbilityList = {};
+BomberFrame.AbilityList = { };
 BomberFrame:Show();
 
 BomberFrameInfo = CreateFrame("Frame");
