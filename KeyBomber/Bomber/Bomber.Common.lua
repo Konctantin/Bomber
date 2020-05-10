@@ -10,12 +10,14 @@ PLAYER = {
     Agro = 0,
     IsMoving  = false,
     IsMounted = false,
+    HasAlivePet = false,
 
     Init = function(self)
         self.HP = 100 * (UnitHealth("player") or 1) / (UnitHealthMax("player") or 1) or 0;
         self.IsMoving = IsMoving();
         self.IsMounted= IsMounted() and not HasBuff("player", 165803);
         self.Agro     = UnitThreatSituation("player") or 0;
+        self.HasAlivePet = UnitExists("pet") and UnitHealth("player") > 0;
     end,
 
     HasBuff = function(self, spellId, filter)

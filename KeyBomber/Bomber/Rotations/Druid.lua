@@ -93,6 +93,17 @@ BOMBER_DRUID_1 = {
             end
         end
     },
+    {   SpellId = 190984, Name = "Солнечный гнев",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "target",
+        Func = function(ability)
+            return not PLAYER.IsMoving and HasBuff("player", 164545);
+        end
+    },
     {   SpellId = 194153, Name = "Лунный удар",
         RecastDelay       = 0,
         DropChanel        = false,
@@ -101,7 +112,7 @@ BOMBER_DRUID_1 = {
         RangeCheck        = true,
         Target            = "target",
         Func = function(ability)
-            if not PLAYER.IsMoving and BOMBER_AOE or HasBuff("player", 164547) then
+            if not PLAYER.IsMoving and HasBuff("player", 164547) then
                 return true;
             end
         end

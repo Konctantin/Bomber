@@ -14,6 +14,19 @@ BOMBER_HUNTER_1 = {
             end
         end
     },
+    {   SpellId = 136, Name = "Лечение питомца",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = false,
+        Target            = "none",
+        Func = function(ability)
+            if PLAYER.HasAlivePet and HealthByPercent("pet") < 80 then
+                return true;
+            end
+        end
+    },
     {   SpellId = 193530, Name = "Дух дикой природы",
         RecastDelay       = 0,
         DropChanel        = false,
@@ -22,7 +35,7 @@ BOMBER_HUNTER_1 = {
         RangeCheck        = true,
         Target            = "none",
         Func = function(ability)
-            if CheckUsedCooldown() and UnitExists("pet") then
+            if CheckUsedCooldown() and PLAYER.HasAlivePet then
                 return true;
             end
         end
@@ -35,7 +48,7 @@ BOMBER_HUNTER_1 = {
         RangeCheck        = true,
         Target            = "none",
         Func = function(ability)
-            if CheckUsedCooldown() and UnitExists("pet") then
+            if CheckUsedCooldown() and PLAYER.HasAlivePet then
                 return true;
             end
         end
@@ -85,7 +98,7 @@ BOMBER_HUNTER_1 = {
         RangeCheck        = true,
         Target            = "target",
         Func = function(ability)
-            if UnitExists("pet") then
+            if PLAYER.HasAlivePet then
                 return true;
             end
         end

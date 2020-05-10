@@ -214,7 +214,7 @@ function CheckAndCastAbility(ability)
     if not ability.CancelCasting then
         -- local name, text, texture, startTime, endTime, isTradeSkill, castID, notInterruptible, spellID
         local endTime = select(5, UnitCastingInfo("player")) or 0;
-        if (endTime - (GetTime() * 1000)) >= castPing then
+        if (endTime - (GetTime() * 1000)) >= castPing + 0.7 then
             return;
         end
     end
@@ -346,15 +346,17 @@ function BomberFrame_OnEvent(self, event, ...)
         end
     elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
         local _,subEvent,_,sourceGUID,_,_,_,destGUID,_,_,_,spellId = CombatLogGetCurrentEventInfo();
-        if subEvent == "SPELL_CAST_SUCCESS" and sourceGUID == UnitGUID("player") then
-            SetTargetCastintInfo(spellId, destGUID, GetTime());
-        elseif subEvent == "SPELL_CAST_FAILED" and sourceGUID == UnitGUID("player") then
-            SetTargetCastintInfo(spellId, nil, 0);
-        elseif subEvent == "SPELL_CAST_START" then
-            -- after start spell cast need reset frame color
-            --print(CombatLogGetCurrentEventInfo())
-            SetTargetCastintInfo(spellId, destGUID, GetTime()+0.001);
-            BomberFrame_SetColor(nil);
+        if sourceGUID == UnitGUID("player") then
+            if subEvent == "SPELL_CAST_SUCCESS" then
+                SetTargetCastintInfo(spellId, destGUID, GetTime());
+            elseif subEvent == "SPELL_CAST_FAILED" then
+                SetTargetCastintInfo(spellId, nil, 0);
+            elseif subEvent == "SPELL_CAST_START" then
+                -- after start spell cast need reset frame color
+                --print(CombatLogGetCurrentEventInfo())
+                SetTargetCastintInfo(spellId, destGUID, GetTime()+0.002);
+                BomberFrame_SetColor(nil);
+            end
         end
 
         local combatMod = COMBATLOG_MODS[subEvent];
