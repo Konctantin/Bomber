@@ -382,7 +382,15 @@ function BomberFrame_OnUpdate(self, elapsed)
         BomberFrame.RangeSpellBookId = bookId;
         BomberFrame.RangeSpellBookType = bookType;
 
-        AddonFrame_AbilityLoop();
+        if C_PetBattles.IsInBattle() and not BOMBER_PAUSE and not IsModKeyDown(mkLeftAlt) then
+            if tdBattlePetScriptAutoButton and tdBattlePetScriptAutoButton:IsEnabled() then
+                local hotKey = string.upper(tostring(tdBattlePetScriptAutoButton.HotKey:GetText()));
+                local color = BOMBER_KEYMAP[hotKey]
+                BomberFrame_SetColor(color);
+            end
+        else
+            AddonFrame_AbilityLoop();
+        end
         BomberFrame.LastTime = GetTime() + math.random(150, 250) / 1000;
     end
 end
