@@ -13,7 +13,7 @@ BOMBER_DRUID_1 = {
         Func = function(ability)
             if IsMounted()
             or IsStealthed()
-            or GetShapeshiftForm() ~= 4
+            or (GetShapeshiftForm() ~= 0 and GetShapeshiftForm() ~= 4)
             then
                 return true;
             end
@@ -89,6 +89,19 @@ BOMBER_DRUID_1 = {
         Target            = "target",
         Func = function(ability)
             if IsMoving() or select(3, HasDebuff("target", 164812, "PLAYER")) < 4 then
+                return true;
+            end
+        end
+    },
+    {   SpellId = 774, Name = "Омоложение",
+        RecastDelay       = 0,
+        DropChanel        = false,
+        CancelCasting     = false,
+        IsCheckInCombat   = true,
+        RangeCheck        = true,
+        Target            = "target",
+        Func = function(ability)
+            if HealthByPercent("target") < 50 and not HasBuff("target", 774, "PLAYER") then
                 return true;
             end
         end
