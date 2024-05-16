@@ -1,5 +1,5 @@
 ﻿
-namespace KeyBomber
+namespace Pulsar
 {
     public class KeyRecord
     {
