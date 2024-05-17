@@ -55,29 +55,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Bomber\Bomber.Commands.lua" />
-    <None Include="Bomber\Bomber.Common.lua" />
-    <None Include="Bomber\Bomber.InfoFrame.lua" />
-    <None Include="Bomber\Bomber.KeyMap.lua" />
-    <None Include="Bomber\Bomber.lua" />
-    <None Include="Bomber\Bomber.toc" />
-    <None Include="Bomber\DemonHunter.lua" />
-    <None Include="Bomber\DeathKnight.lua" />
-    <None Include="Bomber\Druid.lua" />
-    <None Include="Bomber\Hunter.lua" />
-    <None Include="Bomber\Mage.lua" />
-    <None Include="Bomber\Monk.lua" />
-    <None Include="Bomber\Paladin.lua" />
-    <None Include="Bomber\Priest.lua" />
-    <None Include="Bomber\Rogue.lua" />
-    <None Include="Bomber\Shaman.lua" />
-    <None Include="Bomber\Warlock.lua" />
-    <None Include="Bomber\Warrior.lua" />
-    <None Include="CopyAddon.ps1" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>powershell.exe -ExecutionPolicy Unrestricted -file $(ProjectDir)CopyAddon.ps1</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
