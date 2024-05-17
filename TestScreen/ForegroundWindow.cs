@@ -9,22 +9,17 @@ namespace KeyBomber
     [StructLayout(LayoutKind.Sequential)]
     public struct Rect
     {
-        public static int Size;
-
         public int Left;
         public int Top;
         public int Right;
         public int Bottom;
+    }
 
-        public override string ToString()
-        {
-            return $"Left: {Left} Top: {Top} Right: {Right} Bottom: {Bottom}";
-        }
-
-        static Rect()
-        {
-            Size = Marshal.SizeOf(typeof(Rect));
-        }
+    [StructLayout(LayoutKind.Sequential)]
+    public struct POINT
+    {
+        public int X;
+        public int Y;
     }
 
     enum DWMWINDOWATTRIBUTE : uint
@@ -69,17 +64,35 @@ namespace KeyBomber
         [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
 
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+
+        [DllImport("user32.dll")]
+        static extern bool ScreenToClient(IntPtr hWnd, ref Rect lpPoint);
+
         [DllImport("dwmapi.dll")]
         static extern int DwmGetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out Rect pvAttribute, int cbAttribute);
 
         public IntPtr Hwd => GetForegroundWindow();
 
-        public const int X_OFFSET = 2, Y_OFFSET = -2;
+        public string ClassName()
+        {
+            var builder = new StringBuilder(500);
+            var size = GetClassName(Hwd, builder, builder.Capacity);
+            if (size == 0) 
+                return "<none>";
+            return builder.ToString().Substring(0, size);
+        }
 
         public Rect GetForegroundRect()
         {
             var rect = new Rect();
-            DwmGetWindowAttribute(Hwd, DWMWINDOWATTRIBUTE.ExtendedFrameBounds, out rect, Rect.Size);
+            GetWindowRect(Hwd, ref rect);
+
+            int size = Marshal.SizeOf(typeof(Rect));
+            int res = DwmGetWindowAttribute(Hwd, DWMWINDOWATTRIBUTE.ExtendedFrameBounds, out rect, size);
+
+            //ScreenToClient();
             return rect;
         }
 
@@ -107,9 +120,9 @@ namespace KeyBomber
             var b = new Rect();
             GetWindowRect(GetDesktopWindow(), ref b);
 
-            return (a.Left   == b.Left &&
-                    a.Top    == b.Top &&
-                    a.Right  == b.Right &&
+            return (a.Left == b.Left &&
+                    a.Top == b.Top &&
+                    a.Right == b.Right &&
                     a.Bottom == b.Bottom);
         }
 
@@ -127,6 +140,8 @@ namespace KeyBomber
                 int g = (color >> 08) & 0xff;
                 int b = (color >> 16) & 0xff;
 
+                //Console.WriteLine($"{color:X08}");
+
                 return Color.FromArgb(a, r, g, b);
             }
             finally
@@ -142,8 +157,15 @@ namespace KeyBomber
             var rect = GetForegroundRect();
 
             // get left bottom pixel point
-            int x = rect.Left   + X_OFFSET;
-            int y = rect.Bottom + Y_OFFSET;
+            int x = rect.Left + 1;
+            int y = rect.Bottom - 1;
+
+            // Recalc for borders width
+            if (!IsFullScreen())
+            {
+                x += 11;
+                y -= 11;
+            }
 
             var color = GetColorAt(x, y);
 
