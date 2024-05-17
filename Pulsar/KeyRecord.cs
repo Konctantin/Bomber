@@ -24,9 +24,11 @@ public class KeyRecord
 
     public override string ToString()
     {
-        if (HasModif)
+        if (HasModif & HasKey)
             return $"{ModToStr(Modifier)}-{(char)Key}";
-        else
+        else if (HasKey)
             return $"{(char)Key}";
+        else
+            return "none";
     }
 }

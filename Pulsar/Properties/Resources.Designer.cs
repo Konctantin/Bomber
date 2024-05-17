@@ -63,9 +63,19 @@ namespace Pulsar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon TrayIcon {
+        internal static System.Drawing.Icon StatusDisabled {
             get {
-                object obj = ResourceManager.GetObject("TrayIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("StatusDisabled", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon StatusEnabled {
+            get {
+                object obj = ResourceManager.GetObject("StatusEnabled", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

@@ -53,8 +53,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Clicker.cs" />
     <Compile Include="ForegrounWindow.cs" />
-    <Compile Include="KeyBoardInput.cs" />
     <Compile Include="KeyMap.cs" />
     <Compile Include="KeyMapGenerator.cs" />
     <Compile Include="KeyRecord.cs" />
@@ -95,13 +95,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Login.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\AppIcon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="TrayIcon.ico" />
+    <None Include="Resources\StatusDisabled.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\StatusEnabled.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Diagnostics;
 
 namespace Pulsar;
 
@@ -63,14 +62,14 @@ public class ForegrounWindow
     [DllImport("user32.dll", SetLastError = true)]
     static extern IntPtr GetForegroundWindow();
 
-    [DllImport("user32.dll", SetLastError = true)]
-    static extern IntPtr GetWindowRect(IntPtr hWnd, ref Rect rect);
-
     [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
     static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
 
     [DllImport("dwmapi.dll")]
     static extern int DwmGetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out Rect pvAttribute, int cbAttribute);
+
+    [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+    static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
     public IntPtr Hwd => GetForegroundWindow();
 
@@ -83,7 +82,14 @@ public class ForegrounWindow
         return rect;
     }
 
-    ///Stopwatch sw = new Stopwatch();
+    public string ClassName()
+    {
+        var builder = new StringBuilder(500);
+        var size = GetClassName(Hwd, builder, builder.Capacity);
+        if (size == 0)
+            return "<none>";
+        return builder.ToString().Substring(0, size);
+    }
 
     public string Title
     {
@@ -99,20 +105,6 @@ public class ForegrounWindow
     {
         return Title.StartsWith(title, StringComparison.CurrentCultureIgnoreCase);
     }
-
-    public bool IsFullScreen()
-    {
-        var a = GetForegroundRect();
-
-        var b = new Rect();
-        GetWindowRect(GetDesktopWindow(), ref b);
-
-        return (a.Left   == b.Left &&
-                a.Top    == b.Top &&
-                a.Right  == b.Right &&
-                a.Bottom == b.Bottom);
-    }
-
 
     static Color GetColorAt(int x, int y)
     {
@@ -137,8 +129,6 @@ public class ForegrounWindow
 
     public Color GetPixelColor()
     {
-        //sw.Restart();
-
         var rect = GetForegroundRect();
 
         // get left bottom pixel point
@@ -147,9 +137,16 @@ public class ForegrounWindow
 
         var color = GetColorAt(x, y);
 
-        //sw.Stop();
-        //Console.WriteLine($"Total: {sw.Elapsed} ({sw.ElapsedMilliseconds} ms)");
-
         return color;
+    }
+
+    public KeyRecord GetKeyFromCurrentColor()
+    {
+        var intColor = GetPixelColor().ToArgb();
+
+        if (KeyMap.KEY_MAP.ContainsKey(intColor))
+            return KeyMap.KEY_MAP[intColor];
+        else
+            return new KeyRecord();
     }
 }
