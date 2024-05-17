@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Diagnostics;
 
-namespace KeyBomber
+namespace Pulsar
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct Rect

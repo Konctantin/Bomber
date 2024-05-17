@@ -3,8 +3,9 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Linq;
 using System.Threading;
+using System.Windows.Forms;
 
-namespace KeyBomber
+namespace Pulsar
 {
     class Program
     {
@@ -70,47 +71,66 @@ namespace KeyBomber
                 return new KeyRecord();
         }
 
+        [STAThread]
         static void Main(string[] args)
         {
-            if (args.Contains("-m"))
-            {
-                KeyMapGenerator.MakeLuaMapFiles("Bomber.KeyMap.lua");
-                KeyMapGenerator.MakeSharpMapFiles("KeyMap.cs");
-                Console.ReadLine();
-            }
-            else if (args.Contains("-t"))
-            {
-                // delay for select window
-                Thread.Sleep(2_000);
-                // test: SendInput
-                KeyBoardInput.Send(40, KeyEvent.KeyDown);
-                Thread.Sleep(50);
-                KeyBoardInput.Send(40, KeyEvent.KeyUp);
-            }
-            else
-            {
-                var foregroundWindow = new ForegrounWindow();
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
 
-                while (true)
-                {
-                    if (IsAltKeyDown())
-                    {
-                        // pause
-                    }
-                    else if (foregroundWindow.IsTitle("World of Warcraft"))
-                    {
-                        var keyColor = foregroundWindow.GetPixelColor();
-                        var keyRec = GetKeyFromColor(keyColor);
-                        if (keyRec.HasKey)
-                        {
-                            Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} KeyColor: 0x{keyColor.ToArgb():X08} HotKey: <{keyRec}>");
-                            SendKey(foregroundWindow.Hwd, keyRec);
-                        }
-                    }
+            Application.Run(new PulsarContext());
 
-                    Thread.Sleep(100);
-                }
-            }
+
+            //int min = 100;
+            //int max = 100;
+
+            //if (args.Length > 0)
+            //    int.TryParse(args[0], out min);
+
+            //if (args.Length > 1)
+            //    int.TryParse(args[1], out max);
+
+            //if (args.Contains("-m"))
+            //{
+            //    KeyMapGenerator.MakeLuaMapFiles("Bomber.KeyMap.lua");
+            //    KeyMapGenerator.MakeSharpMapFiles("KeyMap.cs");
+            //    Console.ReadLine();
+            //}
+            //else if (args.Contains("-t"))
+            //{
+            //    // delay for select window
+            //    Thread.Sleep(2_000);
+            //    // test: SendInput
+            //    KeyBoardInput.Send(40, KeyEvent.KeyDown);
+            //    Thread.Sleep(50);
+            //    KeyBoardInput.Send(40, KeyEvent.KeyUp);
+            //}
+            //else
+            //{
+            //    var foregroundWindow = new ForegrounWindow();
+
+            //    var rand = new Random();
+            //    while (true)
+            //    {
+            //        int wait = rand.Next(min, max);
+
+            //        if (IsAltKeyDown())
+            //        {
+            //            // pause
+            //        }
+            //        else if (foregroundWindow.IsTitle("World of Warcraft"))
+            //        {
+            //            var keyColor = foregroundWindow.GetPixelColor();
+            //            var keyRec = GetKeyFromColor(keyColor);
+            //            if (keyRec.HasKey)
+            //            {
+            //                Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} KeyColor: 0x{keyColor.ToArgb():X08} HotKey: <{keyRec}>");
+            //                SendKey(foregroundWindow.Hwd, keyRec);
+            //            }
+            //        }
+
+            //        Thread.Sleep(wait);
+            //    }
+            //}
         }
     }
 }
