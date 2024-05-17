@@ -1,5 +1,4 @@
-﻿using KeyBomber;
-using Pulsar.Properties;
+﻿using Pulsar.Properties;
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -73,7 +72,7 @@ internal class PulsarContext: ApplicationContext
 
     private void Default_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-   
+
 
         //throw new NotImplementedException();
     }
