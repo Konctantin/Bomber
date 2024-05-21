@@ -13,13 +13,13 @@ public class KeyRecord
 
     private string ModToStr(int mod)
     {
-        switch (mod)
+        return mod switch
         {
-            case 0xA0: return "S";
-            case 0xA2: return "C";
-            case 0xA4: return "A";
-            default: return "";
-        }
+            0xA0 => "S",
+            0xA2 => "C",
+            0xA4 => "A",
+            _ => "",
+        };
     }
 
     public override string ToString()

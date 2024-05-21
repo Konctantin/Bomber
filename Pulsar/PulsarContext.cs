@@ -6,19 +6,21 @@ namespace Pulsar;
 
 internal class PulsarContext: ApplicationContext
 {
-    private NotifyIcon trayIcon = new NotifyIcon();
+    private readonly NotifyIcon trayIcon = new ();
 
-    private Timer timer = new Timer();
+    private readonly Timer timer = new ();
 
-    private Random random = new Random();
+    private readonly Random random = new ();
 
-    private ForegrounWindow foregroundWindow = new ForegrounWindow();
+    private readonly ForegrounWindow foregroundWindow = new ();
 
-    private MainForm settings = new MainForm();
+    private readonly Clicker clicker = new();
 
-    private Clicker clicker = new Clicker();
+    private readonly MenuItem menuEnable;
 
-    private MenuItem menuEnable;
+    private MainForm settings;
+
+    private string lastKey = "";
 
     public PulsarContext()
     {
@@ -50,10 +52,14 @@ internal class PulsarContext: ApplicationContext
             {
                 var rec = foregroundWindow.GetKeyFromCurrentColor();
                 if (rec.HasKey)
+                {
+                    lastKey = rec.ToString();
                     clicker.Click(foregroundWindow.Hwd, rec);
+                }
             }
 
             timer.Interval = random.Next(Settings.Default.IntervalMin, Settings.Default.IntervalMax);
+            SetStatus();
         };
         timer.Interval = Settings.Default.IntervalMin;
         timer.Enabled = Settings.Default.Enabled;
@@ -63,7 +69,11 @@ internal class PulsarContext: ApplicationContext
 
     void SetStatus()
     {
-        trayIcon.Text = $"Pulsar is: " + (timer.Enabled ? "Enabled" : "Disabled");
+        trayIcon.Text = $"Pulsar " + (timer.Enabled ? "Enabled" : "Disabled")
+            + "\r\n"
+            + "Interval: " + timer.Interval
+            + "\r\n"
+            + "Last Key: " + lastKey;
         trayIcon.Icon = timer.Enabled ? Resources.StatusEnabled : Resources.StatusDisabled;
     }
 
@@ -79,5 +89,10 @@ internal class PulsarContext: ApplicationContext
         SetStatus();
     }
 
-    void SettinsClick(object sender, EventArgs e) => settings.Show();
+    void SettinsClick(object sender, EventArgs e)
+    {
+        if (settings?.IsDisposed != false)
+            settings = new MainForm();
+        settings.Show();
+    }
 }

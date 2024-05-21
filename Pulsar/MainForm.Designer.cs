@@ -30,6 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.gbSettings = new System.Windows.Forms.GroupBox();
+            this.bReset = new System.Windows.Forms.Button();
+            this.cbLaunchAtStartup = new System.Windows.Forms.CheckBox();
             this.bApply = new System.Windows.Forms.Button();
             this.cbEnabled = new System.Windows.Forms.CheckBox();
             this.tbMax = new System.Windows.Forms.NumericUpDown();
@@ -43,7 +45,6 @@
             this.labelInfo2 = new System.Windows.Forms.Label();
             this.labelInfo1 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.cbLaunchAtStartup = new System.Windows.Forms.CheckBox();
             this.gbSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbMax)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbMin)).BeginInit();
@@ -54,6 +55,7 @@
             // 
             // gbSettings
             // 
+            this.gbSettings.Controls.Add(this.bReset);
             this.gbSettings.Controls.Add(this.cbLaunchAtStartup);
             this.gbSettings.Controls.Add(this.bApply);
             this.gbSettings.Controls.Add(this.cbEnabled);
@@ -64,16 +66,37 @@
             this.gbSettings.Dock = System.Windows.Forms.DockStyle.Top;
             this.gbSettings.Location = new System.Drawing.Point(0, 0);
             this.gbSettings.Name = "gbSettings";
-            this.gbSettings.Size = new System.Drawing.Size(486, 64);
+            this.gbSettings.Size = new System.Drawing.Size(496, 64);
             this.gbSettings.TabIndex = 0;
             this.gbSettings.TabStop = false;
             this.gbSettings.Text = "Settings";
+            // 
+            // bReset
+            // 
+            this.bReset.Location = new System.Drawing.Point(408, 11);
+            this.bReset.Name = "bReset";
+            this.bReset.Size = new System.Drawing.Size(75, 45);
+            this.bReset.TabIndex = 7;
+            this.bReset.Text = "Reset";
+            this.bReset.UseVisualStyleBackColor = true;
+            this.bReset.Click += new System.EventHandler(this.bReset_Click);
+            // 
+            // cbLaunchAtStartup
+            // 
+            this.cbLaunchAtStartup.AutoSize = true;
+            this.cbLaunchAtStartup.Location = new System.Drawing.Point(12, 38);
+            this.cbLaunchAtStartup.Name = "cbLaunchAtStartup";
+            this.cbLaunchAtStartup.Size = new System.Drawing.Size(109, 17);
+            this.cbLaunchAtStartup.TabIndex = 6;
+            this.cbLaunchAtStartup.Text = "Launch at startup";
+            this.cbLaunchAtStartup.UseVisualStyleBackColor = true;
+            this.cbLaunchAtStartup.CheckedChanged += new System.EventHandler(this.cbLaunchAtStartup_CheckedChanged);
             // 
             // bApply
             // 
             this.bApply.Location = new System.Drawing.Point(330, 11);
             this.bApply.Name = "bApply";
-            this.bApply.Size = new System.Drawing.Size(75, 46);
+            this.bApply.Size = new System.Drawing.Size(75, 45);
             this.bApply.TabIndex = 5;
             this.bApply.Text = "Apply";
             this.bApply.UseVisualStyleBackColor = true;
@@ -160,7 +183,7 @@
             this.gbPreview.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbPreview.Location = new System.Drawing.Point(0, 64);
             this.gbPreview.Name = "gbPreview";
-            this.gbPreview.Size = new System.Drawing.Size(486, 428);
+            this.gbPreview.Size = new System.Drawing.Size(496, 428);
             this.gbPreview.TabIndex = 1;
             this.gbPreview.TabStop = false;
             this.gbPreview.Text = "Info";
@@ -170,7 +193,7 @@
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(3, 74);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(480, 351);
+            this.pictureBox1.Size = new System.Drawing.Size(490, 351);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
@@ -183,7 +206,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(3, 16);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(480, 58);
+            this.panel1.Size = new System.Drawing.Size(490, 58);
             this.panel1.TabIndex = 3;
             // 
             // labelKeyInfo
@@ -216,31 +239,18 @@
             // timer1
             // 
             this.timer1.Enabled = true;
-            this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // cbLaunchAtStartup
-            // 
-            this.cbLaunchAtStartup.AutoSize = true;
-            this.cbLaunchAtStartup.Location = new System.Drawing.Point(12, 38);
-            this.cbLaunchAtStartup.Name = "cbLaunchAtStartup";
-            this.cbLaunchAtStartup.Size = new System.Drawing.Size(109, 17);
-            this.cbLaunchAtStartup.TabIndex = 6;
-            this.cbLaunchAtStartup.Text = "Launch at startup";
-            this.cbLaunchAtStartup.UseVisualStyleBackColor = true;
-            this.cbLaunchAtStartup.CheckedChanged += new System.EventHandler(this.cbLaunchAtStartup_CheckedChanged);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(486, 492);
+            this.ClientSize = new System.Drawing.Size(496, 492);
             this.Controls.Add(this.gbPreview);
             this.Controls.Add(this.gbSettings);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Pulsar";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.gbSettings.ResumeLayout(false);
             this.gbSettings.PerformLayout();
@@ -271,5 +281,6 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label labelKeyInfo;
         private System.Windows.Forms.CheckBox cbLaunchAtStartup;
+        private System.Windows.Forms.Button bReset;
     }
 }
