@@ -112,5 +112,17 @@ namespace Pulsar
             Settings.Default.IntervalMax = 100;
             Settings.Default.Save();
         }
+
+        private void bMapCs_Click(object sender, EventArgs e)
+        {
+            var code = KeyMapGenerator.MakeSharpMapFiles();
+            CodeForm.ShowCode(code, "C# key map");
+        }
+
+        private void bGenLua_Click(object sender, EventArgs e)
+        {
+            var code = KeyMapGenerator.MakeLuaMapFiles();
+            CodeForm.ShowCode(code, "Lua key map");
+        }
     }
 }
