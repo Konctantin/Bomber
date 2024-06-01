@@ -28,33 +28,89 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tpSharpMap = new System.Windows.Forms.TabPage();
+            this.tpLuaMap = new System.Windows.Forms.TabPage();
+            this.tbSharpCode = new System.Windows.Forms.RichTextBox();
+            this.tbLuaCode = new System.Windows.Forms.RichTextBox();
+            this.tabControl1.SuspendLayout();
+            this.tpSharpMap.SuspendLayout();
+            this.tpLuaMap.SuspendLayout();
             this.SuspendLayout();
             // 
-            // richTextBox1
+            // tabControl1
             // 
-            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox1.Font = new System.Drawing.Font("Courier New", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBox1.Location = new System.Drawing.Point(0, 0);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(520, 455);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = "";
+            this.tabControl1.Controls.Add(this.tpSharpMap);
+            this.tabControl1.Controls.Add(this.tpLuaMap);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(845, 594);
+            this.tabControl1.TabIndex = 1;
+            // 
+            // tpSharpMap
+            // 
+            this.tpSharpMap.Controls.Add(this.tbSharpCode);
+            this.tpSharpMap.Location = new System.Drawing.Point(4, 22);
+            this.tpSharpMap.Name = "tpSharpMap";
+            this.tpSharpMap.Padding = new System.Windows.Forms.Padding(3);
+            this.tpSharpMap.Size = new System.Drawing.Size(669, 499);
+            this.tpSharpMap.TabIndex = 0;
+            this.tpSharpMap.Text = "C# Map";
+            this.tpSharpMap.UseVisualStyleBackColor = true;
+            // 
+            // tpLuaMap
+            // 
+            this.tpLuaMap.Controls.Add(this.tbLuaCode);
+            this.tpLuaMap.Location = new System.Drawing.Point(4, 22);
+            this.tpLuaMap.Name = "tpLuaMap";
+            this.tpLuaMap.Padding = new System.Windows.Forms.Padding(3);
+            this.tpLuaMap.Size = new System.Drawing.Size(837, 568);
+            this.tpLuaMap.TabIndex = 1;
+            this.tpLuaMap.Text = "Lua Map";
+            this.tpLuaMap.UseVisualStyleBackColor = true;
+            // 
+            // tbSharpCode
+            // 
+            this.tbSharpCode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbSharpCode.Font = new System.Drawing.Font("Courier New", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbSharpCode.Location = new System.Drawing.Point(3, 3);
+            this.tbSharpCode.Name = "tbSharpCode";
+            this.tbSharpCode.Size = new System.Drawing.Size(663, 493);
+            this.tbSharpCode.TabIndex = 1;
+            this.tbSharpCode.Text = "";
+            // 
+            // tbLuaCode
+            // 
+            this.tbLuaCode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbLuaCode.Font = new System.Drawing.Font("Courier New", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbLuaCode.Location = new System.Drawing.Point(3, 3);
+            this.tbLuaCode.Name = "tbLuaCode";
+            this.tbLuaCode.Size = new System.Drawing.Size(831, 562);
+            this.tbLuaCode.TabIndex = 1;
+            this.tbLuaCode.Text = "";
             // 
             // CodeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(520, 455);
-            this.Controls.Add(this.richTextBox1);
+            this.ClientSize = new System.Drawing.Size(845, 594);
+            this.Controls.Add(this.tabControl1);
             this.Name = "CodeForm";
-            this.Text = "CodeForm";
+            this.Text = "Key map generator";
+            this.tabControl1.ResumeLayout(false);
+            this.tpSharpMap.ResumeLayout(false);
+            this.tpLuaMap.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tpSharpMap;
+        private System.Windows.Forms.TabPage tpLuaMap;
+        private System.Windows.Forms.RichTextBox tbSharpCode;
+        private System.Windows.Forms.RichTextBox tbLuaCode;
     }
 }

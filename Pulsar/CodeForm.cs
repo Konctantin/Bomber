@@ -9,11 +9,11 @@ namespace Pulsar
             InitializeComponent();
         }
 
-        public static void ShowCode(string code, string title)
+        public static void ShowCode()
         {
             using var form = new CodeForm();
-            form.Text = title;
-            form.richTextBox1.Text = code;
+            form.tbSharpCode.Text = KeyMapGenerator.GenerateSharpMap();
+            form.tbLuaCode.Text = KeyMapGenerator.GenerateLuaMap();
             form.ShowDialog();
         }
     }

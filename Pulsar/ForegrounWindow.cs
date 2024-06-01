@@ -147,6 +147,6 @@ public class ForegrounWindow
         if (KeyMap.KEY_MAP.ContainsKey(intColor))
             return KeyMap.KEY_MAP[intColor];
         else
-            return new KeyRecord();
+            return new KeyRecord(0,0);
     }
 }

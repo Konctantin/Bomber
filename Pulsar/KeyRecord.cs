@@ -1,15 +1,15 @@
 ﻿
 namespace Pulsar;
 
-public class KeyRecord
+public class KeyRecord(int key, int modifier)
 {
-    public int Key { get; set; }
+    public int Key => key;
 
-    public int Modifier { get; set; }
+    public int Modifier => modifier;
 
-    public bool HasKey => Key != 0;
+    public bool HasKey => key != 0;
 
-    public bool HasModif => Modifier != 0;
+    public bool HasModif => modifier != 0;
 
     private string ModToStr(int mod)
     {

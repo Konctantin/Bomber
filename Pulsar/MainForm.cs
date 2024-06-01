@@ -102,7 +102,7 @@ namespace Pulsar
         {
             registryRunKey.DeleteValue(AppName, false);
             if (cbLaunchAtStartup.Checked)
-                registryRunKey.SetValue(AppName, Path.GetFileNameWithoutExtension(Application.ExecutablePath));
+                registryRunKey.SetValue(AppName, Application.ExecutablePath);
         }
 
         private void bReset_Click(object sender, EventArgs e)
@@ -115,14 +115,11 @@ namespace Pulsar
 
         private void bMapCs_Click(object sender, EventArgs e)
         {
-            var code = KeyMapGenerator.MakeSharpMapFiles();
-            CodeForm.ShowCode(code, "C# key map");
         }
 
-        private void bGenLua_Click(object sender, EventArgs e)
+        private void bMap_Click(object sender, EventArgs e)
         {
-            var code = KeyMapGenerator.MakeLuaMapFiles();
-            CodeForm.ShowCode(code, "Lua key map");
+            CodeForm.ShowCode();
         }
     }
 }

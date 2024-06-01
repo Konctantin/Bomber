@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.gbSettings = new System.Windows.Forms.GroupBox();
+            this.bMapGen = new System.Windows.Forms.Button();
             this.bReset = new System.Windows.Forms.Button();
             this.cbLaunchAtStartup = new System.Windows.Forms.CheckBox();
             this.bApply = new System.Windows.Forms.Button();
@@ -45,8 +46,6 @@
             this.labelInfo2 = new System.Windows.Forms.Label();
             this.labelInfo1 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.bGenLua = new System.Windows.Forms.Button();
-            this.bMapCs = new System.Windows.Forms.Button();
             this.gbSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbMax)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbMin)).BeginInit();
@@ -57,8 +56,7 @@
             // 
             // gbSettings
             // 
-            this.gbSettings.Controls.Add(this.bMapCs);
-            this.gbSettings.Controls.Add(this.bGenLua);
+            this.gbSettings.Controls.Add(this.bMapGen);
             this.gbSettings.Controls.Add(this.bReset);
             this.gbSettings.Controls.Add(this.cbLaunchAtStartup);
             this.gbSettings.Controls.Add(this.bApply);
@@ -74,6 +72,16 @@
             this.gbSettings.TabIndex = 0;
             this.gbSettings.TabStop = false;
             this.gbSettings.Text = "Settings";
+            // 
+            // bMapGen
+            // 
+            this.bMapGen.Location = new System.Drawing.Point(330, 36);
+            this.bMapGen.Name = "bMapGen";
+            this.bMapGen.Size = new System.Drawing.Size(153, 23);
+            this.bMapGen.TabIndex = 9;
+            this.bMapGen.Text = "Generate map";
+            this.bMapGen.UseVisualStyleBackColor = true;
+            this.bMapGen.Click += new System.EventHandler(this.bMap_Click);
             // 
             // bReset
             // 
@@ -245,26 +253,6 @@
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // bGenLua
-            // 
-            this.bGenLua.Location = new System.Drawing.Point(330, 36);
-            this.bGenLua.Name = "bGenLua";
-            this.bGenLua.Size = new System.Drawing.Size(75, 23);
-            this.bGenLua.TabIndex = 8;
-            this.bGenLua.Text = "Map .lua";
-            this.bGenLua.UseVisualStyleBackColor = true;
-            this.bGenLua.Click += new System.EventHandler(this.bGenLua_Click);
-            // 
-            // bMapCs
-            // 
-            this.bMapCs.Location = new System.Drawing.Point(408, 36);
-            this.bMapCs.Name = "bMapCs";
-            this.bMapCs.Size = new System.Drawing.Size(75, 23);
-            this.bMapCs.TabIndex = 9;
-            this.bMapCs.Text = "Map .cs";
-            this.bMapCs.UseVisualStyleBackColor = true;
-            this.bMapCs.Click += new System.EventHandler(this.bMapCs_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -306,7 +294,6 @@
         private System.Windows.Forms.Label labelKeyInfo;
         private System.Windows.Forms.CheckBox cbLaunchAtStartup;
         private System.Windows.Forms.Button bReset;
-        private System.Windows.Forms.Button bMapCs;
-        private System.Windows.Forms.Button bGenLua;
+        private System.Windows.Forms.Button bMapGen;
     }
 }
